@@ -60,7 +60,13 @@ pkg_check_modules(Udev REQUIRED IMPORTED_TARGET libudev)
 pkg_check_modules(Pipewire IMPORTED_TARGET libpipewire-0.3 REQUIRED)
 pkg_check_modules(Cava IMPORTED_TARGET libcava QUIET)
 if(NOT Cava_FOUND)
-    pkg_check_modules(Cava IMPORTED_TARGET cava REQUIRED)
+    pkg_check_modules(Cava IMPORTED_TARGET cava QUIET)
+endif()
+if(NOT Cava_FOUND)
+    message(FATAL_ERROR
+        "libcava was not found. Ubuntu/Debian does not package the shared cavacore library. "
+        "Run ./install-ubuntu.sh, which builds a checked cavacore 1.0.0 library, or install "
+        "libcava elsewhere and make it visible to pkg-config.")
 endif()
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -147,7 +153,9 @@ install(
 )
 
 install(
-    FILES "${CLAVIS_SOURCE_ROOT}/packaging/systemd/user/clavis-shell.service"
+    FILES
+        "${CLAVIS_SOURCE_ROOT}/packaging/systemd/user/clavis-shell.service"
+        "${CLAVIS_SOURCE_ROOT}/packaging/systemd/user/clavis-agent.service"
     DESTINATION "${CLAVIS_SYSTEMD_USER_INSTALL_DIR}"
 )
 

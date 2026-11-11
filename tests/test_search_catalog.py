@@ -72,7 +72,7 @@ class CatalogTests(unittest.TestCase):
 
     def test_shipped_catalog_is_valid_and_portable(self):
         catalog = compiler.load(ROOT)
-        self.assertEqual({entry['path'][0] for entry in catalog['settings']}, {'account','general','wallpaper','theme','keystone','advanced'})
+        self.assertEqual({entry['path'][0] for entry in catalog['settings']}, {'account','agent','general','wallpaper','theme','keystone','advanced'})
         self.assertNotIn(str(ROOT), json.dumps(catalog))
         self.assertEqual(len({entry['id'] for entry in catalog['settings']}), len(catalog['settings']))
         self.assertTrue(all(entry['target'] != 'control-center' for entry in catalog['actions']))

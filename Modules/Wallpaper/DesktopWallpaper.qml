@@ -29,8 +29,28 @@ Variants {
             right: true
         }
 
+        // The desktop background owns pointer input so it can present a
+        // context menu.  Desktop cards live in a separate Bottom-layer
+        // surface whose input region sits above this one.
+        Item {
+            id: desktopInput
+
+            anchors.fill: parent
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.RightButton
+                onPressed: mouse => desktopContextMenu.openAt(mouse.x, mouse.y)
+            }
+
+            DesktopContextMenu {
+                id: desktopContextMenu
+                targetScreen: modelData
+            }
+        }
+
         mask: Region {
-            item: Item {}
+            item: desktopInput
         }
 
         Item {
@@ -101,8 +121,8 @@ Variants {
                 textureHeight: Math.min(Math.max(1, Math.round(root.height)), 8192)
 
                 onLoadFailed: (source, message) => {
-                    WallpaperService.reportDesktopError(modelData.name, message);
-                }
+                                  WallpaperService.reportDesktopError(modelData.name, message);
+                              }
             }
 
             Component.onCompleted: WallpaperSceneService.sceneFor(root.screenKey)

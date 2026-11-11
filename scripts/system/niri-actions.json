@@ -1006,6 +1006,78 @@
     }
   },
   {
+    "id": "clavis:launchpad:toggle",
+    "category": "clavis",
+    "name": "Launchpad: toggle",
+    "expression": "spawn \"qs\" \"-c\" \"clavis\" \"ipc\" \"call\" \"launchpad\" \"toggle\"",
+    "parameters": false,
+    "target": "launchpad",
+    "method": "toggle",
+    "search": {
+      "policy": "include",
+      "title": "Launchpad",
+      "description": "Show all installed applications",
+      "context": "SpotlightActions",
+      "icon": "apps",
+      "args": [],
+      "aliases": [
+        "apps",
+        "grid",
+        "launchpad"
+      ],
+      "availability": "always",
+      "confirmation": "none"
+    }
+  },
+  {
+    "id": "clavis:stage-manager:toggle",
+    "category": "clavis",
+    "name": "Stage Manager: toggle",
+    "expression": "spawn \"qs\" \"-c\" \"clavis\" \"ipc\" \"call\" \"stage-manager\" \"toggle\"",
+    "parameters": false,
+    "target": "stage-manager",
+    "method": "toggle",
+    "search": {
+      "policy": "include",
+      "title": "Stage Manager",
+      "description": "Show other windows in a side strip",
+      "context": "SpotlightActions",
+      "icon": "view_sidebar",
+      "args": [],
+      "aliases": [
+        "stage manager",
+        "windows",
+        "stages"
+      ],
+      "availability": "always",
+      "confirmation": "none"
+    }
+  },
+  {
+    "id": "clavis:touch-keyboard:toggle",
+    "category": "clavis",
+    "name": "Touch keyboard: toggle",
+    "expression": "spawn \"qs\" \"-c\" \"clavis\" \"ipc\" \"call\" \"touch-keyboard\" \"toggle\"",
+    "parameters": false,
+    "target": "touch-keyboard",
+    "method": "toggle",
+    "search": {
+      "policy": "include",
+      "title": "Touch Keyboard",
+      "description": "Show the on-screen touch keyboard",
+      "context": "SpotlightActions",
+      "icon": "keyboard",
+      "args": [],
+      "aliases": [
+        "keyboard",
+        "osd",
+        "touch"
+      ],
+      "availability": "always",
+      "confirmation": "none"
+    }
+  },
+  {
     "id": "clavis:spotlight:open",
     "category": "clavis",
     "name": "Spotlight: open",

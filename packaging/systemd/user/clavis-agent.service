@@ -1,0 +1,15 @@
+[Unit]
+Description=Clavis native desktop agent backend
+After=network-online.target
+
+[Service]
+Type=simple
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 %h/.local/etc/xdg/quickshell/clavis/scripts/agent/clavis-agentd.py
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

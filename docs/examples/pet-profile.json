@@ -1,0 +1,66 @@
+{
+  "language": "zh-CN",
+  "locales": {
+    "en": {
+      "actions": {
+        "hello": { "label": "Hello", "say": ["Hi, this is this character's own line."] },
+        "focus": { "label": "Focus", "say": ["Working on this character's own task."] }
+      },
+      "menu": [
+        { "id": "hello", "label": "Hello", "icon": "waving_hand", "action": "hello" },
+        { "id": "focus", "label": "Focus", "icon": "psychology", "action": "focus" },
+        { "separator": true },
+        { "id": "agent", "label": "Agent", "icon": "chat", "action": "agentPanel" },
+        { "id": "settings", "label": "Settings", "icon": "settings", "action": "petSettings" }
+      ],
+      "ui": { "menuTitle": "Actions", "agentPanel": "Agent", "petSettings": "Settings" },
+      "workStatusTexts": [
+        ["Thinking…"], ["Working…"], ["Progress"], ["Waiting for you"], ["Done"], ["Error"]
+      ]
+    }
+  },
+  "ui": {
+    "menuTitle": "我的角色",
+    "agentPanel": "Agent",
+    "petSettings": "设置"
+  },
+  "actions": {
+    "hello": {
+      "animation": "waving",
+      "duration": 1.8,
+      "label": "打招呼",
+      "icon": "waving_hand",
+      "say": ["你好，我是这个角色自己的台词。"]
+    },
+    "focus": {
+      "animation": "review",
+      "duration": 3.6,
+      "loop": true,
+      "label": "专注",
+      "icon": "psychology",
+      "say": ["正在处理这个角色自己的任务。"]
+    }
+  },
+  "menu": [
+    { "id": "hello", "label": "打招呼", "icon": "waving_hand", "action": "hello" },
+    { "id": "focus", "label": "专注", "icon": "psychology", "action": "focus" },
+    { "separator": true },
+    { "id": "agent", "label": "Agent", "icon": "chat", "action": "agentPanel" },
+    { "id": "settings", "label": "设置", "icon": "settings", "action": "petSettings" }
+  ],
+  "interactions": {
+    "singleClick": "hello",
+    "doubleClick": "focus",
+    "rightClick": "menu",
+    "dragStart": "jumping",
+    "dragEnd": "idle"
+  },
+  "workStatusTexts": [
+    ["正在想…"],
+    ["正在做…"],
+    ["有进展"],
+    ["等你确认"],
+    ["完成"],
+    ["出错"]
+  ]
+}

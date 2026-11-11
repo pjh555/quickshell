@@ -24,7 +24,7 @@ Item {
         quitFailed = false;
     }
     onVisibleChanged: if (!visible)
-                          resetQuit()
+    resetQuit()
     onEntryKeyChanged: resetQuit()
 
     required property string entryKey
@@ -52,7 +52,7 @@ Item {
     property string previewConsumer: ""
     readonly property var captureTargets: !visible || contextMenu || !thumbnails ||
                                           !WindowPreviewService.connected ? [] : windows.map(window => String(
-                                                                                                           window.id))
+                                                                                                 window.id))
     onCaptureTargetsChanged: WindowPreviewService.setTargets(previewConsumer, captureTargets)
     Component.onCompleted: {
         mediaPlayer = DockMedia.selectPlayer(matchingPlayers, mediaPlayer);
@@ -178,6 +178,14 @@ Item {
                     root.dismissed();
                 }
                 onCloseRequested: DockService.closeWindow(modelData.id)
+                onMinimizeRequested: {
+                    if (DockService.minimizeWindow(modelData.id))
+                    root.dismissed();
+                }
+                onMaximizeRequested: {
+                    if (DockService.toggleMaximizeWindow(modelData.id))
+                    root.dismissed();
+                }
             }
         }
     }
@@ -288,10 +296,10 @@ Item {
                         }
                         onTriggered: {
                             if (!root.canLaunch)
-                                return;
+                            return;
                             if (ApplicationService.launchApplicationAction(root.entry.desktopId,
                                                                            modelData.id))
-                                root.dismissed();
+                            root.dismissed();
                         }
                     }
                 }
@@ -326,7 +334,7 @@ Item {
                     text: qsTr("Open application")
                     onTriggered: {
                         if (!root.canLaunch)
-                            return;
+                        return;
                         DockService.launch(root.entryKey);
                         root.dismissed();
                     }
@@ -342,7 +350,7 @@ Item {
                         // Snapshot current IDs before close events can change the group.
                         const ids = DockService.windowsFor(root.entryKey).map(window => window.id);
                         for (const id of ids)
-                            DockService.closeWindow(id);
+                        DockService.closeWindow(id);
                         root.dismissed();
                     }
                 }
@@ -358,7 +366,7 @@ Item {
                         const pids = DockService.windowsFor(root.entryKey).map(window => window.pid);
                         root.quitFailed = !processQuit.prepare(pids) || !processQuit.confirm();
                         if (!root.quitFailed)
-                            root.dismissed();
+                        root.dismissed();
                     }
                 }
                 Text {
@@ -389,11 +397,11 @@ Item {
                     onTriggered: {
                         const entry = DockService.entryFor(root.entryKey);
                         if (!entry)
-                            return;
+                        return;
                         if (entry.pinned)
-                            DockService.unpin(root.entryKey);
+                        DockService.unpin(root.entryKey);
                         else if (root.canChangePin)
-                            DockService.pin(entry.desktopId);
+                        DockService.pin(entry.desktopId);
                         root.dismissed();
                     }
                 }

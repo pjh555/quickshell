@@ -42,7 +42,7 @@ Item {
             id: contentViewport
             anchors.fill: parent
             clip: true
-            layer.enabled: true
+            layer.enabled: !PlatformService.softwareRendering
             layer.effect: MultiEffect {
                 maskEnabled: true
                 maskSource: contentMask

@@ -23,11 +23,15 @@ Singleton {
     property alias model: entries
     readonly property var pinnedEntries: root._pinned
     readonly property int pinnedAppCount: root._pinned.filter(entry => !DockModel.isFile(entry)).length
+    // The Launchpad entry is injected before the configurable pins and owns
+    // the first slot. Layout and drop hit testing therefore need one more
+    // pinned row than the persisted app count.
+    readonly property int pinnedSectionCount: root.pinnedAppCount + 1
     readonly property int fileStartIndex: {
         const revision = root._revision;
         for (let i = 0; i < entries.count; ++i)
-            if (DockModel.isFile(entries.get(i)) || entries.get(i).kind === "trash")
-                return i;
+        if (DockModel.isFile(entries.get(i)) || entries.get(i).kind === "trash")
+        return i;
         return entries.count;
     }
     property string fileError: ""
@@ -35,7 +39,8 @@ Singleton {
         return kind === "file" || kind === "folder" ? Math.max(root.pinnedAppCount, Math.min(root._pinned.length,
                                                                                              root.pinnedAppCount
                                                                                              + index - root.fileStartIndex)) :
-                                                      Math.min(root.pinnedAppCount, index);
+                                                      DockModel.pinnedInsertionIndex(index,
+                                                                                     root.pinnedAppCount);
     }
     function fileRow(pin) {
         const info = DesktopFiles.info(pin.url);
@@ -66,9 +71,9 @@ Singleton {
         if (!allowed[name] || allowed[name].indexOf(value) < 0)
             return false;
         const next = root._pinned.map(entry => DockModel.pinnedKey(entry) === key && entry.kind === "folder"
-                                               ? Object.assign({}, entry, {
-                                                                   [name]: value
-                                                               }) : entry);
+                                      ? Object.assign({}, entry, {
+                                                          [name]: value
+                                                      }) : entry);
         return root.commitPinned(next);
     }
     readonly property int revision: root._revision
@@ -110,7 +115,7 @@ Singleton {
     readonly property var _dataRoots: [Paths.xdgDataHome].concat(String(Quickshell.env("XDG_DATA_DIRS")
                                                                         || "/usr/local/share:/usr/share").split(
                                                                      ":").filter(path => path.startsWith(
-                                                                                             "/")))
+                                                                                     "/")))
 
     signal activated(string key)
 
@@ -157,7 +162,7 @@ Singleton {
 
     function rebuild() {
         const applications = ApplicationService.launcherApplications.filter(application =>
-        !application.dragOnly);
+                                                                            !application.dragOnly);
         const windows = Niri.connected ? Niri.searchWindows("") : [];
         const focusOrder = Object.create(null);
         for (const window of windows)
@@ -171,6 +176,22 @@ Singleton {
         const pending = DockModel.pendingLaunches(root._pendingLaunches, groups, Date.now());
         root._pendingLaunches = pending;
         const rows = [];
+        // Keep the launcher at the leading edge like the macOS Dock. It is
+        // deliberately not part of _pinned so it cannot be removed or moved
+        // and existing dock.json files keep their persisted ordering.
+        rows.push({
+                      key: "launchpad",
+                      kind: "launchpad",
+                      desktopId: "",
+                      name: qsTr("Launchpad"),
+                      icon: "",
+                      symbol: "apps",
+                      pinned: true,
+                      windowCount: 0,
+                      focused: false,
+                      launching: false,
+                      available: true
+                  });
         const used = new Set();
         const byKey = Object.create(null);
         for (const key of Object.keys(groups))
@@ -203,13 +224,13 @@ Singleton {
         // Existing running applications keep their slots across focus/title changes.
         const running = Object.keys(groups).filter(key => !used.has(key));
         running.sort((left, right) => {
-            const leftIndex = root.rowIndex(left);
-            const rightIndex = root.rowIndex(right);
-            return (leftIndex < 0 ? Number.MAX_SAFE_INTEGER : leftIndex) - (rightIndex < 0
-                                                                            ? Number.MAX_SAFE_INTEGER :
-                                                                              rightIndex) || Number(
-                        groups[left].windows[0].id) - Number(groups[right].windows[0].id);
-        });
+                         const leftIndex = root.rowIndex(left);
+                         const rightIndex = root.rowIndex(right);
+                         return (leftIndex < 0 ? Number.MAX_SAFE_INTEGER : leftIndex) - (rightIndex < 0
+                                                                                         ? Number.MAX_SAFE_INTEGER :
+                                                                                           rightIndex)
+                         || Number(groups[left].windows[0].id) - Number(groups[right].windows[0].id);
+                     });
         for (const key of running) {
             rows.push(root.appRow(key, groups[key].application, groups[key].windows, false));
             used.add(key);
@@ -249,6 +270,15 @@ Singleton {
 
     function activate(key, outputName) {
         const entry = root.entryFor(key);
+        if (entry && entry.kind === "launchpad") {
+            const target = String(outputName || "");
+            // Keep the fullscreen overlay creation out of the current pointer
+            // event. This matters for touch, where mapping a layer surface
+            // while a point is being released can crash Qt's handler stack.
+            Qt.callLater(() => LaunchpadService.toggle(target));
+            root.activated(key);
+            return true;
+        }
         if (entry && (DockModel.isFile(entry) || entry.kind === "trash")) {
             if (entry.kind !== "trash" && !DesktopFiles.info(entry.url).available) {
                 root.fileError = qsTr("This file or folder is unavailable.");
@@ -305,14 +335,27 @@ Singleton {
         if (!window || !window.id || window.isMinimized)
             return false;
         return WindowPreviewService.snapshot(id, () => {
-            const current = Niri.windowById(id);
-            if (root.supportsMinimize && current && current.id && !current.isMinimized)
-                Niri.minimizeWindow(id);
-        });
+                                                 const current = Niri.windowById(id);
+                                                 if (root.supportsMinimize && current && current.id &&
+                                                     !current.isMinimized)
+                                                 Niri.minimizeWindow(id);
+                                             });
     }
 
     function closeWindow(id) {
         return Niri.connected && Niri.closeWindow(id);
+    }
+
+    function toggleMaximizeWindow(id) {
+        if (!Niri.connected || !Niri.windowById(id).id)
+            return false;
+        return Niri.toggleMaximizeWindow(id);
+    }
+
+    function toggleFullscreenWindow(id) {
+        if (!Niri.connected || !Niri.windowById(id).id)
+            return false;
+        return Niri.toggleFullscreenWindow(id);
     }
 
     function setOption(name, value) {
@@ -470,10 +513,10 @@ Singleton {
         running: true
         onExited: exitCode => {
             if (exitCode === 0)
-                root._storeReady = true;
+            root._storeReady = true;
             else
-                root.loaded(null, false, qsTr(
-                                "Dock settings cannot be saved because the configuration directory is unavailable."));
+            root.loaded(null, false, qsTr(
+                            "Dock settings cannot be saved because the configuration directory is unavailable."));
         }
     }
 
@@ -495,7 +538,7 @@ Singleton {
         }
         onLoadFailed: error => {
             if (!root._storeReady)
-                return;
+            return;
             const missing = error === FileViewError.FileNotFound;
             root.loaded(null, missing, missing ? "" : qsTr(
                                                      "Dock settings could not be opened. Changes apply to this session only."));

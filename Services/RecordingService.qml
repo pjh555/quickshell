@@ -190,6 +190,14 @@ Singleton {
         return true;
     }
 
+    function cancelSelection() {
+        if (root.transientState !== "selecting")
+            return false;
+        root.transientState = "";
+        RegionSelectionService.cancel();
+        return true;
+    }
+
     Connections {
         function onSelectionAccepted(action, geometry, options) {
             if (action !== "record" || root.transientState !== "selecting")
@@ -223,10 +231,10 @@ Singleton {
         onExited: exitCode => {
             root.lastExitCode = exitCode;
             if (exitCode !== 0 && !root.operationError && !root.error)
-                root.reportOperation({
-                                         "code": "key_unavailable",
-                                         "message": qsTr("key command failed")
-                                     });
+            root.reportOperation({
+                                     "code": "key_unavailable",
+                                     "message": qsTr("key command failed")
+                                 });
             root.transientState = "";
             root.transientState = "";
         }
@@ -242,10 +250,10 @@ Singleton {
         onExited: exitCode => {
             root.lastExitCode = exitCode;
             if (exitCode !== 0 && !root.operationError && !root.error)
-                root.reportOperation({
-                                         "code": "key_unavailable",
-                                         "message": qsTr("key command failed")
-                                     });
+            root.reportOperation({
+                                     "code": "key_unavailable",
+                                     "message": qsTr("key command failed")
+                                 });
             root.transientState = "";
         }
 
@@ -261,10 +269,10 @@ Singleton {
         command: [root.commandName, "record", "status", "--json"]
         onExited: exitCode => {
             if (exitCode !== 0 && !root.operationError && !root.error)
-                root.reportOperation({
-                                         "code": "key_unavailable",
-                                         "message": qsTr("Could not query recording status through key")
-                                     });
+            root.reportOperation({
+                                     "code": "key_unavailable",
+                                     "message": qsTr("Could not query recording status through key")
+                                 });
         }
         stdout: StdioCollector {
             onStreamFinished: root.applyResponse(this.text, "record.status")
@@ -290,7 +298,7 @@ Singleton {
         interval: 1000 * root._reconnectAttempts
         onTriggered: {
             if (root.backendActive)
-                watchProcess.running = true;
+            watchProcess.running = true;
         }
     }
 

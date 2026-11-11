@@ -12,6 +12,11 @@ Type=simple
 # Apply before qs starts: QML Env pragmas run after allocator initialization.
 # Ignored by Quickshell builds that do not use jemalloc.
 Environment="MALLOC_CONF=thp:never,narenas:4,dirty_decay_ms:3000"
+Environment="GTK_IM_MODULE=ibus"
+Environment="QT_IM_MODULE=ibus"
+Environment="QT_IM_MODULES=ibus"
+Environment="INPUT_METHOD=ibus"
+Environment="XMODIFIERS=@im=ibus"
 ExecStart=key shell --foreground --no-duplicate
 Restart=on-failure
 RestartSec=2

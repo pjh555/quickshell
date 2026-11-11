@@ -28,7 +28,8 @@
     "AGENTS.md",
     ".clang-format",
     ".qmlformat.ini",
-    "install.sh"
+    "install.sh",
+    "install-ubuntu.sh"
   ],
   "build": [
     {
@@ -616,6 +617,51 @@
           "purpose": "Unused PackageService package counters; not needed by the installer",
           "defaultInstall": false,
           "aur": "paru"
+        },
+        {
+          "package": "ibus",
+          "purpose": "IBus input method daemon; started by the desktop shell",
+          "defaultInstall": true
+        },
+        {
+          "package": "ibus-libpinyin",
+          "purpose": "Chinese Pinyin engine for IBus",
+          "defaultInstall": true
+        },
+        {
+          "package": "ibus-wayland",
+          "purpose": "IBus input-method-v2 bridge for text-input apps such as terminals",
+          "defaultInstall": true
+        },
+        {
+          "package": "wtype",
+          "purpose": "Virtual keyboard input for the touch keyboard",
+          "defaultInstall": true
+        },
+        {
+          "package": "wf-recorder",
+          "purpose": "Region screen recording fallback",
+          "defaultInstall": true
+        },
+        {
+          "package": "fcitx5",
+          "purpose": "Native Wayland input method framework",
+          "defaultInstall": true
+        },
+        {
+          "package": "fcitx5-chinese-addons",
+          "purpose": "Chinese Pinyin input for fcitx5",
+          "defaultInstall": true
+        },
+        {
+          "package": "fcitx5-gtk",
+          "purpose": "GTK input modules for fcitx5",
+          "defaultInstall": true
+        },
+        {
+          "package": "fcitx5-qt",
+          "purpose": "Qt input modules for fcitx5",
+          "defaultInstall": true
         }
       ]
     }

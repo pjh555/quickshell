@@ -2,7 +2,9 @@
 > [!NOTE]
 > This project is under active development.
 
-A desktop shell for [niri](https://github.com/YaLTeR/niri), built with [Quickshell](https://quickshell.org/), QML, Qt 6 and native C++ modules.
+A desktop shell for [niri](https://github.com/YaLTeR/niri), built with [Quickshell](https://quickshell.org/), QML, Qt 6 and native C++ modules. The Qt/QML modules also build and run on Ubuntu; GNOME sessions currently expose the full-screen Launchpad through a normal toplevel window because Mutter does not implement `wlr-layer-shell`. See [Ubuntu 适配](docs/ubuntu.md). On Ubuntu ARM64, `./install-ubuntu.sh` builds the
+missing Ubuntu-only dependencies (libcava and M3Shapes) and installs a launchable shell;
+the generic `install.sh` entry point dispatches to it on Debian/Ubuntu.
 
 <table>
   <tr>
@@ -18,6 +20,15 @@ A desktop shell for [niri](https://github.com/YaLTeR/niri), built with [Quickshe
     <td width="25%"><a href="https://raw.githubusercontent.com/StatIndet/picture/main/clavis-shell/recording_20260912_22-20-48_544529.gif"><img src="https://raw.githubusercontent.com/StatIndet/picture/main/clavis-shell/recording_20260912_22-20-48_544529.gif" alt="Clavis Shell animation 2" width="100%" /></a></td>
   </tr>
 </table>
+
+## Launchpad
+
+The full-screen application grid lives in `Modules/Launchpad/`. It supports search, multiple pages,
+page dots, keyboard navigation, drag reordering across pages, folders, rename, long-press edit mode,
+and a persisted layout in `~/.config/clavis/launchpad.json`. Open it with `F4` or
+`qs -c clavis ipc call launchpad toggle`. See [Launchpad 设计](docs/launchpad.md) for the
+feature matrix and storage format, and [触屏与全屏手势](docs/gestures.md) for edge gestures
+and touchscreen behaviour.
 
 ## Acknowledgements
 

@@ -11,8 +11,8 @@ Singleton {
     readonly property bool wifiEnabled: available && Networking.wifiEnabled
     readonly property bool wifiHardwareEnabled: available && Networking.wifiHardwareEnabled
     readonly property bool connected: root._nativeDevices.some(device => {
-        return device && device.connected;
-    })
+                                                                   return device && device.connected;
+                                                               })
     readonly property bool internetAvailable: Networking.connectivity === NetworkConnectivity.Full
     readonly property bool captivePortal: Networking.connectivity === NetworkConnectivity.Portal
     readonly property bool limitedConnectivity: Networking.connectivity === NetworkConnectivity.Limited
@@ -23,8 +23,9 @@ Singleton {
                                  || NetworkManagerExtras.mutationBusy
     readonly property bool wifiConnecting: root._pendingOperation === "connect"
                                            || root._nativeWifiDevices.some(device => {
-                                               return device && device.state === ConnectionState.Connecting;
-                                           })
+                                                                               return device && device.state
+                                                                               === ConnectionState.Connecting;
+                                                                           })
     property string lastError: ""
     property string passwordRequestSsid: ""
     property string passwordRequestDeviceName: ""
@@ -33,50 +34,55 @@ Singleton {
     property string connectTargetUuid: ""
     readonly property var _nativeDevices: Networking.devices ? Networking.devices.values : []
     readonly property var _nativeWifiDevices: _nativeDevices.filter(device => {
-        return device && device.type === DeviceType.Wifi;
-    })
+                                                                        return device && device.type
+                                                                        === DeviceType.Wifi;
+                                                                    })
     readonly property var _nativeWiredDevices: _nativeDevices.filter(device => {
-        return device && device.type === DeviceType.Wired;
-    })
+                                                                         return device && device.type
+                                                                         === DeviceType.Wired;
+                                                                     })
     readonly property var allWifiNetworks: {
         const result = [];
         for (const device of root._nativeWifiDevices) {
             for (const network of (device && device.networks ? device.networks.values : [])) {
                 if (network && String(network.name || "").length > 0)
-                    result.push(root._describeWifiNetwork(device, network));
+                result.push(root._describeWifiNetwork(device, network));
             }
         }
         return result;
     }
     readonly property var settingsWifiNetworks: allWifiNetworks.slice().sort((a, b) => {
-        if (a.active !== b.active)
-            return a.active ? -1 : 1;
+                                                                                 if (a.active !== b.active)
+                                                                                 return a.active ? -1 : 1;
 
-        if (a.known !== b.known)
-            return a.known ? -1 : 1;
+                                                                                 if (a.known !== b.known)
+                                                                                 return a.known ? -1 : 1;
 
-        return b.strength - a.strength;
-    })
+                                                                                 return b.strength
+                                                                                 - a.strength;
+                                                                             })
     // Quickshell keeps a WifiNetwork visible while it owns saved settings,
     // even when no AP is currently in range. Keep those entries on the Saved
     // Networks page instead of presenting them as nearby scan results.
     readonly property var nearbyWifiNetworks: settingsWifiNetworks.filter(network => {
-        return network.active || !network.known || network.strength > 0;
-    })
+                                                                              return network.active ||
+                                                                              !network.known
+                                                                              || network.strength > 0;
+                                                                          })
     readonly property var devices: _nativeDevices.map(device => {
-        return root._describeDevice(device);
-    })
+                                                          return root._describeDevice(device);
+                                                      })
     readonly property var wifiDevices: devices.filter(device => {
-        return device.type === "wifi";
-    })
+                                                          return device.type === "wifi";
+                                                      })
     readonly property var wiredDevices: devices.filter(device => {
-        return device.type === "wired";
-    })
+                                                           return device.type === "wired";
+                                                       })
     readonly property bool wifiAvailable: wifiDevices.length > 0
     readonly property bool wifiConnected: activeWifi !== null
     readonly property bool wiredConnected: wiredDevices.some(device => {
-        return device.connected;
-    })
+                                                                 return device.connected;
+                                                             })
     readonly property bool ethernetConnected: wiredConnected
     // Quickshell's NetworkManager backend already groups BSSIDs by SSID and keeps the
     // strongest AP as the WifiNetwork representative. This second pass only merges the
@@ -87,46 +93,47 @@ Singleton {
             const networks = device && device.networks ? device.networks.values : [];
             for (const network of networks) {
                 if (!network)
-                    continue;
+                continue;
 
                 const ssid = String(network.name || "");
                 if (ssid.length === 0)
-                    continue;
+                continue;
 
                 const candidate = root._describeWifiNetwork(device, network);
                 const current = bySsid[ssid];
                 if (!current || (candidate.active && !current.active) || (candidate.active === current.active
                                                                           && candidate.strength
                                                                           > current.strength))
-                    bySsid[ssid] = candidate;
+                bySsid[ssid] = candidate;
             }
         }
         return Object.keys(bySsid).map(ssid => {
-            return bySsid[ssid];
-        });
+                                           return bySsid[ssid];
+                                       });
     }
     readonly property var wifiNetworks: accessPoints
     readonly property var friendlyWifiNetworks: accessPoints.slice().sort((a, b) => {
-        if (a.active !== b.active)
-            return a.active ? -1 : 1;
+                                                                              if (a.active !== b.active)
+                                                                              return a.active ? -1 : 1;
 
-        if (a.known !== b.known)
-            return a.known ? -1 : 1;
+                                                                              if (a.known !== b.known)
+                                                                              return a.known ? -1 : 1;
 
-        return b.strength - a.strength;
-    })
+                                                                              return b.strength - a.strength;
+                                                                          })
     readonly property var savedWifiNetworks: friendlyWifiNetworks.filter(network => {
-        return network.known;
-    })
+                                                                             return network.known;
+                                                                         })
     readonly property var availableWifiNetworks: friendlyWifiNetworks.filter(network => {
-        return !network.known;
-    })
+                                                                                 return !network.known;
+                                                                             })
     readonly property var savedWifiConnections: savedWifiNetworks.map(network => {
-        return ({
-                    "ssid": network.ssid,
-                    "deviceName": network.deviceName
-                });
-    })
+                                                                          return ({
+                                                                                      "ssid": network.ssid,
+                                                                                      "deviceName":
+                                                                                      network.deviceName
+                                                                                  });
+                                                                      })
     readonly property var savedWifiProfiles: {
         const profiles = [];
         const byUuid = {};
@@ -142,13 +149,13 @@ Singleton {
                                                                                     === current.networkConnected
                                                                                     && profile.strength
                                                                                     > current.strength))
-                        profiles[currentIndex] = profile;
+                    profiles[currentIndex] = profile;
                 }
             }
         }
         return profiles.sort((a, b) => {
-            return a.name.localeCompare(b.name);
-        });
+                                 return a.name.localeCompare(b.name);
+                             });
     }
     readonly property var wiredProfiles: {
         const profiles = [];
@@ -179,12 +186,12 @@ Singleton {
     property bool _addWifiUsesNative: false
     property var _addWifiTarget: null
     readonly property var activeWifi: accessPoints.find(network => {
-        return network.active;
-    }) || null
+                                                            return network.active;
+                                                        }) || null
     readonly property var activeNetwork: {
         for (const device of root._nativeWiredDevices) {
             if (device && device.connected && device.network)
-                return root._describeWiredNetwork(device, device.network);
+            return root._describeWiredNetwork(device, device.network);
         }
         return activeWifi;
     }
@@ -196,9 +203,13 @@ Singleton {
                                                                    ""
     readonly property int signalStrength: activeWifi ? activeWifi.strength : 0
     readonly property var wifiConnectTarget: connectTargetSsid.length > 0 ? accessPoints.find(network => {
-        return network.ssid === connectTargetSsid && (connectTargetDeviceName.length === 0
-                                                      || network.deviceName === connectTargetDeviceName);
-    }) || null : null
+                                                                                                  return network.ssid
+                                                                                                  === connectTargetSsid
+                                                                                                  && (connectTargetDeviceName.length
+                                                                                                      === 0 || network.deviceName
+                                                                                                      === connectTargetDeviceName);
+                                                                                              }) || null :
+                                                                            null
     readonly property bool passwordPromptActive: passwordRequestSsid.length > 0
     property var _scanOwners: ({})
     property bool _manualScanActive: false
@@ -210,6 +221,7 @@ Singleton {
     property bool _pendingWifiState: false
     property bool _pendingStateWasChanging: false
     property var _pendingNetwork: null
+    property var _pendingRetry: null
 
     signal operationStarted(string operation)
     signal operationSucceeded(string operation)
@@ -263,8 +275,9 @@ Singleton {
                                   root.passwordRequestDeviceName.length === 0
                                   || root.passwordRequestDeviceName === String(device.name || "")),
             "profiles": (network.nmSettings || []).map(settings => {
-                return root._describeProfile(settings, network, device, "wifi");
-            }),
+                                                           return root._describeProfile(settings, network,
+                                                                                        device, "wifi");
+                                                       }),
             "nativeNetwork": network
         };
     }
@@ -319,8 +332,10 @@ Singleton {
         const deviceName = String(network.deviceName || "");
         if (type === "wired") {
             const wiredDevice = root._nativeWiredDevices.find(device => {
-                return device && (deviceName.length === 0 || device.name === deviceName);
-            });
+                                                                  return device && (deviceName.length === 0
+                                                                                    || device.name
+                                                                                    === deviceName);
+                                                              });
             return wiredDevice ? wiredDevice.network : null;
         }
         const ssid = String(network.ssid || network.name || network);
@@ -329,8 +344,9 @@ Singleton {
                 continue;
 
             const match = (device.networks ? device.networks.values : []).find(candidate => {
-                return candidate && candidate.name === ssid;
-            });
+                                                                                   return candidate
+                                                                                   && candidate.name === ssid;
+                                                                               });
             if (match)
                 return match;
         }
@@ -343,6 +359,7 @@ Singleton {
             return false;
         }
         root.lastError = "";
+        root._pendingRetry = null;
         root._pendingOperation = operation;
         root._pendingNetwork = network;
         root._pendingSsid = ssid || "";
@@ -481,9 +498,20 @@ Singleton {
         }
     }
 
-    function connectNetwork(network, credentials) {
+    function connectNetwork(network, credentials, retried) {
         const nativeNetwork = root._resolveNativeNetwork(network);
         if (!nativeNetwork) {
+            // The access point list can be stale (scan stopped, backend just
+            // initialised). Refresh the scan and retry the lookup once.
+            if (!retried) {
+                root._pendingRetry = {
+                    "network": network,
+                    "credentials": credentials
+                };
+                root.requestScan();
+                retryConnectTimer.restart();
+                return;
+            }
             root.lastError = qsTr("The target network is no longer available");
             root.operationFailed("connect", root.lastError);
             return;
@@ -603,8 +631,8 @@ Singleton {
 
     function hasSavedSecret(ssid) {
         return root.savedWifiConnections.some(connection => {
-            return connection.ssid === ssid;
-        });
+                                                  return connection.ssid === ssid;
+                                              });
     }
 
     function profileSnapshot(profile) {
@@ -627,10 +655,11 @@ Singleton {
         }
         const dnsData = ipv4["dns-data"] || [];
         const dns = dnsData.length > 0 ? dnsData.map(value => {
-            return String(value);
-        }) : (ipv4.dns || []).map(value => {
-            return root._uintToIpv4(Number(value));
-        });
+                                                         return String(value);
+                                                     }) : (ipv4.dns || []).map(value => {
+                                                                                   return root._uintToIpv4(
+                                                                                       Number(value));
+                                                                               });
         const customDns = !!ipv4["ignore-auto-dns"];
         const method = String(ipv4.method || "auto");
         return {
@@ -658,14 +687,15 @@ Singleton {
     function _validIpv4(value) {
         const parts = String(value || "").split(".");
         return parts.length === 4 && parts.every(part => {
-            return /^\d{1,3}$/.test(part) && Number(part) >= 0 && Number(part) <= 255;
-        });
+                                                     return /^\d{1,3}$/.test(part) && Number(part) >= 0
+                                                     && Number(part) <= 255;
+                                                 });
     }
 
     function _normalizedDns(value) {
         return String(value || "").trim().split(/[\s,]+/).filter(item => {
-            return item.length > 0;
-        });
+                                                                     return item.length > 0;
+                                                                 });
     }
 
     function _utf8Length(value) {
@@ -811,19 +841,16 @@ Singleton {
         root._queuedRuntimeRequest = null;
         NetworkManagerExtras.queryRuntimeDetails(request.interfaceName, request.isWifi, (success, details,
                                                                                          errorMessage) => {
-                                                                                             if (request.generation
-                                                                                                     !== root._runtimeRequestGeneration)
-                                                                                                 return;
+                                                     if (request.generation
+                                                         !== root._runtimeRequestGeneration)
+                                                     return;
 
-                                                                                             root.runtimeDetailsLoading
-                                                                                                     = false;
-                                                                                             if (success)
-                                                                                                 root.runtimeDetails
-                                                                                                         = details;
-                                                                                             else
-                                                                                                 root.runtimeDetailsError
-                                                                                                         = errorMessage;
-                                                                                         });
+                                                     root.runtimeDetailsLoading = false;
+                                                     if (success)
+                                                     root.runtimeDetails = details;
+                                                     else
+                                                     root.runtimeDetailsError = errorMessage;
+                                                 });
     }
 
     function releaseRuntimeDetails() {
@@ -864,8 +891,8 @@ Singleton {
             return false;
         }
         const matches = root.nearbyWifiNetworks.filter(network => {
-            return network.ssid === normalizedSsid;
-        });
+                                                           return network.ssid === normalizedSsid;
+                                                       });
         if (!hidden && matches.length > 1) {
             root.addWifiFinished(false, null, qsTr(
                                      "Multiple Wi-Fi devices found networks with the same name; select a specific device from the nearby networks list"));
@@ -926,8 +953,8 @@ Singleton {
 
     function savedConnectionForSsid(ssid) {
         return root.savedWifiConnections.find(connection => {
-            return connection.ssid === ssid;
-        }) || null;
+                                                  return connection.ssid === ssid;
+                                              }) || null;
     }
 
     function connectHiddenNetwork(ssid, credentials) {
@@ -953,7 +980,7 @@ Singleton {
     Component.onDestruction: {
         for (const device of root._nativeWifiDevices) {
             if (device && device.scannerEnabled)
-                device.scannerEnabled = false;
+            device.scannerEnabled = false;
         }
     }
 
@@ -983,8 +1010,9 @@ Singleton {
     Connections {
         function onSavedWifiProfilesChanged() {
             if (!root._pendingForgetSettings || root.savedWifiProfiles.some(profile => {
-                return profile.uuid === root._pendingForgetUuid;
-            }))
+                                                                                return profile.uuid
+                                                                                === root._pendingForgetUuid;
+                                                                            }))
                 return;
 
             const uuid = root._pendingForgetUuid;
@@ -1057,14 +1085,15 @@ Singleton {
                 if (root._pendingNetwork.state === ConnectionState.Disconnected) {
                     root._pendingConnectPhase = "waiting";
                     Qt.callLater(() => {
-                        if (root._pendingOperation !== "connect" || root._pendingConnectPhase !== "waiting"
-                                || !root._pendingNetwork || !root._pendingConnectSettings)
-                            return;
+                                     if (root._pendingOperation !== "connect" || root._pendingConnectPhase
+                                         !== "waiting" || !root._pendingNetwork ||
+                                         !root._pendingConnectSettings)
+                                     return;
 
-                        root._pendingStateWasChanging = false;
-                        root._pendingConnectPhase = "activating";
-                        root._pendingNetwork.connectWithSettings(root._pendingConnectSettings);
-                    });
+                                     root._pendingStateWasChanging = false;
+                                     root._pendingConnectPhase = "activating";
+                                     root._pendingNetwork.connectWithSettings(root._pendingConnectSettings);
+                                 });
                 }
                 return;
             }
@@ -1140,9 +1169,23 @@ Singleton {
     }
 
     Timer {
+        id: retryConnectTimer
+
+        interval: 1500
+        repeat: false
+        onTriggered: {
+            const request = root._pendingRetry;
+            root._pendingRetry = null;
+            if (!request)
+            return;
+            root.connectNetwork(request.network, request.credentials, true);
+        }
+    }
+
+    Timer {
         id: operationTimeout
 
-        interval: 60000
+        interval: 30000
         repeat: false
         onTriggered: root._finishOperationFailed(qsTr("Network operation timed out"))
     }

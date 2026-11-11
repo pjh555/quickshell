@@ -215,6 +215,22 @@ bool NiriPlugin::restoreWindow(quint64 id, const QString &output)
                       {QStringLiteral("output"), output.isEmpty() ? QJsonValue() : QJsonValue(output)}}}});
 }
 
+bool NiriPlugin::toggleFullscreenWindow(quint64 id)
+{
+    if (!id || windowById(id).isEmpty())
+        return false;
+    return sendAction({{QStringLiteral("FullscreenWindow"),
+                        QJsonObject{{QStringLiteral("id"), QJsonValue::fromVariant(id)}}}});
+}
+
+bool NiriPlugin::toggleMaximizeWindow(quint64 id)
+{
+    if (!id || windowById(id).isEmpty())
+        return false;
+    return sendAction({{QStringLiteral("MaximizeWindowToEdges"),
+                        QJsonObject{{QStringLiteral("id"), QJsonValue::fromVariant(id)}}}});
+}
+
 bool NiriPlugin::closeFocusedWindow()
 {
     return sendAction({{QStringLiteral("CloseWindow"), QJsonObject{{QStringLiteral("id"), QJsonValue()}}}});

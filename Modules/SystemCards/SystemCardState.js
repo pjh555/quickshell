@@ -1,10 +1,7 @@
 .pragma library
 
-// QML JavaScript files cannot use ES-module imports from another JS file.
-// Include the catalog here so CardState and DrawerGridLayout still consume
-// the same metadata source when they are run directly by qmltestrunner.
-Qt.include("SystemCardCatalog.js");
-Qt.include("SystemCardPlacement.js");
+.import "./SystemCardCatalog.js" as Catalog
+.import "./SystemCardPlacement.js" as Placement
 
 var schemaVersion = 4;
 var placementSpaces = ["screen", "wallpaper"];
@@ -16,7 +13,31 @@ function isObject(value) {
 }
 
 function validDesktopLayoutMode(value) {
-    return desktopLayoutModes.indexOf(String(value || "")) !== -1;
+    return Placement.desktopLayoutModes.indexOf(String(value || "")) !== -1;
+}
+
+function isFreeMode(mode) {
+    return Placement.isFreeMode(mode);
+}
+
+function isScreenLayoutMode(mode) {
+    return Placement.isScreenLayoutMode(mode);
+}
+
+function isWallpaperLayoutMode(mode) {
+    return Placement.isWallpaperLayoutMode(mode);
+}
+
+function all() {
+    return Catalog.all();
+}
+
+function ids() {
+    return Catalog.ids();
+}
+
+function definitionFor(id) {
+    return Catalog.definitionFor(String(id));
 }
 
 function validPlacementSpace(value) {

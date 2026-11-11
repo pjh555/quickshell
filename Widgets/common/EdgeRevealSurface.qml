@@ -26,9 +26,9 @@ Item {
         if (revealProgress === targetProgress) {
             if (!open) {
                 Qt.callLater(() => {
-                    if (!root.open && root.visible && root.revealProgress === 0)
-                        root.closed();
-                });
+                                 if (!root.open && root.visible && root.revealProgress === 0)
+                                 root.closed();
+                             });
             }
             return;
         }
@@ -88,6 +88,14 @@ Item {
                 z: -1
                 anchors.fill: parent
                 color: root.backgroundColor
+            }
+
+            Rectangle {
+                z: 2
+                x: root.onLeft ? revealViewport.width - 1 : 0
+                width: 1
+                height: revealViewport.height
+                color: Appearance.macos.hairline
             }
         }
 

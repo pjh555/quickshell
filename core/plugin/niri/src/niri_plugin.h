@@ -75,6 +75,8 @@ class NiriPlugin : public QObject {
     Q_INVOKABLE bool minimizeWindow(quint64 id);
     Q_INVOKABLE bool restoreWindow(quint64 id, const QString &output = QString());
     Q_INVOKABLE bool closeWindow(quint64 id);
+    Q_INVOKABLE bool toggleFullscreenWindow(quint64 id);
+    Q_INVOKABLE bool toggleMaximizeWindow(quint64 id);
     Q_INVOKABLE bool closeFocusedWindow();
     Q_INVOKABLE bool toggleOverview();
     Q_INVOKABLE bool focusColumnLeft();

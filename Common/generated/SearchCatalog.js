@@ -22,6 +22,60 @@ var catalog = {
     },
     {
       "aliases": [
+        "apps",
+        "grid",
+        "launchpad"
+      ],
+      "args": [],
+      "availability": "always",
+      "confirmation": "none",
+      "context": "SpotlightActions",
+      "description": "Show all installed applications",
+      "icon": "apps",
+      "id": "clavis:launchpad:toggle",
+      "method": "toggle",
+      "policy": "include",
+      "target": "launchpad",
+      "title": "Launchpad"
+    },
+    {
+      "aliases": [
+        "stage manager",
+        "windows",
+        "stages"
+      ],
+      "args": [],
+      "availability": "always",
+      "confirmation": "none",
+      "context": "SpotlightActions",
+      "description": "Show other windows in a side strip",
+      "icon": "view_sidebar",
+      "id": "clavis:stage-manager:toggle",
+      "method": "toggle",
+      "policy": "include",
+      "target": "stage-manager",
+      "title": "Stage Manager"
+    },
+    {
+      "aliases": [
+        "keyboard",
+        "osd",
+        "touch"
+      ],
+      "args": [],
+      "availability": "always",
+      "confirmation": "none",
+      "context": "SpotlightActions",
+      "description": "Show the on-screen touch keyboard",
+      "icon": "keyboard",
+      "id": "clavis:touch-keyboard:toggle",
+      "method": "toggle",
+      "policy": "include",
+      "target": "touch-keyboard",
+      "title": "Touch Keyboard"
+    },
+    {
+      "aliases": [
         "find"
       ],
       "args": [],
@@ -381,6 +435,21 @@ var catalog = {
   ],
   "routes": [
     {
+      "aliases": [
+        "settings",
+        "mobile",
+        "apps"
+      ],
+      "context": "ControlCenterWindow",
+      "icon": "android",
+      "id": "android",
+      "path": [
+        "android"
+      ],
+      "source": "AndroidPage.qml",
+      "title": "Android"
+    },
+    {
       "aliases": [],
       "context": "ControlCenterWindow",
       "icon": "account_circle",
@@ -390,6 +459,21 @@ var catalog = {
       ],
       "source": "AccountPage.qml",
       "title": "Account"
+    },
+    {
+      "aliases": [
+        "assistant",
+        "ai",
+        "codex"
+      ],
+      "context": "ControlCenterWindow",
+      "icon": "smart_toy",
+      "id": "agent",
+      "path": [
+        "agent"
+      ],
+      "source": "AgentPage.qml",
+      "title": "Agent"
     },
     {
       "aliases": [],
@@ -650,6 +734,23 @@ var catalog = {
   "schemaVersion": 1,
   "settings": [
     {
+      "aliases": [
+        "settings",
+        "mobile",
+        "apps"
+      ],
+      "anchor": false,
+      "context": "ControlCenterWindow",
+      "icon": "android",
+      "id": "android",
+      "path": [
+        "android"
+      ],
+      "route": "android",
+      "source": "AndroidPage.qml",
+      "title": "Android"
+    },
+    {
       "aliases": [],
       "anchor": false,
       "context": "ControlCenterWindow",
@@ -661,6 +762,23 @@ var catalog = {
       "route": "account",
       "source": "AccountPage.qml",
       "title": "Account"
+    },
+    {
+      "aliases": [
+        "assistant",
+        "ai",
+        "codex"
+      ],
+      "anchor": false,
+      "context": "ControlCenterWindow",
+      "icon": "smart_toy",
+      "id": "agent",
+      "path": [
+        "agent"
+      ],
+      "route": "agent",
+      "source": "AgentPage.qml",
+      "title": "Agent"
     },
     {
       "aliases": [],
@@ -1062,6 +1180,112 @@ var catalog = {
       "route": "advanced",
       "source": "AdvancedPage.qml",
       "title": "Matugen template generation"
+    },
+    {
+      "aliases": [
+        "assistant",
+        "ai",
+        "model",
+        "api"
+      ],
+      "anchor": true,
+      "context": "AgentPage",
+      "icon": "smart_toy",
+      "id": "agent.section.connection",
+      "path": [
+        "agent"
+      ],
+      "route": "agent",
+      "source": "AgentPage.qml",
+      "title": "Agent backend"
+    },
+    {
+      "aliases": [
+        "api key",
+        "model",
+        "base url"
+      ],
+      "anchor": true,
+      "context": "AgentPage",
+      "icon": "key",
+      "id": "agent.section.provider",
+      "path": [
+        "agent"
+      ],
+      "route": "agent",
+      "source": "AgentPage.qml",
+      "title": "Provider"
+    },
+    {
+      "aliases": [
+        "desktop",
+        "窗口",
+        "键盘",
+        "shell",
+        "操作电脑"
+      ],
+      "anchor": true,
+      "context": "AgentPage",
+      "icon": "computer",
+      "id": "agent.section.computer",
+      "path": [
+        "agent"
+      ],
+      "route": "agent",
+      "source": "AgentPage.qml",
+      "title": "Computer control"
+    },
+    {
+      "aliases": [
+        "mcp",
+        "extension",
+        "plugin",
+        "tools"
+      ],
+      "anchor": true,
+      "context": "AgentPage",
+      "icon": "extension",
+      "id": "agent.section.mcp",
+      "path": [
+        "agent"
+      ],
+      "route": "agent",
+      "source": "AgentPage.qml",
+      "title": "MCP servers"
+    },
+    {
+      "aliases": [
+        "skills",
+        "skill",
+        "能力"
+      ],
+      "anchor": true,
+      "context": "AgentPage",
+      "icon": "auto_awesome",
+      "id": "agent.section.skills",
+      "path": [
+        "agent"
+      ],
+      "route": "agent",
+      "source": "AgentPage.qml",
+      "title": "Agent skills"
+    },
+    {
+      "aliases": [
+        "桌宠",
+        "pet",
+        "image"
+      ],
+      "anchor": true,
+      "context": "AgentPage",
+      "icon": "pets",
+      "id": "agent.section.pet",
+      "path": [
+        "agent"
+      ],
+      "route": "agent",
+      "source": "AgentPage.qml",
+      "title": "Desktop pet"
     },
     {
       "aliases": [],
@@ -1958,7 +2182,9 @@ var catalog = {
 
 function title(id) {
     switch (id) {
+    case "android": return qsTranslate("ControlCenterWindow", "Android");
     case "account": return qsTranslate("ControlCenterWindow", "Account");
+    case "agent": return qsTranslate("ControlCenterWindow", "Agent");
     case "general": return qsTranslate("ControlCenterWindow", "General");
     case "wallpaper": return qsTranslate("ControlCenterWindow", "Wallpaper");
     case "theme": return qsTranslate("ControlCenterWindow", "Theme");
@@ -1988,6 +2214,12 @@ function title(id) {
     case "advanced.section.map-and-weather-services": return qsTranslate("AdvancedPage", "Map and weather services");
     case "advanced.section.cloud-storage": return qsTranslate("AdvancedPage", "Cloud storage");
     case "advanced.section.matugen-template-generation": return qsTranslate("AdvancedPage", "Matugen template generation");
+    case "agent.section.connection": return qsTranslate("AgentPage", "Agent backend");
+    case "agent.section.provider": return qsTranslate("AgentPage", "Provider");
+    case "agent.section.computer": return qsTranslate("AgentPage", "Computer control");
+    case "agent.section.mcp": return qsTranslate("AgentPage", "MCP servers");
+    case "agent.section.skills": return qsTranslate("AgentPage", "Agent skills");
+    case "agent.section.pet": return qsTranslate("AgentPage", "Desktop pet");
     case "general.autostart.section.add-application-to-autostart": return qsTranslate("AutostartPage", "Add application to autostart");
     case "general.autostart.section.user-autostart-applications": return qsTranslate("AutostartPage", "User autostart applications");
     case "general.bluetooth-pairing.section.nearby-devices": return qsTranslate("BluetoothPairingPage", "Nearby devices");
@@ -2052,6 +2284,9 @@ function title(id) {
     case "wallpaper.section.parallax-effects": return qsTranslate("WallpaperPage", "Parallax effects");
     case "wallpaper.section.overview-background": return qsTranslate("WallpaperPage", "Overview background");
     case "clavis:lock:open": return qsTranslate("SpotlightActions", "Lock screen");
+    case "clavis:launchpad:toggle": return qsTranslate("SpotlightActions", "Launchpad");
+    case "clavis:stage-manager:toggle": return qsTranslate("SpotlightActions", "Stage Manager");
+    case "clavis:touch-keyboard:toggle": return qsTranslate("SpotlightActions", "Touch Keyboard");
     case "clavis:spotlight:search": return qsTranslate("SpotlightActions", "Search");
     case "clavis:spotlight:web": return qsTranslate("SpotlightActions", "Web search");
     case "clavis:spotlight:files": return qsTranslate("SpotlightActions", "Find files");
@@ -2080,6 +2315,9 @@ function title(id) {
 function description(id) {
     switch (id) {
     case "clavis:lock:open": return qsTranslate("SpotlightActions", "Lock the current session");
+    case "clavis:launchpad:toggle": return qsTranslate("SpotlightActions", "Show all installed applications");
+    case "clavis:stage-manager:toggle": return qsTranslate("SpotlightActions", "Show other windows in a side strip");
+    case "clavis:touch-keyboard:toggle": return qsTranslate("SpotlightActions", "Show the on-screen touch keyboard");
     case "clavis:spotlight:search": return qsTranslate("SpotlightActions", "Open Spotlight Search");
     case "clavis:spotlight:web": return qsTranslate("SpotlightActions", "Enter Spotlight Web search");
     case "clavis:spotlight:files": return qsTranslate("SpotlightActions", "Open Spotlight Files");

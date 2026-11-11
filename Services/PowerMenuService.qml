@@ -34,6 +34,14 @@ QtObject {
         return true;
     }
 
+    function request(action) {
+        const normalized = String(action || "");
+        if (["lock", "logout", "suspend", "poweroff", "hibernate", "reboot"].indexOf(normalized) < 0)
+            return false;
+        root.actionRequested(normalized);
+        return true;
+    }
+
     function trigger(action) {
         if (!root.active)
             return false;

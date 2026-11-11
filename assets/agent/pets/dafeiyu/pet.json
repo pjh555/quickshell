@@ -1,0 +1,355 @@
+{
+  "schemaVersion": 2,
+  "id": "dafeiyu",
+  "name": "大肥鱼",
+  "description": "蓝色鲸鱼娘 · DeepSeek 社区二创桌宠",
+  "author": "ZipZipPipe / vlln / xiaoshihou",
+  "license": "MIT",
+  "renderer": "frames",
+  "preview": "preview.png",
+  "behavior": {
+    "wander": {
+      "enabled": true,
+      "speed": 26,
+      "facing": "right",
+      "say": [
+        "出去溜达一圈~",
+        "散步散步",
+        "看看主人在干嘛"
+      ]
+    },
+    "sleep": {
+      "after": 180,
+      "animation": "sleep",
+      "wakeAnimation": "wake",
+      "say": [
+        "Zzz…"
+      ],
+      "wakeSay": [
+        "唔…醒了醒了",
+        "谁把我叫醒的？",
+        "再睡五分钟…"
+      ]
+    },
+    "ambient": [
+      {
+        "action": "think",
+        "weight": 1
+      },
+      {
+        "action": "play",
+        "weight": 1
+      },
+      {
+        "action": "celebrate",
+        "weight": 1
+      }
+    ]
+  },
+  "animations": {
+    "idle": {
+      "frames": [
+        "frames/idle_0.png",
+        "frames/idle_1.png",
+        "frames/idle_2.png"
+      ],
+      "fps": 2,
+      "loop": true
+    },
+    "walk": {
+      "frames": [
+        "frames/walk_0.png",
+        "frames/walk_1.png",
+        "frames/walk_2.png"
+      ],
+      "fps": 6,
+      "loop": true,
+      "pingpong": true
+    },
+    "click": {
+      "frames": [
+        "frames/joy_0.png",
+        "frames/joy_1.png"
+      ],
+      "fps": 5,
+      "loop": false
+    },
+    "drag": {
+      "frames": [
+        "frames/drag_0.png"
+      ],
+      "fps": 1,
+      "loop": true
+    },
+    "sleep": {
+      "frames": [
+        "frames/sleep_0.png",
+        "frames/sleep_1.png"
+      ],
+      "fps": 1,
+      "loop": true
+    },
+    "eat": {
+      "frames": [
+        "frames/eat_0.png",
+        "frames/eat_1.png",
+        "frames/eat_2.png"
+      ],
+      "fps": 8,
+      "loop": false
+    },
+    "joy": {
+      "frames": [
+        "frames/joy_0.png",
+        "frames/joy_1.png"
+      ],
+      "fps": 5,
+      "loop": true
+    },
+    "play": {
+      "frames": [
+        "frames/play_0.png",
+        "frames/play_1.png",
+        "frames/play_2.png"
+      ],
+      "fps": 4,
+      "loop": true
+    },
+    "think": {
+      "frames": [
+        "frames/think_0.png"
+      ],
+      "fps": 2,
+      "loop": true
+    },
+    "wait": {
+      "frames": [
+        "frames/wait_0.png"
+      ],
+      "fps": 2,
+      "loop": true
+    },
+    "working": {
+      "frames": [
+        "frames/working_0.png",
+        "frames/working_1.png",
+        "frames/working_2.png"
+      ],
+      "fps": 3,
+      "loop": true
+    },
+    "celebrate": {
+      "frames": [
+        "frames/celebrate_0.png",
+        "frames/celebrate_1.png",
+        "frames/celebrate_2.png"
+      ],
+      "fps": 4,
+      "loop": true
+    },
+    "error": {
+      "frames": [
+        "frames/error_0.png",
+        "frames/error_1.png"
+      ],
+      "fps": 8,
+      "loop": false
+    },
+    "disappointed": {
+      "frames": [
+        "frames/disappointed_0.png",
+        "frames/disappointed_1.png"
+      ],
+      "fps": 2,
+      "loop": true
+    },
+    "wake": {
+      "frames": [
+        "frames/wake_0.png",
+        "frames/wake_1.png"
+      ],
+      "fps": 3,
+      "loop": false
+    },
+    "welcome": {
+      "frames": [
+        "frames/welcome_0.png",
+        "frames/welcome_1.png"
+      ],
+      "fps": 3,
+      "loop": false
+    }
+  },
+  "language": "zh-CN",
+  "locale": "zh-CN",
+  "ui": {
+    "menuTitle": "大肥鱼",
+    "agentPanel": "Agent",
+    "petSettings": "设置"
+  },
+  "agentStates": {
+    "thinking": "think",
+    "working": "working",
+    "result": "wait",
+    "waiting": "wait",
+    "success": "celebrate",
+    "error": "error"
+  },
+  "actions": {
+    "pet": {
+      "animation": "joy",
+      "duration": 1.6,
+      "label": "摸摸",
+      "icon": "favorite",
+      "say": [
+        "干嘛戳我啦~",
+        "大肥鱼在此！",
+        "摸鱼中，请勿打扰",
+        "主人今天也要开心呀",
+        "再戳就要生气咯",
+        "饿了…有小鱼干吗？",
+        "唔…被发现了",
+        "让我安静地肥一会儿"
+      ]
+    },
+    "feed": {
+      "animation": "eat",
+      "duration": 2.8,
+      "label": "喂食",
+      "icon": "restaurant",
+      "say": [
+        "谢谢主人！",
+        "吧唧吧唧…真好吃",
+        "还要还要！",
+        "这口 token 真香",
+        "吃饱啦~"
+      ]
+    },
+    "play": {
+      "animation": "play",
+      "duration": 3.2,
+      "loop": true,
+      "label": "玩耍",
+      "icon": "sports_esports",
+      "say": [
+        "玩一会儿~",
+        "接住这个！",
+        "好耶！"
+      ]
+    },
+    "think": {
+      "animation": "think",
+      "duration": 3.5,
+      "loop": true,
+      "label": "发呆",
+      "icon": "psychology",
+      "say": [
+        "让我想想…",
+        "发呆中，勿扰"
+      ]
+    },
+    "work": {
+      "animation": "working",
+      "duration": 3.5,
+      "loop": true,
+      "label": "工作",
+      "icon": "work",
+      "say": [
+        "努力工作中…",
+        "今天也要加油鸭"
+      ]
+    },
+    "celebrate": {
+      "animation": "celebrate",
+      "duration": 2.8,
+      "label": "庆祝",
+      "icon": "celebration",
+      "say": [
+        "好耶！",
+        "完成啦~"
+      ]
+    },
+    "sleep": {
+      "label": "睡觉 / 叫醒",
+      "icon": "bedtime",
+      "agent": "sleep"
+    }
+  },
+  "menu": [
+    {
+      "id": "feed",
+      "label": "喂食",
+      "icon": "restaurant",
+      "action": "feed"
+    },
+    {
+      "id": "pet",
+      "label": "摸摸",
+      "icon": "favorite",
+      "action": "pet"
+    },
+    {
+      "id": "play",
+      "label": "玩耍",
+      "icon": "sports_esports",
+      "action": "play"
+    },
+    {
+      "separator": true
+    },
+    {
+      "id": "sleep",
+      "label": "睡觉 / 叫醒",
+      "icon": "bedtime",
+      "action": "sleep"
+    },
+    {
+      "separator": true
+    },
+    {
+      "id": "agent",
+      "label": "Agent",
+      "icon": "chat",
+      "action": "agentPanel"
+    },
+    {
+      "id": "settings",
+      "label": "设置",
+      "icon": "settings",
+      "action": "petSettings"
+    }
+  ],
+  "interactions": {
+    "singleClick": "pet",
+    "doubleClick": "feed",
+    "rightClick": "menu",
+    "dragStart": "drag",
+    "dragEnd": "idle"
+  },
+  "workStatusTexts": [
+    [
+      "摸鱼中，让我想想…",
+      "正在理清思路…"
+    ],
+    [
+      "正在帮主人干活…",
+      "努力中…"
+    ],
+    [
+      "有进展了",
+      "继续摸鱼…"
+    ],
+    [
+      "等你确认…",
+      "需要主人拍板"
+    ],
+    [
+      "搞定！收工~",
+      "完成啦~"
+    ],
+    [
+      "出错了…",
+      "先别慌，看看日志"
+    ]
+  ]
+}

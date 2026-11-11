@@ -188,6 +188,16 @@ function insertionIndex(value, length) {
             ? Math.min(length, Math.floor(value)) : length;
 }
 
+// The rendered row has one fixed Launchpad slot before the persisted pins.
+// Translate a visual gap index back into the persisted pinned list while
+// keeping new apps after that fixed slot.
+function pinnedInsertionIndex(index, pinnedAppCount) {
+    const count = Math.max(0, Math.floor(Number(pinnedAppCount) || 0));
+    if (typeof index !== "number" || !isFinite(index))
+        return count;
+    return Math.max(0, Math.min(count, Math.floor(index) - 1));
+}
+
 function movePinned(pinned, key, index) {
     const current = pinned.findIndex(entry => pinnedKey(entry) === key);
     if (current < 0) return null;

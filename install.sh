@@ -15,6 +15,42 @@ set -euo pipefail
 main() (
     set -euo pipefail
     local command metadata tag pattern temporary hash filename expected='' found=0
+    local distro_id='' distro_like='' local_installer=''
+
+    # Ubuntu/Debian releases have no Arch package installer. Build from source
+    # with the repository's native ARM64 installer instead of falling through
+    # to the Arch release download below.
+    if [[ -r /etc/os-release ]]; then
+        # shellcheck disable=SC1091
+        . /etc/os-release
+        distro_id=${ID:-}
+        distro_like=${ID_LIKE:-}
+        case " $distro_id $distro_like " in
+            *ubuntu*|*debian*)
+                for command in curl sha256sum mktemp bash git; do
+                    command -v "$command" >/dev/null || {
+                        printf 'Required command: %s\n' "$command" >&2
+                        return 1
+                    }
+                done
+                if [[ -n ${BASH_SOURCE[0]:-} ]]; then
+                    local_installer="$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/install-ubuntu.sh"
+                fi
+                if [[ -f $local_installer ]]; then
+                    exec bash "$local_installer" "$@"
+                fi
+                temporary=$(mktemp -d "${TMPDIR:-/tmp}/clavis-ubuntu-source.XXXXXX")
+                trap 'rm -rf -- "$temporary"' EXIT
+                git clone --depth 1 --branch main https://github.com/StatIndet/quickshell.git \
+                    "$temporary/quickshell" >/dev/null 2>&1 || {
+                    printf 'Could not download the Clavis source tree.\n' >&2
+                    return 1
+                }
+                exec bash "$temporary/quickshell/install-ubuntu.sh" "$@"
+                ;;
+        esac
+    fi
+
     for command in curl sha256sum mktemp bash; do
         command -v "$command" >/dev/null || { printf 'Required command: %s\n' "$command" >&2; return 1; }
     done

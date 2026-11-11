@@ -798,8 +798,13 @@ Variants {
                 property int pillActiveFusionDuration: pillFusionDuration
                 property int notifW: 380
                 property int notifH: 20 + NotificationManager.popupList.reduce((height, notif) => {
-                    return height + (NotificationManager.normalActions(notif).length > 0 ? 104 : 64);
-                }, 0) + Math.max(0, NotificationManager.popupList.length - 1) * 10
+                                                                                   return height + (
+                                                                                       NotificationManager.normalActions(
+                                                                                           notif).length > 0
+                                                                                       ? 104 : 64);
+                                                                               }, 0) + Math.max(0,
+                                                                                                NotificationManager.popupList.length
+                                                                                                - 1) * 10
                 property color color: BlurService.backgroundColor(mediaWidget.visible
                                                                   && mediaWidget.coverColors
                                                                   ? mediaWidget.surfaceColor :
@@ -903,20 +908,16 @@ Variants {
                     volHideTimer.restart();
                 }
 
-                function triggerVolumeOSD() {
-                    root.triggerSliderOSD("volume");
-                }
-
                 function requestKeyboardFocus() {
                     Qt.callLater(() => {
-                        if (!root.keyboardInteractionActive)
-                            return;
+                                     if (!root.keyboardInteractionActive)
+                                     return;
 
-                        if (root.isToolsMode)
-                            toolsWidget.forceActiveFocus();
-                        else
-                            root.forceActiveFocus();
-                    });
+                                     if (root.isToolsMode)
+                                     toolsWidget.forceActiveFocus();
+                                     else
+                                     root.forceActiveFocus();
+                                 });
                 }
 
                 onIsToolsModeChanged: {
@@ -929,9 +930,9 @@ Variants {
                                                                                  false)
                 focus: root.keyboardInteractionActive
                 Keys.onEscapePressed: event => {
-                    WidgetState.closeAllPopups();
-                    event.accepted = true;
-                }
+                                          WidgetState.closeAllPopups();
+                                          event.accepted = true;
+                                      }
                 state: keystoneWindow.edge
                 // HubContent changes its own currentIndex when a tab is
                 // clicked. Keep the two pieces of state synchronized
@@ -1488,40 +1489,6 @@ Variants {
                     }
                 }
 
-                Connections {
-                    function onVolumeChanged() {
-                        root.triggerSliderOSD("volume");
-                    }
-
-                    function onMutedChanged() {
-                        root.triggerSliderOSD("volume");
-                    }
-
-                    target: root.audioNode
-                    ignoreUnknownSignals: true
-                }
-
-                Connections {
-                    function onVolumeChanged() {
-                        root.triggerSliderOSD("mic");
-                    }
-
-                    function onMutedChanged() {
-                        root.triggerSliderOSD("mic");
-                    }
-
-                    target: root.sourceAudioNode
-                    ignoreUnknownSignals: true
-                }
-
-                Connections {
-                    function onBrightnessChanged() {
-                        root.triggerSliderOSD("brightness");
-                    }
-
-                    target: Brightness
-                }
-
                 MouseArea {
                     id: keystoneMouseArea
 
@@ -1531,11 +1498,12 @@ Variants {
                     enabled: !root.contentPresentationActive && !root.isNotifMode && !root.isVolumeMode
                     acceptedButtons: Qt.LeftButton | Qt.MiddleButton
                     onClicked: mouse => {
-                        root.activateMouseAction(mouse.button === Qt.MiddleButton
-                                                 ? PersonalizationConfig.keystoneMiddleClickAction :
-                                                   PersonalizationConfig.keystoneLeftClickAction, true);
-                        mouse.accepted = true;
-                    }
+                                   root.activateMouseAction(mouse.button === Qt.MiddleButton
+                                                            ? PersonalizationConfig.keystoneMiddleClickAction :
+                                                              PersonalizationConfig.keystoneLeftClickAction,
+                                                            true);
+                                   mouse.accepted = true;
+                               }
                 }
 
                 Item {
@@ -1586,9 +1554,9 @@ Variants {
                         opacity: root.isVolumeMode && !root.keyboardOsd ? 1 : 0
                         visible: opacity > 0.01
                         onMoved: value => {
-                            if (root.sliderMode === "brightness")
-                                Brightness.setBrightness(value);
-                        }
+                                     if (root.sliderMode === "brightness")
+                                     Brightness.setBrightness(value);
+                                 }
 
                         Behavior on opacity {
                             NumberAnimation {
@@ -1758,11 +1726,12 @@ Variants {
                     cursorShape: Qt.PointingHandCursor
                     acceptedButtons: Qt.LeftButton | Qt.MiddleButton
                     onClicked: mouse => {
-                        root.activateMouseAction(mouse.button === Qt.MiddleButton
-                                                 ? PersonalizationConfig.keystoneMiddleClickAction :
-                                                   PersonalizationConfig.keystoneLeftClickAction, true);
-                        mouse.accepted = true;
-                    }
+                                   root.activateMouseAction(mouse.button === Qt.MiddleButton
+                                                            ? PersonalizationConfig.keystoneMiddleClickAction :
+                                                              PersonalizationConfig.keystoneLeftClickAction,
+                                                            true);
+                                   mouse.accepted = true;
+                               }
                 }
 
                 Behavior on width {

@@ -142,17 +142,58 @@ TopBarPill {
         }
     }
 
+    ActiveWindowMenu {
+        id: windowMenu
+
+        anchorItem: root
+        windowData: root.activeWindow
+    }
+
     MouseArea {
-        id: activeHover
+        id: activeWindowPointer
 
         anchors.fill: parent
-        enabled: root.vertical
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
         hoverEnabled: true
-        acceptedButtons: Qt.NoButton
+        property bool longPressTriggered: false
+        property real pressX: 0
+        property real pressY: 0
+
+        onPressed: event => {
+                       if (event.button === Qt.RightButton) {
+                           windowMenu.visible = true;
+                       } else {
+                           longPressTriggered = false;
+                           pressX = event.x;
+                           pressY = event.y;
+                           longPressTimer.restart();
+                       }
+                   }
+        onReleased: event => {
+                        longPressTimer.stop();
+                        longPressTriggered = false;
+                    }
+        onCanceled: longPressTimer.stop()
+        onPositionChanged: event => {
+                               if (pressed && Math.hypot(event.x - pressX, event.y - pressY) > 12)
+                               longPressTimer.stop();
+                           }
+        onDoubleClicked: windowMenu.visible = true
+
+        Timer {
+            id: longPressTimer
+
+            interval: 550
+            repeat: false
+            onTriggered: {
+                activeWindowPointer.longPressTriggered = true;
+                windowMenu.visible = true;
+            }
+        }
     }
 
     PopupToolTip {
-        extraVisibleCondition: root.vertical && activeHover.containsMouse
+        extraVisibleCondition: root.vertical && activeWindowPointer.containsMouse
         text: root.detailedTooltipText
     }
 }

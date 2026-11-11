@@ -119,20 +119,20 @@ TestCase {
     }
 
     function test_fanCurveAndTiltShareTangent() {
-        const short = DockLayout.folderFan("bottom", 5, 1000, 1600, true, 84);
-        const long = DockLayout.folderFan("bottom", 11, 1000, 1600, true, 84);
-        compare(short.count, 5);
-        compare(long.count, 8);
-        const first = fanCenter(long.slots[0], long, true);
-        const last = fanCenter(long.slots[long.count - 1], long, true);
-        const shortFirst = fanCenter(short.slots[0], short, true);
-        const shortLast = fanCenter(short.slots[short.count - 1], short, true);
-        verify(last.x - first.x > shortLast.x - shortFirst.x);
-        for (let index = 1; index < long.count; ++index) {
-            const before = long.slots[index - 1], after = long.slots[index];
-            const a = fanCenter(before, long, true), b = fanCenter(after, long, true);
+        const compactFan = DockLayout.folderFan("bottom", 5, 1000, 1600, true, 84);
+        const expandedFan = DockLayout.folderFan("bottom", 11, 1000, 1600, true, 84);
+        compare(compactFan.count, 5);
+        compare(expandedFan.count, 8);
+        const first = fanCenter(expandedFan.slots[0], expandedFan, true);
+        const last = fanCenter(expandedFan.slots[expandedFan.count - 1], expandedFan, true);
+        const compactFirst = fanCenter(compactFan.slots[0], compactFan, true);
+        const compactLast = fanCenter(compactFan.slots[compactFan.count - 1], compactFan, true);
+        verify(last.x - first.x > compactLast.x - compactFirst.x);
+        for (let index = 1; index < expandedFan.count; ++index) {
+            const before = expandedFan.slots[index - 1], after = expandedFan.slots[index];
+            const a = fanCenter(before, expandedFan, true), b = fanCenter(after, expandedFan, true);
             verify(b.x > a.x && b.y < a.y);
-            verify(Math.hypot(b.x - a.x, b.y - a.y) > long.iconSize);
+            verify(Math.hypot(b.x - a.x, b.y - a.y) > expandedFan.iconSize);
             // The connecting chord follows the midpoint tangent. This also
             // catches separate, unrelated interpolation of position and tilt.
             fuzzyCompare(Math.atan2(b.x - a.x, a.y - b.y) * 180 / Math.PI, (before.rotation + after.rotation)
@@ -175,6 +175,22 @@ TestCase {
                 fuzzyCompare(first.x, layout.width - layout.iconInset, 0.00001);
             }
         }
+    }
+
+    function test_launchpadOwnsLeadingPinnedSlot() {
+        const kinds = ["launchpad", "app", "app", "app", "file", "trash"];
+        // Two configurable app pins plus the injected Launchpad row.
+        const pinnedSectionCount = 3;
+        compare(DockLayout.sectionBoundaries(kinds, pinnedSectionCount).join(","), "3,4");
+        compare(DockLayout.sectionBoundary(kinds, pinnedSectionCount), 3);
+        const layout = DockLayout.layout(kinds, 48, 900, 1.5, 16, NaN, DockLayout.sectionBoundaries(kinds,
+                                                                                                    pinnedSectionCount));
+        compare(layout.slots.length, kinds.length);
+        verifyOrdered(layout);
+        const preview = DockLayout.previewOrder(kinds, -1, 1, "app");
+        compare(preview.kinds[0], "launchpad");
+        compare(preview.order[1], -1);
+        compare(preview.kinds.length, kinds.length + 1);
     }
 
     function test_fileSectionUsesSameLayoutAndDistinctDividers() {
@@ -275,12 +291,12 @@ TestCase {
     function verifyOrdered(result) {
         let end = 0;
         result.slots.forEach(slot => {
-            verify(isFinite(slot.start));
-            verify(isFinite(slot.span));
-            verify(slot.span > 0);
-            verify(slot.start >= end - 0.0001);
-            end = slot.start + slot.span;
-        });
+                                 verify(isFinite(slot.start));
+                                 verify(isFinite(slot.span));
+                                 verify(slot.span > 0);
+                                 verify(slot.start >= end - 0.0001);
+                                 end = slot.start + slot.span;
+                             });
         verify(result.length >= end);
     }
 
@@ -325,12 +341,12 @@ TestCase {
         verify(resting.length <= data.available + 0.0001);
         verifyOrdered(resting);
         resting.slots.forEach(slot => {
-            const hovered = DockLayout.layout(data.kinds, data.preferred, data.available, data.maximum, 16,
-                                              slot.center);
-            verify(hovered.length <= data.available + 0.0001);
-            verify(!hovered.overflow);
-            verifyOrdered(hovered);
-        });
+                                  const hovered = DockLayout.layout(data.kinds, data.preferred, data.available,
+                                                                    data.maximum, 16, slot.center);
+                                  verify(hovered.length <= data.available + 0.0001);
+                                  verify(!hovered.overflow);
+                                  verifyOrdered(hovered);
+                              });
     }
 
     function test_shrinksUntilMinimumThenReportsOverflow() {
@@ -392,14 +408,14 @@ TestCase {
         const kinds = ["app", "app", "spacer", "app", "app"];
         const resting = DockLayout.layout(kinds, 48, 800, 1.75, 20, NaN);
         resting.slots.forEach(target => {
-            const hovered = DockLayout.layout(kinds, 48, 800, 1.75, 20, target.center);
-            compare(hovered.size, resting.size);
-            compare(hovered.baseLength, resting.baseLength);
-            hovered.slots.forEach((slot, index) => {
-                compare(slot.center, resting.slots[index].center);
-            });
-            verifyOrdered(hovered);
-        });
+                                  const hovered = DockLayout.layout(kinds, 48, 800, 1.75, 20, target.center);
+                                  compare(hovered.size, resting.size);
+                                  compare(hovered.baseLength, resting.baseLength);
+                                  hovered.slots.forEach((slot, index) => {
+                                                            compare(slot.center, resting.slots[index].center);
+                                                        });
+                                  verifyOrdered(hovered);
+                              });
     }
 
     function test_spacersUseApplicationSlotsAtEverySizeAndMagnification() {
@@ -416,13 +432,14 @@ TestCase {
 
     function test_emptyAndSpacerOnlyLayoutsStayFinite() {
         [[], ["spacer"], ["spacer", "spacer"]].forEach(kinds => {
-            const result = DockLayout.layout(kinds, 48, 600, 2, 16, 100);
-            compare(result.slots.length, kinds.length);
-            verify(isFinite(result.size));
-            verify(isFinite(result.length));
-            verify(!result.overflow);
-            verifyOrdered(result);
-        });
+                                                           const result = DockLayout.layout(kinds, 48, 600, 2,
+                                                                                            16, 100);
+                                                           compare(result.slots.length, kinds.length);
+                                                           verify(isFinite(result.size));
+                                                           verify(isFinite(result.length));
+                                                           verify(!result.overflow);
+                                                           verifyOrdered(result);
+                                                       });
     }
 
     function test_insertionUsesVisualSlotMidpoints() {

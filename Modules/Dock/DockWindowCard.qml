@@ -29,6 +29,8 @@ Button {
 
     signal activated
     signal closeRequested
+    signal minimizeRequested
+    signal maximizeRequested
 
     height: (showThumbnail ? 40 + (logicalWidth - 16) / 1.6 + 8 : 40) * detailScale
     padding: 0
@@ -67,7 +69,7 @@ Button {
                 id: headerTitle
                 x: 30
                 y: 0
-                width: Math.max(0, parent.width - x - 36)
+                width: Math.max(0, parent.width - x - 88)
                 height: 40
                 text: root.title
                 textFormat: Text.PlainText
@@ -80,15 +82,39 @@ Button {
             IconButton {
                 id: closeButton
                 x: parent.width - width - 4
-                y: 6
-                controlSize: 28
-                iconSize: 16
+                y: 8
+                controlSize: 24
+                iconSize: 14
                 iconName: "close"
                 buttonRadius: 5
                 buttonRadiusPressed: 5
                 normalHoverStateLayerColor: Appearance.applyAlpha(Appearance.m3colors.m3error, 0.2)
                 accessibleName: qsTr("Close window")
                 onClicked: root.closeRequested()
+            }
+            IconButton {
+                id: minimizeButton
+                x: closeButton.x - width - 2
+                y: 8
+                controlSize: 24
+                iconSize: 14
+                iconName: "minimize"
+                buttonRadius: 5
+                buttonRadiusPressed: 5
+                accessibleName: qsTr("Minimize window")
+                onClicked: root.minimizeRequested()
+            }
+            IconButton {
+                id: maximizeButton
+                x: minimizeButton.x - width - 2
+                y: 8
+                controlSize: 24
+                iconSize: 14
+                iconName: root.windowData && root.windowData.fullscreen ? "close_fullscreen" : "open_in_full"
+                buttonRadius: 5
+                buttonRadiusPressed: 5
+                accessibleName: qsTr("Maximize window")
+                onClicked: root.maximizeRequested()
             }
             Rectangle {
                 x: 8
@@ -178,6 +204,7 @@ Button {
         text: root.title
         textFormat: Text.PlainText
         extraVisibleCondition: root.hovered && headerTitle.truncated && !closeButton.pointerHovered &&
+                               !minimizeButton.pointerHovered && !maximizeButton.pointerHovered &&
                                !mediaHover.hovered
     }
 

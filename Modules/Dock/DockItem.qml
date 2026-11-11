@@ -125,6 +125,10 @@ Item {
         }
         opacity: root.available || root.windowCount > 0 || root.spacer ? 1 : 0.45
 
+        LaunchpadDockIcon {
+            anchors.fill: parent
+            visible: root.kind === "launchpad"
+        }
         ThemeIcon {
             anchors.fill: parent
             visible: (root.kind === "app" || root.trashIconAvailable) && !root.symbol
@@ -213,19 +217,19 @@ Item {
             root.grabOffset = Qt.point(root.pressPoint.x - center.x, root.pressPoint.y - center.y);
         }
         onPositionChanged: mouse => {
-            if (root.kind === "trash" || !(pressedButtons & Qt.LeftButton))
-                return;
+            if (root.kind === "trash" || root.kind === "launchpad" || !(pressedButtons & Qt.LeftButton))
+            return;
             const position = pointer.mapToItem(null, mouse.x, mouse.y);
             if (!root.moved && Math.hypot(position.x - root.pressPoint.x, position.y - root.pressPoint.y)
-                    < 10)
+                < 10)
 
-                return;
+            return;
             root.moved = true;
             root.dragMoved(root.entryKey, position, root.grabOffset, root.iconSize);
         }
         onReleased: mouse => {
             if (root.moved)
-                root.dragReleased(root.entryKey, pointer.mapToItem(null, mouse.x, mouse.y));
+            root.dragReleased(root.entryKey, pointer.mapToItem(null, mouse.x, mouse.y));
         }
         onCanceled: {
             root.moved = true;
@@ -233,15 +237,15 @@ Item {
         }
         onClicked: mouse => {
             if (root.moved)
-                return;
+            return;
             if (mouse.button === Qt.RightButton)
-                root.contextRequested(root.entryKey);
+            root.contextRequested(root.entryKey);
             else
-                root.activated(root.entryKey);
+            root.activated(root.entryKey);
         }
         onPressAndHold: {
             if (!root.moved)
-                root.contextRequested(root.entryKey);
+            root.contextRequested(root.entryKey);
         }
     }
 }

@@ -26,7 +26,8 @@ Singleton {
     signal integrationFailed(string message)
 
     function backgroundColor(baseColor) {
-        return Appearance.applyAlpha(baseColor, PersonalizationConfig.shellBackgroundOpacity);
+        const material = Appearance.mix(baseColor, Appearance.macos.surfaceElevated, 0.18);
+        return Appearance.applyAlpha(material, PersonalizationConfig.shellBackgroundOpacity);
     }
 
     // A shell-managed Material surface. It starts from an opaque base but
@@ -61,6 +62,15 @@ Singleton {
         NiriConfigService.setup("effects");
     }
 
+    function ensureIntegration() {
+        if (!root.available || !PersonalizationConfig.shellBlurEnabled || root.integrationBusy)
+            return;
+        if (root.niriIntegrationReady)
+            NiriConfigService.update("effects");
+        else
+            root.configureNiriIntegration();
+    }
+
     Connections {
         target: PersonalizationConfig
 
@@ -70,8 +80,12 @@ Singleton {
 
         function onShellBlurEnabledChanged() {
             root.writeEffectsConfig();
+            root.ensureIntegration();
         }
     }
+
+    onAvailableChanged: Qt.callLater(root.ensureIntegration)
+    onNiriIntegrationReadyChanged: Qt.callLater(root.ensureIntegration)
 
     Process {
         id: versionProcess

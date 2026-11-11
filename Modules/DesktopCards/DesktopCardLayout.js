@@ -1,15 +1,38 @@
 .pragma library
 
-// Keep layout mode classification in one place.  This file owns geometry and
-// collision solving; SystemCardPlacement.js owns the meaning of each mode.
-Qt.include("../SystemCards/SystemCardPlacement.js");
-Qt.include("../SystemCards/SystemCardGeometry.js");
-Qt.include("../SystemCards/SystemCardGrid.js");
+.import "../SystemCards/SystemCardPlacement.js" as Placement
+.import "../SystemCards/SystemCardGeometry.js" as Geometry
+.import "../SystemCards/SystemCardGrid.js" as Grid
 
-var desktopCardGap = cellGap;
+var desktopCardGap = Number(Geometry.cellGap) || 8;
 var desktopCardEdgeInset = 24;
-var desktopGridColumnPitch = cardGridStep;
-var desktopGridRowPitch = cardGridStep;
+var desktopGridColumnPitch = Number(Grid.cardGridStep) || 8;
+var desktopGridRowPitch = Number(Grid.cardGridStep) || 8;
+var cardGridStep = desktopGridColumnPitch;
+
+function isScreenLayoutMode(mode) {
+    return Placement.isScreenLayoutMode(mode);
+}
+
+function isWallpaperLayoutMode(mode) {
+    return Placement.isWallpaperLayoutMode(mode);
+}
+
+function gridSnap(value, maximum, step) {
+    return Grid.gridSnap(value, maximum, step);
+}
+
+function gridOverlaps(first, second, gap) {
+    return Grid.gridOverlaps(first, second, gap);
+}
+
+function gridEdgeCandidates(card, occupied, width, height, gap, step) {
+    return Grid.gridEdgeCandidates(card, occupied, width, height, gap, step);
+}
+
+function gridNearestFree(card, occupied, width, height, gap, step) {
+    return Grid.gridNearestFree(card, occupied, width, height, gap, step);
+}
 
 function safeNumber(value, fallback) {
     const number = Number(value);

@@ -6,8 +6,7 @@ import qs.Services
 Item {
     id: root
 
-    property color fillColor: BlurService.backgroundColor(
-        Appearance.colors.colLayer0)
+    property color fillColor: BlurService.backgroundColor(Appearance.colors.colLayer0)
     property real cornerRadius: height / 2
     property real shadowPadding: Sizes.barShadowBuffer
     readonly property string contextualEdge: findContextEdge(root.parent)
@@ -28,20 +27,29 @@ Item {
         anchors.fill: parent
         color: root.fillColor
         radius: root.cornerRadius
+        border.width: 1
+        border.color: Appearance.macos.glassBorder
         visible: false
+    }
+
+    Rectangle {
+        anchors.fill: parent
+        visible: PlatformService.softwareRendering
+        color: root.fillColor
+        radius: root.cornerRadius
+        border.width: 1
+        border.color: Appearance.macos.glassBorder
     }
 
     MultiEffect {
         anchors.fill: sourceItem
+        visible: !PlatformService.softwareRendering
         source: sourceItem
         shadowEnabled: true
-        shadowColor: Appearance.applyAlpha(
-            Appearance.colors.colShadow, 0.4)
+        shadowColor: Appearance.applyAlpha(Appearance.colors.colShadow, 0.4)
         shadowBlur: 0.8
-        shadowVerticalOffset: root.contextualEdge === "top" ? 3
-            : root.contextualEdge === "bottom" ? -3 : 0
-        shadowHorizontalOffset: root.contextualEdge === "left" ? 3
-            : root.contextualEdge === "right" ? -3 : 0
+        shadowVerticalOffset: root.contextualEdge === "top" ? 3 : root.contextualEdge === "bottom" ? -3 : 0
+        shadowHorizontalOffset: root.contextualEdge === "left" ? 3 : root.contextualEdge === "right" ? -3 : 0
 
         // Let MultiEffect derive the source texture padding from its blur.
         // A manually expanded paddingRect caused the source itself to vanish

@@ -13,33 +13,38 @@ Singleton {
     readonly property bool enabled: available && adapter.enabled
     readonly property bool blocked: available && adapter.state === BluetoothAdapterState.Blocked
     readonly property bool discovering: _nativeAdapters.some(candidate => {
-        return candidate && candidate.discovering;
-    })
+                                                                 return candidate && candidate.discovering;
+                                                             })
     readonly property bool scanning: discovering
     readonly property bool discoverable: available && adapter.discoverable
     readonly property bool pairable: available && adapter.pairable
     readonly property bool connected: connectedDevices.length > 0
     readonly property string connectedName: connected ? connectedDevices[0].name : ""
-    readonly property bool busy: _pendingOperation.length > 0 || _nativeAdapters.some(candidate => {
-        return candidate && (candidate.state === BluetoothAdapterState.Enabling || candidate.state
-                             === BluetoothAdapterState.Disabling);
-    }) || _nativeDevices.some(device => {
-        return device && (device.pairing || device.state === BluetoothDeviceState.Connecting || device.state
-                          === BluetoothDeviceState.Disconnecting);
-    })
+    // Only our own operation locks the UI. A device that is stuck in
+    // Connecting/Disconnecting must not disable every other action.
+    readonly property bool busy: _pendingOperation.length > 0 || _cyclingAdapter || _nativeAdapters.some(
+                                     candidate => {
+                                         return candidate && (candidate.state
+                                                              === BluetoothAdapterState.Enabling
+                                                              || candidate.state
+                                                              === BluetoothAdapterState.Disabling);
+                                     })
     readonly property var adapters: _nativeAdapters.map(candidate => {
-        return root._describeAdapter(candidate);
-    })
+                                                            return root._describeAdapter(candidate);
+                                                        })
     readonly property var devices: root._deduplicatedDeviceDescriptors()
     readonly property var connectedDevices: devices.filter(device => {
-        return device.connected;
-    })
+                                                               return device.connected;
+                                                           })
     readonly property var pairedDevices: devices.filter(device => {
-        return !device.connected && (device.paired || device.bonded || device.trusted);
-    })
+                                                            return !device.connected && (device.paired
+                                                                                         || device.bonded
+                                                                                         || device.trusted);
+                                                        })
     readonly property var availableDevices: devices.filter(device => {
-        return !device.connected && !device.paired && !device.bonded && !device.trusted;
-    })
+                                                               return !device.connected && !device.paired &&
+                                                               !device.bonded && !device.trusted;
+                                                           })
     property string lastError: ""
     property var _discoveryOwners: ({})
     property bool _manualDiscoveryActive: false
@@ -51,6 +56,8 @@ Singleton {
     property bool _pendingPairingStarted: false
     property var _pendingAdapter: null
     property var _pendingDevice: null
+    property int _connectRetries: 0
+    property bool _cyclingAdapter: false
 
     signal operationStarted(string operation)
     signal operationSucceeded(string operation)
@@ -122,16 +129,16 @@ Singleton {
                 byAddress[key] = descriptor;
         }
         return Object.keys(byAddress).map(key => {
-            return byAddress[key];
-        }).sort((a, b) => {
-            if (a.connected !== b.connected)
-                return a.connected ? -1 : 1;
+                                              return byAddress[key];
+                                          }).sort((a, b) => {
+                                                      if (a.connected !== b.connected)
+                                                      return a.connected ? -1 : 1;
 
-            if ((a.paired || a.bonded) !== (b.paired || b.bonded))
-                return (a.paired || a.bonded) ? -1 : 1;
+                                                      if ((a.paired || a.bonded) !== (b.paired || b.bonded))
+                                                      return (a.paired || a.bonded) ? -1 : 1;
 
-            return a.name.localeCompare(b.name);
-        });
+                                                      return a.name.localeCompare(b.name);
+                                                  });
     }
 
     function _resolveAdapter(adapterLike) {
@@ -142,8 +149,8 @@ Singleton {
             return root.adapter;
 
         return root._nativeAdapters.find(candidate => {
-            return candidate && candidate.adapterId === adapterId;
-        }) || null;
+                                             return candidate && candidate.adapterId === adapterId;
+                                         }) || null;
     }
 
     function _resolveDevice(deviceLike) {
@@ -153,10 +160,12 @@ Singleton {
         const address = typeof deviceLike === "string" ? deviceLike : String(deviceLike.address || "");
         const adapterId = typeof deviceLike === "string" ? "" : String(deviceLike.adapterId || "");
         return root._nativeDevices.find(device => {
-            return device && device.address === address && (adapterId.length === 0 || (device.adapter
-                                                                                       && device.adapter.adapterId
-                                                                                       === adapterId));
-        }) || null;
+                                            return device && device.address === address && (adapterId.length
+                                                                                            === 0 || (
+                                                                                                device.adapter
+                                                                                                && device.adapter.adapterId
+                                                                                                === adapterId));
+                                        }) || null;
     }
 
     function _beginOperation(operation) {
@@ -180,6 +189,8 @@ Singleton {
         const operation = root._pendingOperation;
         operationTimeout.stop();
         root._clearPendingOperation();
+        if (operation === "connect")
+            root._connectRetries = 0;
         root.operationSucceeded(operation);
     }
 
@@ -188,6 +199,22 @@ Singleton {
             return;
 
         const operation = root._pendingOperation;
+        // BlueZ often fails once with a page timeout or "InProgress" right
+        // after a disconnect. Retry the same device once before reporting.
+        if (operation === "connect" && root._connectRetries < 1 && root._pendingDevice &&
+                !root._pendingDevice.connected && !root._pendingDevice.blocked) {
+            const target = {
+                "address": root._pendingAddress,
+                "adapterId": root._pendingAdapterId
+            };
+            root._connectRetries++;
+            operationTimeout.stop();
+            root._clearPendingOperation();
+            root.lastError = "";
+            retryConnectTimer.target = target;
+            retryConnectTimer.restart();
+            return;
+        }
         root.lastError = String(message || qsTr("Bluetooth operation failed"));
         operationTimeout.stop();
         root._clearPendingOperation();
@@ -368,6 +395,11 @@ Singleton {
         if (current && current.connected)
             return;
 
+        root._connectRetries = 0;
+        root._startConnect(device);
+    }
+
+    function _startConnect(device) {
         const nativeDevice = root._beginDeviceOperation("connect", device, true);
         if (nativeDevice)
             nativeDevice.connect();
@@ -445,7 +477,7 @@ Singleton {
     Component.onDestruction: {
         for (const nativeAdapter of root._nativeAdapters) {
             if (nativeAdapter && nativeAdapter.discovering)
-                nativeAdapter.discovering = false;
+            nativeAdapter.discovering = false;
         }
     }
 
@@ -571,6 +603,54 @@ Singleton {
 
         target: root._pendingDevice
         enabled: root._pendingDevice !== null
+    }
+
+    function resetAdapter(adapterLike) {
+        const nativeAdapter = root._resolveAdapter(adapterLike);
+        if (!nativeAdapter || !nativeAdapter.enabled) {
+            root.lastError = qsTr("No enabled Bluetooth adapter to restart");
+            root.operationFailed("reset-adapter", root.lastError);
+            return false;
+        }
+        if (root.busy) {
+            root.operationFailed("reset-adapter", qsTr("Another Bluetooth operation is already in progress"));
+            return false;
+        }
+        root.lastError = "";
+        root._cyclingAdapter = true;
+        root.operationStarted("reset-adapter");
+        nativeAdapter.enabled = false;
+        adapterCycleTimer.restart();
+        return true;
+    }
+
+    Timer {
+        id: retryConnectTimer
+
+        property var target: null
+
+        interval: 1200
+        repeat: false
+        onTriggered: {
+            const request = retryConnectTimer.target;
+            retryConnectTimer.target = null;
+            if (request && !root.busy)
+            root._startConnect(request);
+        }
+    }
+
+    Timer {
+        id: adapterCycleTimer
+
+        interval: 1200
+        repeat: false
+        onTriggered: {
+            const nativeAdapter = root.adapter;
+            root._cyclingAdapter = false;
+            if (nativeAdapter)
+            nativeAdapter.enabled = true;
+            root.operationSucceeded("reset-adapter");
+        }
     }
 
     Timer {

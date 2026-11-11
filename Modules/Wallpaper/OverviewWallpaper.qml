@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Effects
 import Quickshell
 import Quickshell.Wayland
+import Clavis.Niri
 import qs.Common
 import qs.Services
 
@@ -25,6 +26,29 @@ Variants {
         anchors.bottom: true
         anchors.left: true
         anchors.right: true
+
+        // The offscreen blur layer costs a full-output texture plus blur
+        // targets. It is only needed while the overview is on screen, so drop
+        // it after the closing animation instead of holding it permanently.
+        readonly property bool overviewVisible: !Niri.connected || Niri.inOverview
+        property bool blurLayerActive: false
+        Component.onCompleted: blurLayerActive = overviewVisible
+        onOverviewVisibleChanged: {
+            if (overviewVisible) {
+                blurLayerActive = true;
+                blurLayerHold.stop();
+            } else {
+                blurLayerHold.restart();
+            }
+        }
+
+        Timer {
+            id: blurLayerHold
+            interval: 600
+            repeat: false
+            onTriggered: if (!overviewWindow.overviewVisible)
+                             overviewWindow.blurLayerActive = false
+        }
 
         mask: Region {
             item: Item {}
@@ -71,9 +95,10 @@ Variants {
                 textureWidth: Math.min(Math.max(1, Math.round(root.width)), 8192)
                 textureHeight: Math.min(Math.max(1, Math.round(root.height)), 8192)
 
-                layer.enabled: PersonalizationConfig.overviewBlurRadius > 0
-                               || PersonalizationConfig.overviewSaturation !== 1
-                               || PersonalizationConfig.overviewContrast !== 1
+                layer.enabled: overviewWindow.blurLayerActive && (PersonalizationConfig.overviewBlurRadius
+                                                                  > 0 || PersonalizationConfig.overviewSaturation
+                                                                  !== 1 || PersonalizationConfig.overviewContrast
+                                                                  !== 1)
                 layer.effect: MultiEffect {
                     blurEnabled: PersonalizationConfig.overviewBlurRadius > 0
                     blur: PersonalizationConfig.overviewBlurRadius / 100
@@ -85,8 +110,8 @@ Variants {
                 onReadyChanged: root.reportSurface()
                 onLastErrorChanged: root.reportSurface()
                 onLoadFailed: (source, message) => {
-                    WallpaperService.reportOverviewSurface(modelData.name, false, message);
-                }
+                                  WallpaperService.reportOverviewSurface(modelData.name, false, message);
+                              }
             }
 
             Rectangle {

@@ -7,6 +7,8 @@ import qs.Modules.Bar.Tray
 import qs.Modules.Bar.SysMonitor
 import qs.Modules.Bar.Media
 import qs.Modules.Bar.QuickSettings
+import qs.Modules.Bar.TouchKeyboard
+import qs.Modules.Bar.Agent
 
 Loader {
     id: root
@@ -33,6 +35,12 @@ Loader {
             return systemMonitorComponent;
         case "quickSettings":
             return quickSettingsComponent;
+        case "controlCenter":
+            return controlCenterComponent;
+        case "touchKeyboard":
+            return touchKeyboardComponent;
+        case "agent":
+            return agentComponent;
         default:
             return null;
         }
@@ -102,6 +110,33 @@ Loader {
         QuickSettings {
             screen: root.screen
             vertical: root.vertical
+        }
+    }
+
+    Component {
+        id: controlCenterComponent
+
+        ControlCenterButton {
+            screen: root.screen
+            barVisualItem: root.barVisualItem
+        }
+    }
+
+    Component {
+        id: agentComponent
+
+        AgentButton {
+            screen: root.screen
+            barVisualItem: root.barVisualItem
+        }
+    }
+
+    Component {
+        id: touchKeyboardComponent
+
+        TouchKeyboardButton {
+            screen: root.screen
+            barVisualItem: root.barVisualItem
         }
     }
 }

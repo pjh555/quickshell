@@ -115,25 +115,25 @@ PopupWindow {
         anchors.fill: parent
         focus: root.visible
         Keys.onEscapePressed: event => {
-            if (stackView.depth > 1)
-                stackView.pop();
-            else
-                root.close();
-            event.accepted = true;
-        }
+                                  if (stackView.depth > 1)
+                                  stackView.pop();
+                                  else
+                                  root.close();
+                                  event.accepted = true;
+                              }
 
         MouseArea {
             anchors.fill: parent
             acceptedButtons: Qt.BackButton | Qt.RightButton
             onPressed: event => {
-                if ((event.button === Qt.BackButton || event.button === Qt.RightButton) && stackView.depth
-                        > 1) {
-                    stackView.pop();
-                    event.accepted = true;
-                } else {
-                    event.accepted = false;
-                }
-            }
+                           if ((event.button === Qt.BackButton || event.button === Qt.RightButton)
+                               && stackView.depth > 1) {
+                               stackView.pop();
+                               event.accepted = true;
+                           } else {
+                               event.accepted = false;
+                           }
+                       }
 
             StyledRectangularShadow {
                 target: popupBackground
@@ -152,7 +152,7 @@ PopupWindow {
                 color: BlurService.backgroundColor(Appearance.colors.colLayer0)
                 radius: 18
                 border.width: 1
-                border.color: Appearance.colors.colLayer0Border
+                border.color: Appearance.macos.glassBorder
                 clip: true
                 opacity: 0
                 Component.onCompleted: opacity = 1
@@ -264,8 +264,8 @@ PopupWindow {
                 implicitHeight: 36
                 Layout.fillWidth: true
                 releaseAction: () => {
-                    return stackView.pop();
-                }
+                                   return stackView.pop();
+                               }
 
                 contentItem: RowLayout {
                     id: backContent
@@ -332,11 +332,11 @@ PopupWindow {
                 buttonRadius: popupBackground.radius - popupBackground.popupPadding
                 onDismiss: root.close()
                 onOpenSubmenu: handle => {
-                    stackView.push(subMenuComponent, {
-                                       "handle": handle,
-                                       "isSubmenu": true
-                                   });
-                }
+                                   stackView.push(subMenuComponent, {
+                                                      "handle": handle,
+                                                      "isSubmenu": true
+                                                  });
+                               }
             }
         }
 

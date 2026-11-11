@@ -67,13 +67,13 @@ PanelWindow {
         const revision = DockService.revision;
         const result = [];
         for (let i = 0; i < DockService.model.count; ++i)
-            result.push(DockService.model.get(i).kind);
+        result.push(DockService.model.get(i).kind);
         return result;
     }
     readonly property real magnification: DockService.magnification ? DockService.magnificationScale : 1
     readonly property var baseLayout: DockLayout.layout(kinds, DockService.iconSize, availableLength,
                                                         magnification, 16, NaN, DockLayout.sectionBoundaries(
-                                                            kinds, DockService.pinnedAppCount))
+                                                            kinds, DockService.pinnedSectionCount))
     readonly property real scrollOffset: horizontal ? icons.contentX - icons.originX : icons.contentY
                                                       - icons.originY
     readonly property real pointerInBase: pointerAxis - (axisLength - Math.min(baseLayout.baseLength,
@@ -105,14 +105,14 @@ PanelWindow {
     readonly property var layout: DockLayout.layout(preview.kinds, baseLayout.size, availableLength,
                                                     magnification, 16, pointerInBase,
                                                     DockLayout.sectionBoundaries(preview.kinds,
-                                                                                 DockService.pinnedAppCount,
+                                                                                 DockService.pinnedSectionCount,
                                                                                  preview.order),
                                                     magnificationProgress)
     readonly property var slotsByIndex: {
         const result = [];
         for (let i = 0; i < preview.order.length; ++i) {
             if (preview.order[i] >= 0)
-                result[preview.order[i]] = layout.slots[i];
+            result[preview.order[i]] = layout.slots[i];
         }
         return result;
     }
@@ -140,7 +140,7 @@ PanelWindow {
                                                       < dockInputArea.y + dockInputArea.height)
     readonly property bool pointerOverInteractiveArea: {
         if (!shown || !surfaceHover.hovered)
-            return false;
+        return false;
         // Fan tiles can take a delegate's hover while crossing the source icon.
         // Use the surface pointer and the same geometry as the input regions,
         // independent of which child currently receives mouse events.
@@ -148,18 +148,18 @@ PanelWindow {
         const x = point.x - band.x;
         const y = point.y - band.y;
         if (x >= glass.x && x < glass.x + glass.width && y >= glass.y && y < glass.y + glass.height)
-            return true;
+        return true;
         const iconX = x + (horizontal ? scrollOffset : 0);
         const iconY = y + (horizontal ? 0 : scrollOffset);
         for (let i = 0; i < iconItems.count; ++i) {
             const item = iconItems.itemAt(i) as DockItem;
             if (!item || !item.enabled || item.dragged)
-                continue;
+            continue;
             const area = item.pointerArea;
             const left = item.x + area.x;
             const top = item.y + area.y;
             if (iconX >= left && iconX < left + area.width && iconY >= top && iconY < top + area.height)
-                return true;
+            return true;
         }
         return false;
     }
@@ -187,11 +187,11 @@ PanelWindow {
     property real popupIconSize: baseLayout.size
     readonly property var folderButtonItems: {
         if (!filePopupActive || contextMenu || filePopup.list)
-            return [];
+        return [];
         for (let i = 0; i < iconItems.count; ++i) {
             const item = iconItems.itemAt(i);
             if (item && item.entryKey === popupKey)
-                return [item.folderButtonBackground];
+            return [item.folderButtonBackground];
         }
         return [];
     }
@@ -206,12 +206,12 @@ PanelWindow {
     property string dropTargetKey: ""
     property var externalEntries: []
     readonly property bool externalFiles: externalEntries.some(entry => entry.kind === "file" || entry.kind
-                                                                        === "folder")
+                                                               === "folder")
     readonly property bool trackingFileDrag: externalOver && externalFiles && DockService.magnification
     property bool fileDragPositionPending: false
     onTrackingFileDragChanged: {
         if (!trackingFileDrag)
-            fileDragPositionPending = false;
+        fileDragPositionPending = false;
     }
     // Native drag motion can arrive more often than frames. Keep only its
     // newest surface position and apply the whole wave in one frame, without
@@ -419,9 +419,9 @@ PanelWindow {
         const coordinate = (horizontal ? point.x : point.y) - origin + scrollOffset;
         const kind = draggedEntry ? draggedEntry.kind : externalKind;
         const files = kind === "file" || kind === "folder";
-        const candidate = Math.max(files ? DockService.fileStartIndex : 0, Math.min(files
+        const candidate = Math.max(files ? DockService.fileStartIndex : 1, Math.min(files
                                                                                     ? DockService.model.count
-                                                                                      - 1 : DockService.pinnedAppCount,
+                                                                                      - 1 : DockService.pinnedSectionCount,
                                                                                     DockLayout.insertionIndex(
                                                                                         baseLayout.slots,
                                                                                         coordinate)));
@@ -632,7 +632,7 @@ PanelWindow {
     onFilePopupActiveChanged: updateInteraction()
     onShownChanged: {
         if (!shown)
-            dismissPopup();
+        dismissPopup();
     }
 
     // Region changes can briefly reset HoverHandler during popup creation.
@@ -642,7 +642,7 @@ PanelWindow {
         interval: 80
         onTriggered: {
             if (!root.pointerOverInteractiveArea)
-                root.magnificationActive = false;
+            root.magnificationActive = false;
         }
     }
     Timer {
@@ -660,7 +660,7 @@ PanelWindow {
         interval: 350
         onTriggered: {
             if (!root.interacting)
-                root.dismissPopup();
+            root.dismissPopup();
         }
     }
     Timer {
@@ -668,8 +668,8 @@ PanelWindow {
         interval: 450
         onTriggered: {
             if (root.pendingPopupKey && root.pendingPopupKey === root.hoverKey && root.pointerOverDock &&
-                    !root.dragKey && !dragGhost.active)
-                root.showPopup(root.pendingPopupKey, false);
+                !root.dragKey && !dragGhost.active)
+            root.showPopup(root.pendingPopupKey, false);
         }
     }
     Timer {
@@ -681,9 +681,9 @@ PanelWindow {
             const local = icons.mapFromItem(content, position.x, position.y);
             const coordinate = root.horizontal ? local.x : local.y;
             if (coordinate < 28)
-                root.scrollBy(-12);
+            root.scrollBy(-12);
             else if (coordinate > root.bandLength - 28)
-                root.scrollBy(12);
+            root.scrollBy(12);
             root.insertion = root.insertionAt(position);
         }
     }
@@ -703,7 +703,7 @@ PanelWindow {
             id: surfaceHover
             onPointChanged: {
                 if (root.pointerOverDock && !root.trackingFileDrag)
-                    root.pointerAxis = root.horizontal ? point.scenePosition.x : point.scenePosition.y;
+                root.pointerAxis = root.horizontal ? point.scenePosition.x : point.scenePosition.y;
             }
         }
 
@@ -718,7 +718,7 @@ PanelWindow {
                 const inPopup = filePopup.mapFromItem(fileDismissArea, event.x, event.y);
                 const inBand = band.mapFromItem(fileDismissArea, event.x, event.y);
                 if (!filePopup.contains(inPopup) && !band.contains(inBand))
-                    root.dismissPopup();
+                root.dismissPopup();
             }
         }
 
@@ -734,7 +734,7 @@ PanelWindow {
                 id: edgeHover
                 onHoveredChanged: {
                     if (hovered)
-                        root.revealed = true;
+                    root.revealed = true;
                 }
             }
             DropArea {
@@ -824,17 +824,24 @@ PanelWindow {
                 height: root.horizontal ? root.restingThickness : parent.height
                 radius: 20
                 color: BlurService.backgroundColor(Appearance.colors.colSurfaceContainer)
-                border.color: Appearance.applyAlpha(Appearance.colors.colOutlineVariant, 0.65)
+                border.color: Appearance.macos.glassBorder
                 border.width: 1
                 MouseArea {
                     anchors.fill: parent
                     acceptedButtons: Qt.RightButton
                     onClicked: {
-                        const entry = DockService.model.count ? DockService.model.get(0) : null;
+                        let entry = null;
+                        for (let i = 0; i < DockService.model.count; ++i) {
+                            const candidate = DockService.model.get(i);
+                            if (candidate.kind !== "launchpad") {
+                                entry = candidate;
+                                break;
+                            }
+                        }
                         if (entry)
-                            root.showPopup(entry.key, true);
+                        root.showPopup(entry.key, true);
                         else
-                            ControlCenterService.openSearch("general.dock");
+                        ControlCenterService.openSearch("general.dock");
                     }
                 }
             }
@@ -885,7 +892,7 @@ PanelWindow {
                     property var inputRegions: []
                     onItemAdded: (index, item) => inputRegions = inputRegions.concat([item.inputRegion])
                     onItemRemoved: (index, item) => inputRegions = inputRegions.filter(region => region
-                                                                                                 !== item.inputRegion)
+                                                                                       !== item.inputRegion)
                     model: visualEntries
                     onCountChanged: root.scheduleAnimationTargets()
                     delegate: DockItem {
@@ -941,15 +948,15 @@ PanelWindow {
                         readonly property var slot: {
                             const target = root.slotForKey(key);
                             if (!target)
-                                return lastSlot;
+                            return lastSlot;
                             if (!root.directMagnification && !reorderAnimation.running)
-                                return target;
+                            return target;
                             const slots = root.layout.slots;
                             const position = Math.max(0, Math.min(slots.length - 1, visualSlotIndex));
                             const lower = slots[Math.floor(position)];
                             const upper = slots[Math.ceil(position)];
                             if (!lower || !upper)
-                                return target;
+                            return target;
                             const fraction = position - Math.floor(position);
                             return {
                                 start: lower.start + (upper.start - lower.start) * fraction,
@@ -959,7 +966,7 @@ PanelWindow {
                         }
                         onSlotChanged: {
                             if (!retiring && root.slotForKey(key))
-                                lastSlot = slot;
+                            lastSlot = slot;
                         }
                         entryKey: key
                         edge: root.edge
@@ -1006,7 +1013,7 @@ PanelWindow {
                         }
                         onAwaitingHandoffChanged: {
                             if (appeared)
-                                animatePresence();
+                            animatePresence();
                         }
                         Component.onCompleted: {
                             appeared = true;
@@ -1014,13 +1021,13 @@ PanelWindow {
                         }
                         onPresenceChanged: {
                             if (retiring && presence === 0)
-                                Qt.callLater(root.removeRetired);
+                            Qt.callLater(root.removeRetired);
                         }
                         onRetiringChanged: {
                             if (appeared)
-                                animatePresence();
+                            animatePresence();
                             if (retiring)
-                                Qt.callLater(root.removeRetired);
+                            Qt.callLater(root.removeRetired);
                         }
                         NumberAnimation {
                             id: presenceAnimation
@@ -1062,7 +1069,7 @@ PanelWindow {
                         onPressStarted: {
                             root.dragCancelled = false;
                             if (kind !== "folder" || root.popupKey !== key || root.contextMenu)
-                                root.dismissPopup();
+                            root.dismissPopup();
                         }
                         onHovered: key => root.hoverEntry(key)
                         onHoverLeft: key => root.leaveEntry(key)
@@ -1074,17 +1081,23 @@ PanelWindow {
                             if (kind === "folder") {
                                 if (root.popupKey === key && !root.contextMenu) {
                                     if (filePopup.closing)
-                                        filePopup.reopenPopup();
+                                    filePopup.reopenPopup();
                                     else
-                                        root.dismissPopup();
+                                    root.dismissPopup();
                                 } else
-                                    root.showPopup(key, false, true);
+                                root.showPopup(key, false, true);
                             } else {
                                 DockService.activate(key, root.screen.name);
                                 root.dismissPopup();
                             }
                         }
-                        onContextRequested: key => root.showPopup(key, true)
+                        onContextRequested: key => {
+                            const entry = DockService.entryFor(key);
+                            if (entry && entry.kind === "launchpad")
+                            DockService.activate(key, root.screen.name);
+                            else
+                            root.showPopup(key, true);
+                        }
                         onDragMoved: (key, position, offset, size) => root.moveDrag(key, position, offset,
                                                                                     size)
                         onDragReleased: (key, position) => root.finishDrag(key, position)
@@ -1104,7 +1117,7 @@ PanelWindow {
                     target: null
                     onWheel: event => {
                         const delta = event.pixelDelta.y || event.pixelDelta.x || event.angleDelta.y
-                              || event.angleDelta.x;
+                        || event.angleDelta.x;
                         root.scrollBy(-delta);
                         event.accepted = true;
                     }
@@ -1119,7 +1132,7 @@ PanelWindow {
                     // drags can already preview their existing grouped identity.
                     drag.accepted = drag.formats.indexOf(DockService.dragMimeType) >= 0 || drag.hasUrls;
                     if (!drag.accepted)
-                        return;
+                    return;
                     root.cancelExternalHandoff(root.handoffSerial);
                     root.externalEntries = DockService.dropEntries(drag.getDataAsString(
                                                                        DockService.dragMimeType), drag.urls);
@@ -1160,7 +1173,7 @@ PanelWindow {
                     const incoming = DockService.dropEntries(text, drop.urls);
                     const before = new Set();
                     for (let i = 0; i < DockService.model.count; ++i)
-                        before.add(DockService.model.get(i).key);
+                    before.add(DockService.model.get(i).key);
                     root.externalEntries = incoming;
                     root.updateDropTarget();
                     if (root.dropTargetKey && root.externalFiles) {
@@ -1172,12 +1185,12 @@ PanelWindow {
                             const ok = trash ? DesktopFiles.moveToTrash(urls) : DesktopFiles.openWith(
                                                    desktopId, urls);
                             if (!ok)
-                                DockService.fileError = qsTr("The file operation could not be started.");
+                            DockService.fileError = qsTr("The file operation could not be started.");
                         };
                         if (drop.source && typeof drop.source.deferDrop === "function")
-                            drop.source.deferDrop(operation);
+                        drop.source.deferDrop(operation);
                         else
-                            operation();
+                        operation();
                         drop.accept(target.kind === "trash" ? Qt.MoveAction : Qt.CopyAction);
                         root.dropTargetKey = "";
                         root.externalEntries = [];
@@ -1191,9 +1204,9 @@ PanelWindow {
                     let landingEntry = null;
                     if (accepted && incoming.length === 1) {
                         if (incoming[0].kind === "app")
-                            landingEntry = DockService.entryFor("app:" + incoming[0].desktopId);
+                        landingEntry = DockService.entryFor("app:" + incoming[0].desktopId);
                         else if (incoming[0].kind === "file" || incoming[0].kind === "folder")
-                            landingEntry = DockService.entryFor("file:" + incoming[0].url);
+                        landingEntry = DockService.entryFor("file:" + incoming[0].url);
                         else {
                             for (let i = 0; i < DockService.model.count; ++i) {
                                 const candidate = DockService.model.get(i);
@@ -1207,7 +1220,7 @@ PanelWindow {
                     // Keep new and reused entries hidden until the native drag
                     // ends, then let the actual delegate animate in once.
                     if (landingEntry)
-                        root.prepareExternalHandoff(landingEntry, drop.source);
+                    root.prepareExternalHandoff(landingEntry, drop.source);
                     root.dropTargetKey = "";
                     root.externalEntries = [];
                     root.externalOver = false;

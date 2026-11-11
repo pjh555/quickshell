@@ -12,9 +12,12 @@ StyledFlickable {
     property string deviceAdapterId: ""
     property bool pageReady: false
     readonly property var device: BluetoothService.devices.find(candidate => {
-        return candidate.address === root.deviceAddress && (root.deviceAdapterId.length === 0
-                                                            || candidate.adapterId === root.deviceAdapterId);
-    }) || null
+                                                                    return candidate.address
+                                                                    === root.deviceAddress && (
+                                                                        root.deviceAdapterId.length === 0
+                                                                        || candidate.adapterId
+                                                                        === root.deviceAdapterId);
+                                                                }) || null
     readonly property string pageTitle: root.device ? root.device.name : qsTr("Bluetooth device")
     readonly property bool deviceChanging: root.device && (root.device.connecting
                                                            || root.device.disconnecting
@@ -171,6 +174,16 @@ StyledFlickable {
                             BluetoothService.setDeviceWakeAllowed(root.device, checked);
                     }
                 }
+            }
+
+            SettingsActionRow {
+                Layout.fillWidth: true
+                enabled: !BluetoothService.busy && BluetoothService.enabled
+                iconName: "restart_alt"
+                text: qsTr("Restart Bluetooth adapter")
+                description: qsTr("Use when a device can no longer connect")
+                trailingIconName: ""
+                onClicked: BluetoothService.resetAdapter(null)
             }
         }
 

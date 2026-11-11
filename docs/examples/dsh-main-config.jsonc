@@ -1,0 +1,34 @@
+// Example DSH/dsh-pet main-config.jsonc that Clavis can import.
+// Put the real file at ~/.dsh/dsh-pet/main-config.jsonc.
+{
+  "clickSoundEnabled": true,
+  "physics": { "gravity": 1200 },
+  "font": { "family": "candy", "size": 21, "followPet": true },
+  "pets": [
+    {
+      "id": "main",
+      "name": "大肥鱼",
+      "size": 462,
+      "display": "desktop",
+      "position": { "corner": "bottom-right", "marginX": 36, "marginY": 92 },
+      "fixedEnabled": false,
+      "workStatusEnabled": true
+    }
+  ],
+  "animations": {
+    "idle": ["待机呼吸休闲"],
+    "events": {
+      "workStatus": [
+        "工作状态-思考冒泡",
+        ["工作状态-忙碌点按"],
+        "工作状态-清点归档",
+        "工作状态-原地踱步张望",
+        "工作状态-雀跃庆祝",
+        "工作状态-垂头叹气冒汗"
+      ]
+    }
+  },
+  "workStatusTexts": [
+    ["让我想想"], ["正在干活"], ["有进展"], ["等你确认"], ["完成"], ["出错"]
+  ]
+}

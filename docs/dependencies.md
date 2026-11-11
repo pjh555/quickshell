@@ -1,5 +1,9 @@
 # Dependencies
 
+Ubuntu package names and the GNOME/Niri compatibility matrix are documented in
+[Ubuntu 适配](ubuntu.md). The inventory below is the Arch release manifest; it is not a
+distro-neutral package list.
+
 The source of truth is [`packaging/dependencies.json`](../packaging/dependencies.json).
 Release tooling generates PKGBUILD dependency fields from this inventory. `defaultInstall`
 selects the full installation profile; optional authorization and vendor GPU drivers are never implicit.

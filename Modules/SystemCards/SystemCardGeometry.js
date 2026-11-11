@@ -3,11 +3,15 @@
 // The catalog size presets are shared by every SystemCard surface.
 // Desktop cards deliberately use these same dimensions; wallpaper placement
 // changes the coordinate system, not the card's visual scale.
-Qt.include("SystemCardCatalog.js");
+.import "./SystemCardCatalog.js" as Catalog
 
 var baseCellWidth = 152;
 var baseCellHeight = 160;
 var cellGap = 8;
+
+function definitionFor(id) {
+    return Catalog.definitionFor(String(id));
+}
 
 function widthForSpan(columnSpan) {
     var span = Math.max(1, Math.round(Number(columnSpan) || 1));

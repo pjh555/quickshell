@@ -1,0 +1,15 @@
+{
+  "agents": {
+    "codex": {
+      "name": "Codex",
+      "command": ["codex", "-a", "never", "-s", "workspace-write",
+                  "exec", "--skip-git-repo-check", "--color", "never", "{prompt}"],
+      "timeout": 900
+    },
+    "opencode": {
+      "name": "OpenCode",
+      "command": ["opencode", "run", "--standalone", "--auto", "{prompt}"],
+      "timeout": 900
+    }
+  }
+}

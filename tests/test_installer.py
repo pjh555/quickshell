@@ -7,6 +7,7 @@ import io
 import json
 import os
 from pathlib import Path
+import platform
 import subprocess
 import sys
 import tempfile
@@ -43,6 +44,10 @@ class Terminal:
         pass
 
 
+ARCH_INSTALLER_HOST = Path("/etc/arch-release").is_file() and platform.machine() == "x86_64"
+
+
+@unittest.skipUnless(ARCH_INSTALLER_HOST, "Arch x86_64 release installer contracts")
 class InstallerContracts(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()

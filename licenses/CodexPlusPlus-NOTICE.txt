@@ -1,0 +1,7 @@
+Clavis native Agent integration is informed by BigPizzaV3/CodexPlusPlus.
+CodexPlusPlus is licensed under AGPL-3.0-only:
+https://github.com/BigPizzaV3/CodexPlusPlus
+
+The Agent pet image catalog follows CodexPlusPlus's Fluent Emoji 3D catalog
+(Microsoft, MIT). Pet click sounds are used under the upstream asset notice in
+assets/agent/sounds/README.md.

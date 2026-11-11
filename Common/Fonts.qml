@@ -7,7 +7,7 @@ Singleton {
 
     // User-configurable family defaults. Keep all family literals in this
     // singleton so components only depend on semantic roles.
-    readonly property string defaultUi: "LXGW WenKai GB Screen"
+    readonly property string defaultUi: "Noto Sans CJK SC"
     readonly property string defaultMono: "JetBrainsMono Nerd Font"
     readonly property string defaultNumeric: root.defaultMono
     readonly property string bundledFamilyName: bundledFont.name || "Google Sans Flex"
@@ -29,8 +29,11 @@ Singleton {
     // to this family name; the clock must never switch to a user-selected
     // family.
     readonly property string systemClock: root.bundledFamilyName
-    readonly property string materialSymbolsRounded: "Material Symbols Rounded"
-    readonly property string materialSymbolsOutlined: "Material Symbols Outlined"
+    readonly property string materialSymbolsRounded: materialRoundedFont.status === FontLoader.Ready
+                                                     ? materialRoundedFont.name : "Material Symbols Rounded"
+    readonly property string materialSymbolsOutlined: materialOutlinedFont.status === FontLoader.Ready
+                                                      ? materialOutlinedFont.name :
+                                                        "Material Symbols Outlined"
 
     function familyAvailable(family) {
         const value = String(family || "").trim();
@@ -89,5 +92,19 @@ Singleton {
 
         source: Paths.fileUrl(Paths.fontsDir + "/google-sans-flex/" + "GoogleSansFlex-VariableFont_"
                               + "GRAD,ROND,opsz,slnt,wdth,wght.ttf")
+    }
+
+    // Ubuntu does not ship the Material Symbols variable font. Bundle it so
+    // icon ligatures work on a clean install instead of rendering as words.
+    FontLoader {
+        id: materialRoundedFont
+
+        source: Paths.fileUrl(Paths.fontsDir + "/material-symbols/MaterialSymbolsRounded.ttf")
+    }
+
+    FontLoader {
+        id: materialOutlinedFont
+
+        source: Paths.fileUrl(Paths.fontsDir + "/material-symbols/MaterialSymbolsOutlined.ttf")
     }
 }

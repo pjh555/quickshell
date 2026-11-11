@@ -2,6 +2,21 @@
   "schemaVersion": 1,
   "routes": [
     {
+      "id": "android",
+      "title": "Android",
+      "context": "ControlCenterWindow",
+      "icon": "android",
+      "source": "AndroidPage.qml",
+      "path": [
+        "android"
+      ],
+      "aliases": [
+        "settings",
+        "mobile",
+        "apps"
+      ]
+    },
+    {
       "id": "account",
       "title": "Account",
       "context": "ControlCenterWindow",
@@ -11,6 +26,21 @@
         "account"
       ],
       "aliases": []
+    },
+    {
+      "id": "agent",
+      "title": "Agent",
+      "context": "ControlCenterWindow",
+      "icon": "smart_toy",
+      "source": "AgentPage.qml",
+      "path": [
+        "agent"
+      ],
+      "aliases": [
+        "assistant",
+        "ai",
+        "codex"
+      ]
     },
     {
       "id": "general",
@@ -101,7 +131,10 @@
         "general",
         "dock"
       ],
-      "aliases": ["taskbar", "launcher"]
+      "aliases": [
+        "taskbar",
+        "launcher"
+      ]
     },
     {
       "id": "general.sidebar",

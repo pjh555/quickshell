@@ -25,7 +25,10 @@ FRAGMENTS = ('effects', 'cursor', 'layer-rules', 'binds', 'outputs', 'minimize-a
 
 # Stable first-setup defaults. Existing fragments, including empty ones, are preserved.
 DEFAULT_BINDINGS = (
+    ('Mod+Tab', 'stage-manager', 'toggle'),
+    ('Mod+Shift+K', 'touch-keyboard', 'toggle'),
     ('Mod+Space', 'spotlight', 'toggle'),
+    ('F4', 'launchpad', 'toggle'),
     ('Mod+Slash', 'shortcut-map', 'toggle'),
     ('Mod+BackSpace', 'power-menu', 'toggle'),
     ('Mod+Shift+Space', 'spotlight', 'web'),
@@ -258,7 +261,7 @@ def initial(feature, request):
     if feature == 'effects':
         if request.get('xray', True):
             return header + "// X-Ray is niri's default for client-requested effects.\n"
-        return header + 'layer-rule {\n    match namespace="^clavis-shell-";\n    background-effect { xray false; };\n}\nwindow-rule {\n    match title="^(clavis-control-center(-[a-z-]+)?|clavis-file-picker)$";\n    background-effect { xray false; };\n}\n'
+        return header + 'layer-rule {\n    match namespace="^(clavis-shell-|clavis-status-menu$|clavis-active-window-menu|clavis-touch-keyboard|clavis-stage-manager|clavis-window-overview|clavis-agent|clavis-agent-pet)";\n    background-effect { xray false; };\n}\nwindow-rule {\n    match title="^(clavis-control-center(-[a-z-]+)?|clavis-file-picker)$";\n    background-effect { xray false; };\n}\n'
     size = int(request.get('size', 24))
     hide = int(request.get('hideAfter', 0))
     if not 12 <= size <= 128 or not 0 <= hide <= 5000:

@@ -395,9 +395,9 @@ Singleton {
     property bool barOverlay: false
     property string barPosition: "top"
     readonly property var barComponentIds: ["workspaces", "information", "activeWindow", "media", "tray",
-        "systemMonitor", "quickSettings"]
+        "systemMonitor", "quickSettings", "controlCenter", "touchKeyboard", "agent"]
     readonly property var defaultBarLeadingComponents: ["workspaces", "information", "activeWindow"]
-    readonly property var defaultBarTrailingComponents: ["tray", "systemMonitor", "quickSettings"]
+    readonly property var defaultBarTrailingComponents: ["agent", "touchKeyboard", "tray", "controlCenter"]
     readonly property var barComponentOptions: [({
                                                      "value": "media",
                                                      "label": qsTr("Media"),
@@ -427,7 +427,21 @@ Singleton {
                                                                                    "label": qsTr(
                                                                                                 "Quick Settings"),
                                                                                    "icon": "tune"
-                                                                               })]
+                                                                               }), ({
+                                                                                        "value": "agent",
+                                                                                        "label": qsTr("Agent"),
+                                                                                        "icon": "smart_toy"
+                                                                                    }), ({
+                                                                                             "value": "controlCenter",
+                                                                                             "label": qsTr(
+                                                                                                          "Control Center"),
+                                                                                             "icon": "tune"
+                                                                                         }), ({
+                                                                                                  "value": "touchKeyboard",
+                                                                                                  "label": qsTr(
+                                                                                                               "Touch Keyboard"),
+                                                                                                  "icon": "keyboard"
+                                                                                              })]
     readonly property var quickSettingsComponentIds: ["network", "bluetooth", "brightness", "volume",
         "microphone", "battery", "settings", "power"]
     readonly property var defaultQuickSettingsComponents: root.quickSettingsComponentIds.slice()
@@ -847,9 +861,9 @@ Singleton {
     readonly property string monoFontFamily: Fonts.configuredMono || Fonts.defaultMono
     readonly property string numericFontFamily: Fonts.configuredNumeric || Fonts.defaultNumeric
     readonly property string expressiveFontFamily: Fonts.configuredExpressive || Fonts.bundledFamilyName
-    property real shellBackgroundOpacity: 1
-    property bool shellBlurEnabled: false
-    property bool shellBlurXray: true
+    property real shellBackgroundOpacity: 0.72
+    property bool shellBlurEnabled: true
+    property bool shellBlurXray: false
     property bool keepSidebarsLoaded: true
     property var sidebarPositions: ({
                                         dashboard: "left",
@@ -1624,11 +1638,13 @@ Singleton {
             return false;
 
         const leading = root.normalizedBarComponents(root.barLeadingComponents, []).filter(value => {
-            return value !== id;
-        });
+                                                                                               return value
+                                                                                               !== id;
+                                                                                           });
         const trailing = root.normalizedBarComponents(root.barTrailingComponents, leading).filter(value => {
-            return value !== id;
-        });
+                                                                                                      return value
+                                                                                                      !== id;
+                                                                                                  });
         const target = targetZone === "leading" ? leading : trailing;
         const numericIndex = Number(targetIndex);
         const insertionIndex = isFinite(numericIndex) ? Math.max(0, Math.min(target.length, Math.round(
@@ -1647,11 +1663,11 @@ Singleton {
             return false;
 
         const leading = root.barLeadingComponents.filter(value => {
-            return value !== id;
-        });
+                                                             return value !== id;
+                                                         });
         const trailing = root.barTrailingComponents.filter(value => {
-            return value !== id;
-        });
+                                                               return value !== id;
+                                                           });
         if (leading.length === root.barLeadingComponents.length && trailing.length
                 === root.barTrailingComponents.length)
             return false;
@@ -1694,7 +1710,7 @@ Singleton {
         const components = root.normalizedQuickSettingsComponents(root.quickSettingsComponents).filter(value
                                                                                                        => {
                                                                                                            return value
-                                                                                                                   !== id;
+                                                                                                           !== id;
                                                                                                        });
         const numericIndex = Number(targetIndex);
         const insertionIndex = isFinite(numericIndex) ? Math.max(0, Math.min(components.length, Math.round(
@@ -1709,8 +1725,8 @@ Singleton {
     function removeQuickSettingsComponent(componentId) {
         const id = String(componentId || "");
         const components = root.quickSettingsComponents.filter(value => {
-            return value !== id;
-        });
+                                                                   return value !== id;
+                                                               });
         if (components.length === root.quickSettingsComponents.length)
             return false;
 
@@ -2084,7 +2100,7 @@ Singleton {
         root.shellBackgroundOpacity = normalizedBoundedReal(effects.shellBackgroundOpacity, 1, 0, 1);
         root.shellBlurEnabled = typeof effects.shellBlurEnabled === "boolean" ? effects.shellBlurEnabled :
                                                                                 false;
-        root.shellBlurXray = typeof effects.shellBlurXray === "boolean" ? effects.shellBlurXray : true;
+        root.shellBlurXray = typeof effects.shellBlurXray === "boolean" ? effects.shellBlurXray : false;
         root.keystoneMediaProgressStyle = normalizedOption(root.keystoneMediaProgressOptions,
                                                            media.progressStyle, "wave");
         root.keystoneMediaCoverStyle = normalizedOption(root.keystoneMediaCoverOptions, media.coverStyle
@@ -2301,16 +2317,16 @@ Singleton {
             try {
                 parsed = JSON.parse(configFile.text().trim() || "{}");
                 shouldRepair = root.needsWallpaperMigration(parsed) || root.needsEffectsMigration(parsed)
-                        || root.needsThemeMigration(parsed) || root.needsEdgePositionMigration(parsed)
-                        || root.needsScrollingMigration(parsed);
+                || root.needsThemeMigration(parsed) || root.needsEdgePositionMigration(parsed)
+                || root.needsScrollingMigration(parsed);
                 root.loadFromObject(parsed);
                 shouldRepair = shouldRepair || JSON.stringify(parsed.wallpaper || {}) !== JSON.stringify(
-                            root.toJson().wallpaper) || JSON.stringify(parsed.effects || {})
-                        !== JSON.stringify(root.toJson().effects) || JSON.stringify(parsed.theme || {})
-                        !== JSON.stringify(root.toJson().theme) || JSON.stringify(parsed.bar || {}) !== JSON.stringify(
-                            root.toJson().bar) || JSON.stringify(parsed.keystone || {}) !== JSON.stringify(
-                            root.toJson().keystone) || JSON.stringify(parsed.desktopCards || {})
-                        !== JSON.stringify(root.toJson().desktopCards);
+                    root.toJson().wallpaper) || JSON.stringify(parsed.effects || {}) !== JSON.stringify(
+                    root.toJson().effects) || JSON.stringify(parsed.theme || {}) !== JSON.stringify(
+                    root.toJson().theme) || JSON.stringify(parsed.bar || {}) !== JSON.stringify(root.toJson(
+                                                                                                    ).bar) || JSON.stringify(
+                    parsed.keystone || {}) !== JSON.stringify(root.toJson().keystone) || JSON.stringify(
+                    parsed.desktopCards || {}) !== JSON.stringify(root.toJson().desktopCards);
             } catch (error) {
                 console.warn("PersonalizationConfig failed to load:", error);
                 shouldRepair = true;
@@ -2319,7 +2335,7 @@ Singleton {
             root.loaded = true;
             root.settingsLoaded();
             if (shouldRepair)
-                root.save();
+            root.save();
         }
         onLoadFailed: {
             root.loading = true;

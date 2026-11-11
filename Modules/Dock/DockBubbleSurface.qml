@@ -40,7 +40,7 @@ Item {
         antialiasing: true
         readonly property var outline: root.outline
         readonly property color fillColor: BlurService.backgroundColor(Appearance.colors.colSurfaceContainer)
-        readonly property color lineColor: Appearance.applyAlpha(Appearance.colors.colOnSurface, 0.18)
+        readonly property color lineColor: Appearance.macos.glassBorder
         onOutlineChanged: requestPaint()
         onFillColorChanged: requestPaint()
         onLineColorChanged: requestPaint()

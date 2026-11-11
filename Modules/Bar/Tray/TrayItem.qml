@@ -17,6 +17,10 @@ MouseArea {
     signal menuOpened(var qsWindow)
     signal menuClosed
 
+    property bool longPressTriggered: false
+    property real pressX: 0
+    property real pressY: 0
+
     implicitWidth: Sizes.barControlCircleSize
     implicitHeight: Sizes.barControlCircleSize
     hoverEnabled: true
@@ -42,21 +46,56 @@ MouseArea {
         }
     }
 
-    onPressed: event => {
-        if (event.button === Qt.LeftButton) {
-            root.modelData.activate();
-            root.closeMenu();
-        } else if (event.button === Qt.RightButton) {
-            if (root.modelData.hasMenu || root.modelData.menu) {
-                if (menu.active && menu.item && typeof menu.item.close === "function") {
-                    menu.item.close();
-                } else {
-                    root.closeOtherMenus();
-                    menu.open();
-                }
+    function openSecondaryAction() {
+        if (root.modelData.hasMenu || root.modelData.menu) {
+            if (menu.active && menu.item && typeof menu.item.close === "function") {
+                menu.item.close();
+            } else {
+                root.closeOtherMenus();
+                menu.open();
             }
+            return;
         }
-        event.accepted = true;
+        if (typeof root.modelData.secondaryActivate === "function")
+            root.modelData.secondaryActivate();
+    }
+
+    onPressed: event => {
+                   if (event.button === Qt.LeftButton) {
+                       root.longPressTriggered = false;
+                       root.pressX = event.x;
+                       root.pressY = event.y;
+                       longPressTimer.restart();
+                   } else if (event.button === Qt.RightButton) {
+                       root.longPressTriggered = true;
+                       root.openSecondaryAction();
+                   }
+                   event.accepted = true;
+               }
+    onReleased: event => {
+                    longPressTimer.stop();
+                    if (event.button === Qt.LeftButton && !root.longPressTriggered) {
+                        root.modelData.activate();
+                        root.closeMenu();
+                    }
+                    root.longPressTriggered = false;
+                    event.accepted = true;
+                }
+    onCanceled: longPressTimer.stop()
+    onPositionChanged: event => {
+                           if (pressed && Math.hypot(event.x - root.pressX, event.y - root.pressY) > 12)
+                           longPressTimer.stop();
+                       }
+
+    Timer {
+        id: longPressTimer
+
+        interval: 550
+        repeat: false
+        onTriggered: {
+            root.longPressTriggered = true;
+            root.openSecondaryAction();
+        }
     }
 
     Loader {

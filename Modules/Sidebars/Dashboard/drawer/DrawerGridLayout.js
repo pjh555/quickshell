@@ -1,7 +1,53 @@
 .pragma library
 
-Qt.include("../../../SystemCards/SystemCardGeometry.js");
-Qt.include("../../../SystemCards/SystemCardGrid.js");
+.import "../../../SystemCards/SystemCardGeometry.js" as Geometry
+.import "../../../SystemCards/SystemCardGrid.js" as Grid
+.import "../../../SystemCards/SystemCardCatalog.js" as Catalog
+
+function ids() {
+    return Catalog.ids();
+}
+
+function sidebarDefinitions(activeIds) {
+    return Catalog.sidebarDefinitions(activeIds);
+}
+
+function definitionFor(id) {
+    return Catalog.definitionFor(String(id));
+}
+
+function sizeFor(id) {
+    return Geometry.sizeFor(String(id));
+}
+
+function widthFor(id) {
+    return Geometry.widthFor(String(id));
+}
+
+function heightFor(id) {
+    return Geometry.heightFor(String(id));
+}
+
+function gridSnap(value, maximum, step) {
+    return Grid.gridSnap(value, maximum, step);
+}
+
+function gridOverlaps(first, second, gap) {
+    return Grid.gridOverlaps(first, second, gap);
+}
+
+function gridNearestFree(card, occupied, width, height, gap, step) {
+    return Grid.gridNearestFree(card, occupied, width, height, gap, step);
+}
+
+function defaultAnchorFor(id) {
+    return Catalog.defaultAnchorFor(String(id));
+}
+
+var cellGap = Number(Geometry.cellGap) || 8;
+var cardGridStep = Number(Grid.cardGridStep) || 8;
+var baseCellWidth = Number(Geometry.baseCellWidth) || 152;
+var baseCellHeight = Number(Geometry.baseCellHeight) || 160;
 
 var canvasWidth = 472;
 var schemaVersion = 8;

@@ -3,6 +3,15 @@
 Existing license files in this directory continue to cover their respective
 components.
 
+## Material Symbols
+
+Source: [google/material-design-icons](https://github.com/google/material-design-icons).
+`assets/fonts/material-symbols/MaterialSymbolsRounded.ttf` and
+`MaterialSymbolsOutlined.ttf` are the upstream variable fonts. The complete
+Apache-2.0 license is preserved next to them as
+`assets/fonts/material-symbols/LICENSE`. Clavis bundles the fonts so Ubuntu
+installs do not depend on an Arch-only `ttf-material-symbols-variable` package.
+
 ## Animated Weather Cards
 
 Source: [Animated Weather Cards](https://codepen.io/ste-vg/pen/GqaZbo) by Steve Gardner.

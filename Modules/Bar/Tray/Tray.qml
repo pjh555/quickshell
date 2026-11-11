@@ -164,17 +164,17 @@ TopBarPill {
             rippleColor: Appearance.colors.colOnSecondaryContainer
             Layout.alignment: Qt.AlignVCenter
             releaseAction: () => {
-                if (root.trayOverflowOpen) {
-                    root.trayOverflowOpen = false;
-                    root.closeActiveMenu();
-                    return;
-                }
+                               if (root.trayOverflowOpen) {
+                                   root.trayOverflowOpen = false;
+                                   root.closeActiveMenu();
+                                   return;
+                               }
 
-                root.closeActiveMenu();
-                root.captureOverflowAnchor();
-                root.updateOverflowPosition();
-                root.trayOverflowOpen = true;
-            }
+                               root.closeActiveMenu();
+                               root.captureOverflowAnchor();
+                               root.updateOverflowPosition();
+                               root.trayOverflowOpen = true;
+                           }
 
             contentItem: MaterialSymbol {
                 anchors.centerIn: parent
@@ -244,9 +244,9 @@ TopBarPill {
         onVisibleChanged: {
             if (visible)
                 Qt.callLater(() => {
-                    root.updateOverflowPosition();
-                    overflowKeyScope.forceActiveFocus();
-                });
+                                 root.updateOverflowPosition();
+                                 overflowKeyScope.forceActiveFocus();
+                             });
         }
 
         Item {
@@ -261,14 +261,14 @@ TopBarPill {
             z: -1
 
             onClicked: event => {
-                const outsideMenu = event.x < overflowSurface.x || event.x > overflowSurface.x
-                      + overflowSurface.width || event.y < overflowSurface.y || event.y > overflowSurface.y
-                      + overflowSurface.height;
-                if (outsideMenu) {
-                    root.trayOverflowOpen = false;
-                    root.closeActiveMenu();
-                }
-            }
+                           const outsideMenu = event.x < overflowSurface.x || event.x > overflowSurface.x
+                           + overflowSurface.width || event.y < overflowSurface.y || event.y
+                           > overflowSurface.y + overflowSurface.height;
+                           if (outsideMenu) {
+                               root.trayOverflowOpen = false;
+                               root.closeActiveMenu();
+                           }
+                       }
         }
 
         FocusScope {
@@ -278,10 +278,10 @@ TopBarPill {
             focus: overflowPopup.visible
 
             Keys.onEscapePressed: event => {
-                root.trayOverflowOpen = false;
-                root.closeActiveMenu();
-                event.accepted = true;
-            }
+                                      root.trayOverflowOpen = false;
+                                      root.closeActiveMenu();
+                                      event.accepted = true;
+                                  }
 
             Item {
                 id: overflowSurface
@@ -313,7 +313,7 @@ TopBarPill {
                     color: BlurService.backgroundColor(Appearance.colors.colLayer0)
                     radius: 18
                     border.width: 1
-                    border.color: Appearance.colors.colLayer0Border
+                    border.color: Appearance.macos.glassBorder
                     clip: true
                     opacity: overflowPopup.visible ? 1 : 0
 

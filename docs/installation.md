@@ -1,4 +1,9 @@
-# Arch installation
+# Installation
+
+Arch releases use the process below. Ubuntu/Debian ARM64 uses the source installer in
+[Ubuntu 适配](ubuntu.md); `install.sh` dispatches to it automatically on those systems.
+
+## Arch installation
 
 The first release targets Arch-compatible x86_64 systems. The two active projects
 are distributed as `clavis-shell` and `key-cli`. `clavis` is an unrelated AUR package.

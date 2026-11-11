@@ -497,6 +497,18 @@ TestCase {
         compare(ids(pinned), "app:a,spacer:gap,app:b");
     }
 
+    function test_launchpadOffsetMapsVisualGapToPinnedIndex() {
+        // Visual row: launchpad, app a, app b. Persisted list: app a, app b.
+        compare(DockModel.pinnedInsertionIndex(0, 2), 0);
+        compare(DockModel.pinnedInsertionIndex(1, 2), 0);
+        compare(DockModel.pinnedInsertionIndex(2, 2), 1);
+        compare(DockModel.pinnedInsertionIndex(3, 2), 2);
+        compare(DockModel.pinnedInsertionIndex(99, 2), 2);
+        compare(DockModel.pinnedInsertionIndex(-1, 2), 0);
+        compare(DockModel.pinnedInsertionIndex(NaN, 2), 2);
+        compare(DockModel.pinnedInsertionIndex(1, 0), 0);
+    }
+
     function test_launchWaitsForNewMatchingWindowOrTimeout() {
         const pending = {
             "app:editor": {

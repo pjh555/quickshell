@@ -24,6 +24,7 @@ assets/icons/weather/meteocons/*
 
 # C++/Qt build outputs
 build/
+build-ubuntu/
 core/build*/
 .build/
 core/**/*.o
