@@ -10,22 +10,23 @@ import qs.Common
 import qs.Services
 import qs.Components
 import qs.Widgets.common
+import "../../Common/functions/SettingsIconPalette.js" as IconPalette
 
 FloatingWindow {
     id: root
 
     property bool _wasShown: false
-    property real contentPadding: 8
+    property real contentPadding: Metrics.spacingM
     property int currentPage: 0
-    property bool navExpanded: width > 900
+    property bool navExpanded: width >= 880
     property string pendingPageSection: ""
-    readonly property var pages: SpotlightCatalog.routes.filter(entry => entry.path.length === 1).map(entry
-                                                                                                      => Object.assign(
-                                                                                                             {}, entry,
-                                                                                                             {
-                                                                                                                 title: SpotlightCatalog.title(
-                                                                                                                            entry.id)
-                                                                                                             }))
+    readonly property var pageOrder: ["account", "general", "wallpaper", "theme", "keystone", "agent",
+        "android", "advanced"]
+    readonly property var pages: root.pageOrder.map(pageId => SpotlightCatalog.route(pageId)).filter(entry => entry
+                                                                                                     !== null).map(
+                                     entry => Object.assign({}, entry, {
+                                                                title: SpotlightCatalog.title(entry.id)
+                                                            }))
     property int searchRequestSerial: -1
     property var searchLeaf: null
     readonly property var searchPageAnchor: pageSearchAnchor
@@ -157,7 +158,7 @@ FloatingWindow {
     implicitWidth: 1100
     implicitHeight: 750
     minimumSize: Qt.size(760, 520)
-    color: Appearance.m3colors.m3background
+    color: "transparent"
     Material.theme: PersonalizationConfig.themeMode === "light" ? Material.Light : Material.Dark
     Material.accent: Appearance.colors.colPrimary
     onVisibleChanged: {
@@ -185,6 +186,16 @@ FloatingWindow {
     Item {
         id: focusBoundary
         anchors.fill: parent
+
+        LiquidGlassSurface {
+            anchors.fill: parent
+            radius: root.maximized ? 0 : Appearance.rounding.extraLarge
+            baseColor: Appearance.colors.colLayer0Base
+            blurOpacity: 0.30
+            fallbackOpacity: 0.98
+            topHighlight: 0.13
+            bottomReflection: 0.025
+        }
 
         Shortcut {
             sequence: "Ctrl+F"
@@ -217,9 +228,9 @@ FloatingWindow {
             // Inspect presses before page controls handle them, then let the
             // original press through for text selection, buttons and dragging.
             onPressed: mouse => {
-                focusBoundary.releaseInputFocus(Qt.point(mouse.x, mouse.y));
-                mouse.accepted = false;
-            }
+                           focusBoundary.releaseInputFocus(Qt.point(mouse.x, mouse.y));
+                           mouse.accepted = false;
+                       }
             onWheel: wheel => wheel.accepted = false
         }
 
@@ -245,13 +256,6 @@ FloatingWindow {
                     onMaximizeRequested: root.toggleMaximize()
                 }
 
-                Item {
-                    id: searchBarSlot
-                    anchors.centerIn: parent
-                    width: Math.min(360, parent.width - windowControls.width * 2 - Metrics.spacingL * 2)
-                    height: 36
-                }
-
                 DragHandler {
                     target: null
                     acceptedButtons: Qt.LeftButton
@@ -272,24 +276,102 @@ FloatingWindow {
                 Layout.fillHeight: true
                 spacing: root.contentPadding
 
-                Item {
+                LiquidGlassSurface {
                     id: navRailWrapper
 
                     Layout.fillHeight: true
-                    Layout.margins: 5
-                    implicitWidth: root.navExpanded ? 150 : configButton.baseSize
+                    Layout.preferredWidth: implicitWidth
+                    implicitWidth: root.navExpanded ? 248 : 72
+                    radius: Metrics.cornerL
+                    baseColor: Appearance.colors.colLayer1Base
+                    blurOpacity: 0.28
+                    fallbackOpacity: 0.92
+                    topHighlight: 0.17
+                    clipContent: true
 
                     ColumnLayout {
                         id: navRail
 
-                        anchors.left: parent.left
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        spacing: 10
+                        anchors.fill: parent
+                        anchors.margins: Metrics.spacingS
+                        spacing: Metrics.spacingS
 
-                        NavigationRailExpandButton {
-                            expanded: root.navExpanded
-                            onClicked: root.navExpanded = !root.navExpanded
+                        Item {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: Metrics.controlHeightL
+
+                            Text {
+                                anchors.left: parent.left
+                                anchors.leftMargin: Metrics.spacingS
+                                anchors.verticalCenter: parent.verticalCenter
+                                visible: root.navExpanded
+                                text: qsTranslate("ControlCenterWindow", "Settings")
+                                color: Appearance.colors.colOnSurface
+                                font.family: Typography.titleLarge.family
+                                font.pixelSize: Typography.titleLarge.pixelSize
+                                font.weight: Font.DemiBold
+                            }
+
+                            NavigationRailExpandButton {
+                                anchors.right: parent.right
+                                anchors.verticalCenter: parent.verticalCenter
+                                expanded: root.navExpanded
+                                onClicked: root.navExpanded = !root.navExpanded
+                            }
+                        }
+
+                        Item {
+                            id: searchBarSlot
+
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: 36
+                        }
+
+                        Flickable {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            contentWidth: width
+                            contentHeight: navigationTabs.implicitHeight
+                            clip: true
+                            boundsBehavior: Flickable.StopAtBounds
+
+                            NavigationRailTabArray {
+                                id: navigationTabs
+
+                                width: parent.width
+                                currentIndex: root.currentPage
+                                expanded: root.navExpanded
+
+                                Repeater {
+                                    model: root.pages
+
+                                    NavigationRailButton {
+                                        required property int index
+                                        required property var modelData
+
+                                        active: root.currentPage === index
+                                        expanded: root.navExpanded
+                                        buttonIcon: modelData.icon
+                                        buttonText: modelData.title
+                                        showToggledHighlight: false
+                                        Layout.topMargin: ["wallpaper", "agent", "advanced"].indexOf(
+                                            modelData.id) >= 0 ? Metrics.spacingS : 0
+                                        onPressed: root.currentPage = index
+                                    }
+                                }
+                            }
+
+                            ScrollBar.vertical: ScrollBar {
+                                policy: ScrollBar.AsNeeded
+                            }
+                        }
+
+                        Rectangle {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: Metrics.dividerWidth
+                            Layout.leftMargin: Metrics.spacingS
+                            Layout.rightMargin: Metrics.spacingS
+                            color: Appearance.colors.colLayer0Border
                         }
 
                         FloatingActionButton {
@@ -297,36 +379,17 @@ FloatingWindow {
 
                             property bool justCopied: copiedTimer.running
 
+                            Layout.fillWidth: true
                             iconText: justCopied ? "check" : "edit"
                             buttonText: justCopied ? qsTr("Path copied") : qsTr("config file")
                             expanded: root.navExpanded
+                            baseSize: Metrics.controlHeightL
+                            baseColor: "transparent"
+                            hoverStateColor: Appearance.colors.colLayer1Hover
+                            pressedStateColor: Appearance.colors.colLayer1Active
+                            contentColor: Appearance.colors.colOnSurfaceVariant
                             onClicked: root.openConfig()
                             onAltClicked: root.copyConfigPath()
-                        }
-
-                        NavigationRailTabArray {
-                            currentIndex: root.currentPage
-                            expanded: root.navExpanded
-
-                            Repeater {
-                                model: root.pages
-
-                                NavigationRailButton {
-                                    required property int index
-                                    required property var modelData
-
-                                    active: root.currentPage === index
-                                    expanded: root.navExpanded
-                                    buttonIcon: modelData.icon
-                                    buttonText: modelData.title
-                                    showToggledHighlight: false
-                                    onPressed: root.currentPage = index
-                                }
-                            }
-                        }
-
-                        Item {
-                            Layout.fillHeight: true
                         }
                     }
 
@@ -344,9 +407,66 @@ FloatingWindow {
 
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    radius: Math.max(0, Appearance.rounding.large - root.contentPadding)
-                    color: root.currentPage === 0 ? "transparent" : Appearance.m3colors.m3surfaceContainerLow
+                    radius: Metrics.cornerL
+                    color: Appearance.applyAlpha(Appearance.m3colors.m3surfaceContainerLowest,
+                                                 BlurService.enabled ? 0.78 : 1)
+                    border.width: 1
+                    border.color: Appearance.applyAlpha(Appearance.macos.glassBorder, 0.56)
                     clip: true
+
+                    GlassHighlight {
+                        anchors.fill: parent
+                        radius: parent.radius
+                        topStrength: 0.055
+                        bottomStrength: 0.018
+                    }
+
+                    Item {
+                        id: currentPageHeader
+
+                        readonly property var page: root.pages[root.currentPage]
+
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        height: visible ? 72 : 0
+                        visible: !pageLoader.item || !("currentSection" in pageLoader.item) || pageLoader.item.currentSection
+                                 === "overview"
+                        z: 2
+
+                        Rectangle {
+                            anchors.left: parent.left
+                            anchors.leftMargin: Metrics.spacingXL
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 36
+                            height: 36
+                            radius: 9
+                            color: currentPageHeader.page ? IconPalette.backgroundFor(
+                                                                currentPageHeader.page.icon) : "transparent"
+
+                            MaterialSymbol {
+                                anchors.centerIn: parent
+                                text: currentPageHeader.page ? currentPageHeader.page.icon : "settings"
+                                iconSize: 22
+                                fill: 1
+                                color: "white"
+                            }
+                        }
+
+                        Text {
+                            anchors.left: parent.left
+                            anchors.leftMargin: Metrics.spacingXL + 48
+                            anchors.right: parent.right
+                            anchors.rightMargin: Metrics.spacingXL
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: currentPageHeader.page ? currentPageHeader.page.title : ""
+                            color: Appearance.colors.colOnSurface
+                            font.family: Typography.headlineSmall.family
+                            font.pixelSize: Typography.headlineSmall.pixelSize
+                            font.weight: Font.DemiBold
+                            elide: Text.ElideRight
+                        }
+                    }
 
                     InlineStatusBanner {
                         z: 200
@@ -365,6 +485,7 @@ FloatingWindow {
                         property var parentModal: root
 
                         anchors.fill: parent
+                        anchors.topMargin: currentPageHeader.height
                         source: root.pageSource(root.currentPage)
                         presentationActive: root.visible
                         onLoaded: {
@@ -404,7 +525,7 @@ FloatingWindow {
             anchors.fill: parent
             z: 500
             barSlot: searchBarSlot
-            sideMargin: root.contentPadding + windowControls.width + Metrics.spacingXL
+            sideMargin: root.navExpanded ? 288 : 112
             onCollapsed: focusBoundary.forceActiveFocus(Qt.OtherFocusReason)
         }
     }

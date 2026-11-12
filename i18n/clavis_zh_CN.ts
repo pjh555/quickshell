@@ -13385,6 +13385,30 @@ detected</source>
         <source>Weather</source>
         <translation>天气</translation>
     </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="122"/>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="231"/>
+        <source>Now Playing</source>
+        <translation>正在播放</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="132"/>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="233"/>
+        <source>Notifications</source>
+        <translation>通知</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="142"/>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="235"/>
+        <source>Notes</source>
+        <translation>便签</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="152"/>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="237"/>
+        <source>Photos</source>
+        <translation>照片</translation>
+    </message>
 </context>
 <context>
     <name>SystemCardContent</name>
@@ -13453,6 +13477,169 @@ detected</source>
         <location filename="../Modules/SystemCards/SystemCardContent.qml" line="370"/>
         <source>Disk %1, %2 of %3 used, %4 occupied</source>
         <translation>磁盘 %1，已使用 %2，共 %3，占用 %4</translation>
+    </message>
+        <message>
+            <source>Clock</source>
+            <translation>时钟</translation>
+        </message>
+        <message>
+            <source>Battery</source>
+            <translation>电池</translation>
+        </message>
+        <message>
+            <source>Memory</source>
+            <translation>内存</translation>
+        </message>
+        <message>
+            <source>Wi-Fi</source>
+            <translation>Wi-Fi</translation>
+        </message>
+        <message>
+            <source>Network</source>
+            <translation>网络</translation>
+        </message>
+        <message>
+            <source>Disk I/O</source>
+            <translation>磁盘 I/O</translation>
+        </message>
+        <message>
+            <source>Disk capacity</source>
+            <translation>磁盘容量</translation>
+        </message>
+        <message>
+            <source>Calendar</source>
+            <translation>日历</translation>
+        </message>
+        <message>
+            <source>Weather</source>
+            <translation>天气</translation>
+        </message>
+        <message>
+            <source>Now Playing</source>
+            <translation>正在播放</translation>
+        </message>
+        <message>
+            <source>Notifications</source>
+            <translation>通知</translation>
+        </message>
+        <message>
+            <source>Notes</source>
+            <translation>便签</translation>
+        </message>
+        <message>
+            <source>Photos</source>
+            <translation>照片</translation>
+        </message>
+</context>
+<context>
+    <name>SystemMusicCard</name>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="17"/>
+        <source>Nothing playing</source>
+        <translation>暂无播放</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="20"/>
+        <source>No active player</source>
+        <translation>没有活跃的播放器</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="38"/>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="58"/>
+        <source>Now Playing</source>
+        <translation>正在播放</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="133"/>
+        <source>Previous track</source>
+        <translation>上一首</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="142"/>
+        <source>Pause</source>
+        <translation>暂停</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="142"/>
+        <source>Play</source>
+        <translation>播放</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="152"/>
+        <source>Next track</source>
+        <translation>下一首</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="83"/>
+        <source>Playing</source>
+        <translation>正在播放</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="83"/>
+        <source>Paused</source>
+        <translation>已暂停</translation>
+    </message>
+</context>
+<context>
+    <name>SystemNotificationsCard</name>
+    <message>
+        <location filename="../Modules/SystemCards/SystemNotificationsCard.qml" line="39"/>
+        <location filename="../Modules/SystemCards/SystemNotificationsCard.qml" line="59"/>
+        <source>Notifications</source>
+        <translation>通知</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemNotificationsCard.qml" line="80"/>
+        <source>No notifications</source>
+        <translation>暂无通知</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemNotificationsCard.qml" line="192"/>
+        <source>View all</source>
+        <translation>查看全部</translation>
+    </message>
+</context>
+<context>
+    <name>SystemNotesCard</name>
+    <message>
+        <location filename="../Modules/SystemCards/SystemNotesCard.qml" line="25"/>
+        <location filename="../Modules/SystemCards/SystemNotesCard.qml" line="45"/>
+        <source>Notes</source>
+        <translation>便签</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemNotesCard.qml" line="66"/>
+        <source>No notes yet</source>
+        <translation>暂无便签</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemNotesCard.qml" line="161"/>
+        <source>Add a note</source>
+        <translation>添加便签</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemNotesCard.qml" line="170"/>
+        <source>Add note</source>
+        <translation>添加便签</translation>
+    </message>
+</context>
+<context>
+    <name>SystemPhotosCard</name>
+    <message>
+        <location filename="../Modules/SystemCards/SystemPhotosCard.qml" line="73"/>
+        <location filename="../Modules/SystemCards/SystemPhotosCard.qml" line="142"/>
+        <source>Photos</source>
+        <translation>照片</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemPhotosCard.qml" line="224"/>
+        <source>No photos found</source>
+        <translation>未找到照片</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemPhotosCard.qml" line="269"/>
+        <source>Open photo</source>
+        <translation>打开照片</translation>
     </message>
 </context>
 <context>
@@ -13989,6 +14176,11 @@ detected</source>
         <location filename="../Modules/SystemCards/SystemWeatherCard.qml" line="22"/>
         <source>Weather,</source>
         <translation>天气，</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemWeatherCard.qml" line="100"/>
+        <source>Weather</source>
+        <translation>天气</translation>
     </message>
     <message>
         <location filename="../Modules/SystemCards/SystemWeatherCard.qml" line="23"/>

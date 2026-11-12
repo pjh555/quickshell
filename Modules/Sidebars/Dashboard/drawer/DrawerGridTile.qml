@@ -10,6 +10,7 @@ Item {
     property bool active: true
     property bool dragging: false
     property bool motionEnabled: true
+    readonly property bool hovered: hoverHandler.hovered
     readonly property bool presentationOwned: SystemCardDragSession.presentationActive
                                               && SystemCardDragSession.tileId === root.tileId
     readonly property Item contentItem: cardContent
@@ -21,6 +22,17 @@ Item {
     signal dragCanceled(string tileId)
 
     Accessible.role: Accessible.Pane
+    transformOrigin: Item.Center
+    scale: root.dragging ? 0.985 : root.hovered ? 1.012 : 1
+
+    Behavior on scale {
+        enabled: root.motionEnabled
+        NumberAnimation {
+            duration: Appearance.animation.expressiveFastSpatial.duration
+            easing.type: Appearance.animation.expressiveFastSpatial.type
+            easing.bezierCurve: Appearance.animation.expressiveFastSpatial.bezierCurve
+        }
+    }
 
     Behavior on x {
         enabled: root.motionEnabled && !root.dragging
@@ -58,15 +70,8 @@ Item {
         }
     }
 
-    // Only cards opted into the new shell-managed surface receive a backing
-    // rectangle.  The first six cards retain their original backgrounds.
-    Rectangle {
-        anchors.fill: parent
-        visible: !root.presentationOwned && cardContent.shellManagedSurface
-        radius: Appearance.rounding.extraLarge
-        color: BlurService.solidBackgroundColor(Appearance.m3colors.m3surfaceContainerHigh)
-    }
-
+    // The card content owns the iPad-style glass surface now; a second solid
+    // backing rectangle here would block the compositor blur behind it.
     SystemCardContent {
         id: cardContent
 
@@ -78,9 +83,24 @@ Item {
         active: root.active && !root.presentationOwned
         visible: !root.presentationOwned
         useShellManagedSurface: true
+        interactionProgress: root.hovered || root.dragging ? 1 : 0
+    }
+
+    Rectangle {
+        anchors.fill: parent
+        radius: Appearance.rounding.veryLarge
+        color: root.dragging ? Qt.rgba(0, 0, 0, 0.08) : root.hovered ? Qt.rgba(1, 1, 1, 0.06) : "transparent"
+
+        Behavior on color {
+            ColorAnimation {
+                duration: Appearance.animation.expressiveFastEffects.duration
+            }
+        }
     }
 
     HoverHandler {
+        id: hoverHandler
+
         cursorShape: dragHandler.active ? Qt.ClosedHandCursor : Qt.OpenHandCursor
     }
 

@@ -21,6 +21,7 @@ Rectangle {
     property int updateInterval: 1000
     property real decorationSize: 70
     property real valueSize: Typography.displaySmall.pixelSize
+    property bool glassSurface: false
     property color containerColor: Appearance.colors.colPrimaryContainer
     property color foregroundColor: Appearance.colors.colOnPrimaryContainer
     property color accentColor: Appearance.colors.colPrimary
@@ -40,8 +41,8 @@ Rectangle {
         return MaterialShape.Cookie4Sided;
     }
 
-    radius: Appearance.rounding.extraLarge
-    color: root.containerColor
+    radius: root.glassSurface ? Appearance.rounding.veryLarge : Appearance.rounding.extraLarge
+    color: root.glassSurface ? "transparent" : root.containerColor
     clip: true
     layer.enabled: true
     layer.effect: OpacityMask {
@@ -76,6 +77,7 @@ Rectangle {
         implicitSize: Math.min(root.width * 0.38, root.height * 0.42, root.decorationSize * (1.08
                                                                                              + root.normalizedUsage
                                                                                              * 0.14))
+        visible: !root.glassSurface
         rotation: 18
         shape: root.resolvedShape
         color: root.accentColor
@@ -101,6 +103,32 @@ Rectangle {
         }
     }
 
+    Rectangle {
+        id: glassBadge
+
+        visible: root.glassSurface
+        width: 40
+        height: 40
+        radius: Appearance.rounding.normal
+        color: Qt.rgba(1, 1, 1, 0.16)
+        z: 4
+
+        anchors {
+            right: parent.right
+            bottom: parent.bottom
+            rightMargin: 16
+            bottomMargin: 16
+        }
+
+        MaterialSymbol {
+            anchors.centerIn: parent
+            text: root.iconName
+            color: root.accentColor
+            iconSize: 24
+            fill: 1
+        }
+    }
+
     Row {
         id: temperatureBadge
 
@@ -111,8 +139,10 @@ Rectangle {
         anchors {
             top: parent.top
             right: parent.right
-            topMargin: root.dense ? Appearance.spacing.small : Appearance.spacing.medium
-            rightMargin: root.dense ? Appearance.spacing.small : Appearance.spacing.medium
+            topMargin: root.glassSurface ? 16 : root.dense ? Appearance.spacing.small :
+                                                             Appearance.spacing.medium
+            rightMargin: root.glassSurface ? 16 : root.dense ? Appearance.spacing.small :
+                                                               Appearance.spacing.medium
         }
 
         MaterialSymbol {
@@ -138,9 +168,10 @@ Rectangle {
     ColumnLayout {
         anchors {
             fill: parent
-            margins: root.dense ? Appearance.spacing.small : Appearance.spacing.medium
+            margins: root.glassSurface ? 16 : root.dense ? Appearance.spacing.small :
+                                                           Appearance.spacing.medium
         }
-        spacing: root.dense ? 2 : Appearance.spacing.xSmall
+        spacing: root.glassSurface ? 4 : root.dense ? 2 : Appearance.spacing.xSmall
 
         Text {
             Layout.maximumWidth: Math.max(48, root.width - temperatureBadge.width - Appearance.spacing.large
@@ -148,9 +179,9 @@ Rectangle {
             text: root.label
             color: root.foregroundColor
             font.family: Fonts.ui
-            font.pixelSize: root.dense ? Typography.titleMedium.pixelSize + 2 :
-                                         Typography.titleLarge.pixelSize
-            font.weight: Font.Bold
+            font.pixelSize: root.glassSurface ? 18 : root.dense ? Typography.titleMedium.pixelSize + 2 :
+                                                                  Typography.titleLarge.pixelSize
+            font.weight: root.glassSurface ? Font.DemiBold : Font.Bold
             elide: Text.ElideRight
         }
 
@@ -159,7 +190,7 @@ Rectangle {
             visible: !root.dense && text.length > 0
             text: root.detailText
             color: root.foregroundColor
-            opacity: 0.72
+            opacity: root.glassSurface ? 0.78 : 0.72
             font.family: Fonts.ui
             font.pixelSize: Typography.labelSmall.pixelSize
             elide: Text.ElideRight
@@ -181,9 +212,9 @@ Rectangle {
             accessibilityName: root.label + qsTr(" trend over the last minute")
             accessibilityDescription: qsTr("Current value ") + root.valueText
             lineColor: root.accentColor
-            baselineColor: Appearance.applyAlpha(root.foregroundColor, 0.2)
+            baselineColor: Appearance.applyAlpha(root.foregroundColor, 0.22)
             lineWidth: 2.2
-            fillOpacity: 0.12
+            fillOpacity: root.glassSurface ? 0.20 : 0.12
         }
 
         Item {
@@ -197,11 +228,11 @@ Rectangle {
 
             Text {
                 Layout.fillWidth: true
-                Layout.rightMargin: root.decorationSize * 0.28
+                Layout.rightMargin: root.glassSurface ? 56 : root.decorationSize * 0.28
                 text: root.valueText
                 color: root.foregroundColor
                 font.family: Fonts.numeric
-                font.pixelSize: root.valueSize
+                font.pixelSize: root.glassSurface ? 34 : root.valueSize
                 font.weight: Font.Bold
                 elide: Text.ElideRight
 
@@ -215,13 +246,13 @@ Rectangle {
 
         Text {
             Layout.fillWidth: true
-            Layout.rightMargin: root.decorationSize * 0.5
+            Layout.rightMargin: root.glassSurface ? 56 : root.decorationSize * 0.5
             visible: !root.dense && text.length > 0
             text: root.supportingText
             color: root.foregroundColor
-            opacity: 0.74
+            opacity: root.glassSurface ? 0.78 : 0.74
             font.family: Fonts.ui
-            font.pixelSize: Typography.bodySmall.pixelSize
+            font.pixelSize: root.glassSurface ? 13 : Typography.bodySmall.pixelSize
             elide: Text.ElideRight
         }
     }

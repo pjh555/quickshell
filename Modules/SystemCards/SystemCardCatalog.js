@@ -115,6 +115,46 @@ var cardDefinitions = [
         monitorModules: [],
         preserveDefaultSurface: true,
         excludeHostBlur: true
+    },
+    {
+        id: "music",
+        nameKey: "音乐",
+        name: qsTr("Now Playing"),
+        icon: "music_note",
+        columnSpan: 2,
+        rowSpan: 2,
+        monitorModules: [],
+        preserveDefaultSurface: false
+    },
+    {
+        id: "notifications",
+        nameKey: "通知",
+        name: qsTr("Notifications"),
+        icon: "notifications",
+        columnSpan: 2,
+        rowSpan: 2,
+        monitorModules: [],
+        preserveDefaultSurface: false
+    },
+    {
+        id: "notes",
+        nameKey: "便签",
+        name: qsTr("Notes"),
+        icon: "sticky_note_2",
+        columnSpan: 2,
+        rowSpan: 2,
+        monitorModules: [],
+        preserveDefaultSurface: false
+    },
+    {
+        id: "photos",
+        nameKey: "照片",
+        name: qsTr("Photos"),
+        icon: "photo_library",
+        columnSpan: 2,
+        rowSpan: 2,
+        monitorModules: [],
+        preserveDefaultSurface: false
     }
 ];
 
@@ -129,7 +169,11 @@ var defaultAnchors = {
     storage: { column: 0, row: 5 },
     storageCapacity: { column: 0, row: 7 },
     calendar: { column: 2, row: 3 },
-    weather: { column: 1, row: 6 }
+    weather: { column: 1, row: 6 },
+    music: { column: 0, row: 8 },
+    notifications: { column: 1, row: 10 },
+    notes: { column: 0, row: 12 },
+    photos: { column: 1, row: 14 }
 };
 
 function cloneDefinition(definition) {
@@ -183,6 +227,14 @@ function nameFor(id) {
         return qsTr("Calendar");
     case "weather":
         return qsTr("Weather");
+    case "music":
+        return qsTr("Now Playing");
+    case "notifications":
+        return qsTr("Notifications");
+    case "notes":
+        return qsTr("Notes");
+    case "photos":
+        return qsTr("Photos");
     default:
         return String(id);
     }

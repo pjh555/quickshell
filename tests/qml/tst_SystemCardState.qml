@@ -6,8 +6,8 @@ TestCase {
     function test_legacyMissingStateDefaultsEveryCardToSidebar() {
         const state = CardState.normalize({});
         compare(state.version, 4);
-        compare(Object.keys(state.cards).length, 11);
-        compare(CardState.activeSidebarIds(state).length, 11);
+        compare(Object.keys(state.cards).length, 15);
+        compare(CardState.activeSidebarIds(state).length, 15);
         compare(CardState.activeDesktopIds(state).length, 0);
         compare(state.cards.cpu.enabled, true);
         compare(state.cards.cpu.container, "sidebar");

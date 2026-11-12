@@ -212,8 +212,8 @@ StyledFlickable {
                 ]
                 currentValue: SystemCardService.globalDesktopLayoutMode
                 onValueSelected: value => {
-                    return SystemCardService.setGlobalDesktopLayoutMode(value);
-                }
+                                     return SystemCardService.setGlobalDesktopLayoutMode(value);
+                                 }
             }
 
             StyledButtonGroup {
@@ -243,8 +243,8 @@ StyledFlickable {
                 currentValue: SystemCardService.globalDesktopLayoutMode
                 buttonMinWidth: 0
                 onValueSelected: value => {
-                    return SystemCardService.setGlobalDesktopLayoutMode(value);
-                }
+                                     return SystemCardService.setGlobalDesktopLayoutMode(value);
+                                 }
             }
 
             SettingsRow {
@@ -300,8 +300,8 @@ StyledFlickable {
                 currentValue: UiPreferences.sidebarClockStyle
                 buttonMinWidth: 120
                 onValueSelected: value => {
-                    return UiPreferences.setSidebarClockStyle(value);
-                }
+                                     return UiPreferences.setSidebarClockStyle(value);
+                                 }
             }
 
             ColumnLayout {
@@ -326,8 +326,8 @@ StyledFlickable {
                         to: 40
                         stepSize: 1
                         onValueModified: value => {
-                            return UiPreferences.setSidebarCookieSides(value);
-                        }
+                                             return UiPreferences.setSidebarCookieSides(value);
+                                         }
                     }
                 }
 
@@ -409,8 +409,8 @@ StyledFlickable {
                     currentValue: UiPreferences.sidebarCookieDialStyle
                     horizontalPadding: Metrics.spacingXL
                     onValueSelected: value => {
-                        return UiPreferences.setSidebarCookieDialStyle(value);
-                    }
+                                         return UiPreferences.setSidebarCookieDialStyle(value);
+                                     }
                 }
 
                 Text {
@@ -451,8 +451,8 @@ StyledFlickable {
                     currentValue: UiPreferences.sidebarCookieHourHandStyle
                     horizontalPadding: Metrics.spacingXL
                     onValueSelected: value => {
-                        return UiPreferences.setSidebarCookieHourHandStyle(value);
-                    }
+                                         return UiPreferences.setSidebarCookieHourHandStyle(value);
+                                     }
                 }
 
                 Text {
@@ -499,8 +499,8 @@ StyledFlickable {
                     horizontalPadding: Metrics.spacingM * 2
                     contentSpacing: Metrics.spacingXS
                     onValueSelected: value => {
-                        return UiPreferences.setSidebarCookieMinuteHandStyle(value);
-                    }
+                                         return UiPreferences.setSidebarCookieMinuteHandStyle(value);
+                                     }
                 }
 
                 Text {
@@ -541,8 +541,8 @@ StyledFlickable {
                     currentValue: UiPreferences.sidebarCookieSecondHandStyle
                     horizontalPadding: Metrics.spacingXL
                     onValueSelected: value => {
-                        return UiPreferences.setSidebarCookieSecondHandStyle(value);
-                    }
+                                         return UiPreferences.setSidebarCookieSecondHandStyle(value);
+                                     }
                 }
 
                 Text {
@@ -583,8 +583,8 @@ StyledFlickable {
                     currentValue: UiPreferences.sidebarCookieDateStyle
                     horizontalPadding: Metrics.spacingXL
                     onValueSelected: value => {
-                        return UiPreferences.setSidebarCookieDateStyle(value);
-                    }
+                                         return UiPreferences.setSidebarCookieDateStyle(value);
+                                     }
                 }
             }
         }
@@ -611,28 +611,25 @@ StyledFlickable {
                 Repeater {
                     model: SystemCardService.cardIds
 
-                    delegate: SettingsRow {
+                    delegate: SystemCardSettingsTile {
                         required property string modelData
 
                         Layout.fillWidth: true
                         Layout.minimumWidth: 0
+                        tileId: modelData
                         iconName: SystemCardService.cardIcon(modelData)
                         title: SystemCardService.cardName(modelData)
-                        supportingText: {
+                        locationText: {
                             const cards = SystemCardService.cards;
                             const state = cards ? cards[modelData] : null;
                             return state && state.container === "desktop" ? qsTr("Desktop") : qsTr("Sidebar");
                         }
-
-                        trailing: StyledSwitch {
-                            checked: {
-                                const cards = SystemCardService.cards;
-                                const state = cards ? cards[modelData] : null;
-                                return state ? state.enabled : true;
-                            }
-                            Accessible.name: SystemCardService.cardName(modelData)
-                            onToggled: SystemCardService.setCardEnabled(modelData, checked)
+                        checked: {
+                            const cards = SystemCardService.cards;
+                            const state = cards ? cards[modelData] : null;
+                            return state ? state.enabled : true;
                         }
+                        onToggled: checked => SystemCardService.setCardEnabled(modelData, checked)
                     }
                 }
             }
@@ -649,8 +646,8 @@ StyledFlickable {
                     placeholder: qsTr("Auto")
                     closeOnAccept: true
                     onAccepted: value => {
-                        return UiPreferences.setSystemMonitorGpuId(value);
-                    }
+                                    return UiPreferences.setSystemMonitorGpuId(value);
+                                }
                 }
             }
 
@@ -703,8 +700,8 @@ StyledFlickable {
                     placeholder: qsTr("Follow Disk I/O card")
                     closeOnAccept: true
                     onAccepted: value => {
-                        return UiPreferences.setStorageCapacityDiskDevice(value);
-                    }
+                                    return UiPreferences.setStorageCapacityDiskDevice(value);
+                                }
                 }
             }
         }

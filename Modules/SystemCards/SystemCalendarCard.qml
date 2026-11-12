@@ -5,7 +5,11 @@ Rectangle {
     id: root
 
     property bool active: true
+    property bool glassSurface: false
     property color surfaceColor: Appearance.colors.colSurfaceContainerHigh
+    property color foregroundColor: Appearance.colors.colOnSurface
+    property color secondaryForegroundColor: Appearance.applyAlpha(Appearance.colors.colOnSurface, 0.78)
+    property color accentColor: Appearance.colors.colPrimary
     property date currentDate: new Date()
     readonly property var monthNames: [qsTr("January"), qsTr("February"), qsTr("March"), qsTr("April"), qsTr(
             "May"), qsTr("June"), qsTr("July"), qsTr("August"), qsTr("September"), qsTr("October"), qsTr(
@@ -21,7 +25,7 @@ Rectangle {
                                                                            "wdth": 78
                                                                        }) : ({})
 
-    radius: Appearance.rounding.extraLarge
+    radius: root.glassSurface ? Appearance.rounding.veryLarge : Appearance.rounding.extraLarge
     color: root.surfaceColor
     clip: true
     Accessible.name: currentDate.getFullYear() + qsTr(" ") + (currentDate.getMonth() + 1) + qsTr("/")
@@ -44,7 +48,7 @@ Rectangle {
             right: parent.right
         }
         height: Math.max(42, root.height * 0.36)
-        color: Appearance.colors.colSecondaryContainer
+        color: root.glassSurface ? Qt.rgba(1, 1, 1, 0.16) : Appearance.colors.colSecondaryContainer
         topLeftRadius: root.radius
         topRightRadius: root.radius
         bottomLeftRadius: 0
@@ -54,14 +58,15 @@ Rectangle {
             anchors.centerIn: parent
             text: root.monthNames[root.currentDate.getMonth()] + "  "
                   + root.weekdayNames[root.currentDate.getDay()]
-            color: Appearance.colors.colOnSecondaryContainer
+            color: root.glassSurface ? root.foregroundColor : Appearance.colors.colOnSecondaryContainer
             renderType: Text.NativeRendering
             font {
-                family: root.calendarFamily
-                pixelSize: Math.min(Typography.titleMedium.pixelSize, headingBand.height * 0.36)
-                weight: Font.Bold
-                letterSpacing: 0.8
-                variableAxes: root.calendarAxes
+                family: root.glassSurface ? Fonts.ui : root.calendarFamily
+                pixelSize: root.glassSurface ? 16 : Math.min(Typography.titleMedium.pixelSize,
+                                                             headingBand.height * 0.36)
+                weight: root.glassSurface ? Font.DemiBold : Font.Bold
+                letterSpacing: root.glassSurface ? 0.4 : 0.8
+                variableAxes: root.glassSurface ? ({}) : root.calendarAxes
             }
         }
     }
@@ -74,7 +79,7 @@ Rectangle {
             right: parent.right
         }
         text: String(root.currentDate.getDate())
-        color: Appearance.colors.colOnSurface
+        color: root.glassSurface ? root.foregroundColor : Appearance.colors.colOnSurface
         renderType: Text.NativeRendering
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter

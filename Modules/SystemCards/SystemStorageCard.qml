@@ -13,6 +13,10 @@ Item {
     property var writeHistories: ({})
     property color surfaceColor: Appearance.colors.colTertiary
     property color panelColor: Appearance.colors.colTertiaryContainer
+    property bool glassSurface: false
+    property color foregroundColor: Appearance.colors.colOnSurface
+    property color secondaryForegroundColor: Appearance.applyAlpha(Appearance.colors.colOnSurface, 0.78)
+    property color accentColor: Appearance.colors.colPrimary
     property bool chartActive: visible
     property int updateInterval: 1000
     property string preferredDiskDevice: ""
@@ -38,14 +42,18 @@ Item {
     readonly property string selectedDevice: String(root.disk.device || "")
     readonly property var readHistory: root.readHistories[root.selectedDevice] || []
     readonly property var writeHistory: root.writeHistories[root.selectedDevice] || []
-    readonly property color leftColor: root.surfaceColor
-    readonly property color leftForeground: Appearance.colors.colOnTertiary
-    readonly property color rightColor: root.panelColor
-    readonly property color rightForeground: Appearance.colors.colOnPrimaryContainer
-    readonly property color readDataColor: Appearance.mix(Appearance.colors.colPrimary, root.leftForeground,
-                                                          0.62)
-    readonly property color writeDataColor: Appearance.mix(Appearance.colors.colSecondary, root.leftForeground,
-                                                           0.58)
+    readonly property color leftColor: root.glassSurface ? "transparent" : root.surfaceColor
+    readonly property color leftForeground: root.glassSurface ? root.foregroundColor :
+                                                                Appearance.colors.colOnTertiary
+    readonly property color rightColor: root.glassSurface ? Qt.rgba(1, 1, 1, 0.14) : root.panelColor
+    readonly property color rightForeground: root.glassSurface ? root.secondaryForegroundColor :
+                                                                 Appearance.colors.colOnPrimaryContainer
+    readonly property color readDataColor: root.glassSurface ? root.accentColor : Appearance.mix(
+                                                                   Appearance.colors.colPrimary,
+                                                                   root.leftForeground, 0.62)
+    readonly property color writeDataColor: root.glassSurface ? Qt.rgba(1, 1, 1, 0.86) : Appearance.mix(
+                                                                    Appearance.colors.colSecondary,
+                                                                    root.leftForeground, 0.58)
     readonly property real rightPanelX: Math.round(width * 0.53)
     readonly property int chartHistoryLength: 18
     readonly property real chartMaximum: {
@@ -80,7 +88,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        radius: Appearance.rounding.extraLarge
+        radius: Appearance.rounding.veryLarge
         color: root.leftColor
     }
 
@@ -88,16 +96,16 @@ Item {
         text: qsTr("Disk I/O")
         color: root.leftForeground
         renderType: Text.NativeRendering
-        font.family: Fonts.expressive
-        font.pixelSize: 32
-        font.weight: Font.Black
-        font.variableAxes: root.expressiveBoldAxes
+        font.family: root.glassSurface ? Fonts.ui : Fonts.expressive
+        font.pixelSize: root.glassSurface ? 18 : 32
+        font.weight: root.glassSurface ? Font.DemiBold : Font.Black
+        font.variableAxes: root.glassSurface ? ({}) : root.expressiveBoldAxes
 
         anchors {
             left: parent.left
             top: parent.top
-            leftMargin: Appearance.spacing.medium
-            topMargin: 16
+            leftMargin: root.glassSurface ? 18 : Appearance.spacing.medium
+            topMargin: root.glassSurface ? 18 : 16
         }
     }
 
@@ -161,7 +169,7 @@ Item {
         y: 0
         width: root.width - x
         height: root.height
-        radius: Appearance.rounding.extraLarge
+        radius: Appearance.rounding.veryLarge
         color: root.rightColor
         clip: true
         z: 2
@@ -193,14 +201,18 @@ Item {
                 leadingIcon: "hard_drive"
                 enabled: root.diskOptions.length > 0
                 visible: enabled
-                buttonColor: root.leftColor
-                buttonHoverColor: Appearance.mix(root.leftColor, root.leftForeground, 0.88)
-                buttonPressedColor: Appearance.mix(root.leftColor, root.leftForeground, 0.76)
+                buttonColor: root.glassSurface ? Qt.rgba(1, 1, 1, 0.16) : root.leftColor
+                buttonHoverColor: root.glassSurface ? Qt.rgba(1, 1, 1, 0.24) : Appearance.mix(root.leftColor,
+                                                                                              root.leftForeground,
+                                                                                              0.88)
+                buttonPressedColor: root.glassSurface ? Qt.rgba(1, 1, 1, 0.30) : Appearance.mix(root.leftColor,
+                                                                                                root.leftForeground,
+                                                                                                0.76)
                 buttonTextColor: root.leftForeground
                 Accessible.name: qsTr("Select disk")
                 onValueSelected: value => {
-                    return root.diskSelected(value);
-                }
+                                     return root.diskSelected(value);
+                                 }
             }
 
             Text {
@@ -241,7 +253,7 @@ Item {
         maskSource: Rectangle {
             width: root.width
             height: root.height
-            radius: Appearance.rounding.extraLarge
+            radius: Appearance.rounding.veryLarge
         }
     }
 
@@ -259,7 +271,7 @@ Item {
             id: metricIcon
 
             text: metric.iconName
-            iconSize: 27
+            iconSize: root.glassSurface ? 24 : 27
             fill: 1
             color: metric.accentColor
             Accessible.ignored: true
@@ -274,10 +286,10 @@ Item {
             text: metric.value
             color: root.rightForeground
             renderType: Text.NativeRendering
-            font.family: Fonts.expressive
-            font.pixelSize: 27
-            font.weight: Font.Black
-            font.variableAxes: root.expressiveBoldAxes
+            font.family: root.glassSurface ? Fonts.ui : Fonts.expressive
+            font.pixelSize: root.glassSurface ? 30 : 27
+            font.weight: root.glassSurface ? Font.Bold : Font.Black
+            font.variableAxes: root.glassSurface ? ({}) : root.expressiveBoldAxes
             elide: Text.ElideRight
 
             anchors {

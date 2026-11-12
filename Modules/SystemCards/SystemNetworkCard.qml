@@ -16,18 +16,29 @@ Item {
     property string preferredInterface: ""
     property color surfaceColor: Appearance.colors.colPrimary
     property color panelColor: Appearance.colors.colPrimaryContainer
+    property bool glassSurface: false
+    property color foregroundColor: Appearance.colors.colOnSurface
+    property color secondaryForegroundColor: Appearance.applyAlpha(Appearance.colors.colOnSurface, 0.78)
+    property color accentColor: Appearance.colors.colTertiary
     property bool chartActive: visible
     property int updateInterval: 1000
-    readonly property color leftColor: root.surfaceColor
-    readonly property color leftForeground: Appearance.colors.colOnPrimary
-    readonly property color rightColor: root.panelColor
-    readonly property color rightForeground: Appearance.colors.colOnPrimaryContainer
-    readonly property color downloadIconColor: Appearance.colors.colTertiary
-    readonly property color uploadIconColor: Appearance.mix(Appearance.colors.colPrimary,
-                                                            Appearance.colors.colOnPrimary, 0.76)
-    readonly property color downloadChartColor: Appearance.mix(root.downloadIconColor, root.leftForeground,
-                                                               0.64)
-    readonly property color uploadChartColor: Appearance.mix(root.uploadIconColor, root.leftForeground, 0.58)
+    readonly property color leftColor: root.glassSurface ? "transparent" : root.surfaceColor
+    readonly property color leftForeground: root.glassSurface ? root.foregroundColor :
+                                                                Appearance.colors.colOnPrimary
+    readonly property color rightColor: root.glassSurface ? Qt.rgba(1, 1, 1, 0.14) : root.panelColor
+    readonly property color rightForeground: root.glassSurface ? root.secondaryForegroundColor :
+                                                                 Appearance.colors.colOnPrimaryContainer
+    readonly property color downloadIconColor: root.glassSurface ? root.accentColor :
+                                                                   Appearance.colors.colTertiary
+    readonly property color uploadIconColor: root.glassSurface ? Qt.rgba(1, 1, 1, 0.86) : Appearance.mix(
+                                                                     Appearance.colors.colPrimary,
+                                                                     Appearance.colors.colOnPrimary, 0.76)
+    readonly property color downloadChartColor: root.glassSurface ? root.downloadIconColor : Appearance.mix(
+                                                                        root.downloadIconColor,
+                                                                        root.leftForeground, 0.64)
+    readonly property color uploadChartColor: root.glassSurface ? root.uploadIconColor : Appearance.mix(root.uploadIconColor,
+                                                                                                        root.leftForeground,
+                                                                                                        0.58)
     readonly property var interfaces: Array.isArray(root.network.interfaces) ? root.network.interfaces : []
     readonly property string defaultInterface: String(root.network.defaultInterface || "")
     readonly property string selectedInterfaceName: root.preferredInterface === "" ? root.defaultInterface :
@@ -109,7 +120,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        radius: Appearance.rounding.extraLarge
+        radius: Appearance.rounding.veryLarge
         color: root.leftColor
     }
 
@@ -117,16 +128,16 @@ Item {
         text: qsTr("Network")
         color: root.leftForeground
         renderType: Text.NativeRendering
-        font.family: Fonts.expressive
-        font.pixelSize: 34
-        font.weight: Font.Black
-        font.variableAxes: root.expressiveBoldAxes
+        font.family: root.glassSurface ? Fonts.ui : Fonts.expressive
+        font.pixelSize: root.glassSurface ? 18 : 34
+        font.weight: root.glassSurface ? Font.DemiBold : Font.Black
+        font.variableAxes: root.glassSurface ? ({}) : root.expressiveBoldAxes
 
         anchors {
             left: parent.left
             top: parent.top
-            leftMargin: Appearance.spacing.medium
-            topMargin: 16
+            leftMargin: root.glassSurface ? 18 : Appearance.spacing.medium
+            topMargin: root.glassSurface ? 18 : 16
         }
     }
 
@@ -194,7 +205,7 @@ Item {
         y: 0
         width: root.width - x
         height: root.height
-        radius: Appearance.rounding.extraLarge
+        radius: Appearance.rounding.veryLarge
         color: root.rightColor
         clip: true
         z: 2
@@ -224,14 +235,18 @@ Item {
                 model: root.interfaceOptions
                 currentValue: root.preferredInterface
                 leadingIcon: "lan"
-                buttonColor: root.leftColor
-                buttonHoverColor: Appearance.mix(root.leftColor, root.leftForeground, 0.88)
-                buttonPressedColor: Appearance.mix(root.leftColor, root.leftForeground, 0.76)
+                buttonColor: root.glassSurface ? Qt.rgba(1, 1, 1, 0.16) : root.leftColor
+                buttonHoverColor: root.glassSurface ? Qt.rgba(1, 1, 1, 0.24) : Appearance.mix(root.leftColor,
+                                                                                              root.leftForeground,
+                                                                                              0.88)
+                buttonPressedColor: root.glassSurface ? Qt.rgba(1, 1, 1, 0.30) : Appearance.mix(root.leftColor,
+                                                                                                root.leftForeground,
+                                                                                                0.76)
                 buttonTextColor: root.leftForeground
                 Accessible.name: qsTr("Select network interface")
                 onValueSelected: value => {
-                    return root.interfaceSelected(value);
-                }
+                                     return root.interfaceSelected(value);
+                                 }
             }
 
             NetworkRate {
@@ -257,7 +272,7 @@ Item {
         maskSource: Rectangle {
             width: root.width
             height: root.height
-            radius: Appearance.rounding.extraLarge
+            radius: Appearance.rounding.veryLarge
         }
     }
 
@@ -272,7 +287,7 @@ Item {
             id: rateIcon
 
             text: rate.iconName
-            iconSize: 27
+            iconSize: root.glassSurface ? 24 : 27
             fill: 1
             color: rate.accentColor
 
@@ -286,10 +301,10 @@ Item {
             text: rate.value
             color: root.rightForeground
             renderType: Text.NativeRendering
-            font.family: Fonts.expressive
-            font.pixelSize: 27
-            font.weight: Font.Black
-            font.variableAxes: root.expressiveBoldAxes
+            font.family: root.glassSurface ? Fonts.ui : Fonts.expressive
+            font.pixelSize: root.glassSurface ? 30 : 27
+            font.weight: root.glassSurface ? Font.Bold : Font.Black
+            font.variableAxes: root.glassSurface ? ({}) : root.expressiveBoldAxes
             elide: Text.ElideRight
 
             anchors {

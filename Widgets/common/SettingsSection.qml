@@ -2,59 +2,54 @@ import QtQuick
 import QtQuick.Layouts
 import qs.Common
 import qs.Components
+import qs.Services
+import "../../Common/functions/SettingsIconPalette.js" as IconPalette
 
-Rectangle {
+Item {
     id: root
 
     property string title: ""
     property string iconName: ""
     property string supportingText: ""
     property real pullExpansion: 0
-    property real contentSpacing: Metrics.spacingXS
-    // General subpages use the same semantic grouping without the overview
-    // page's card containment. Keep the default so first-level pages retain
-    // their existing visual language.
+    property real contentSpacing: 0
     property bool flat: false
-    // Heading badges retain their tonal container on both flat and card sections.
     property bool flatIconContainer: true
-    readonly property bool hasIconContainer: !root.flat || root.flatIconContainer
+    property color iconContainerColor: IconPalette.backgroundFor(root.iconName)
+    property color iconColor: IconPalette.foregroundFor(root.iconName)
     property alias headerTrailing: headerTrailingSlot.data
     default property alias content: body.data
 
-    implicitHeight: sectionLayout.implicitHeight + (flat ? 0 : Metrics.cardPadding * 2)
-    radius: flat ? 0 : Metrics.cornerL
-    color: flat ? "transparent" : Appearance.colors.colLayer1
+    implicitHeight: sectionLayout.implicitHeight
 
     ColumnLayout {
         id: sectionLayout
 
-        spacing: Metrics.spacingS + root.pullExpansion * 1.5
-
-        anchors {
-            fill: parent
-            margins: root.flat ? 0 : Metrics.cardPadding
-        }
+        anchors.left: parent.left
+        anchors.right: parent.right
+        spacing: Metrics.spacingS + root.pullExpansion * 0.5
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.leftMargin: Metrics.spacingXS
+            Layout.rightMargin: Metrics.spacingXS
             visible: root.title.length > 0 || root.iconName.length > 0 || headerTrailingSlot.children.length
                      > 0
             spacing: Metrics.spacingS
 
             Rectangle {
                 visible: root.iconName.length > 0
-                Layout.preferredWidth: root.hasIconContainer ? Metrics.controlHeightM : Metrics.iconM
-                Layout.preferredHeight: root.hasIconContainer ? Metrics.controlHeightM : Metrics.iconM
-                radius: root.hasIconContainer ? Appearance.rounding.normal : 0
-                color: root.hasIconContainer ? Appearance.colors.colSecondaryContainer : "transparent"
+                Layout.preferredWidth: 28
+                Layout.preferredHeight: 28
+                radius: 7
+                color: root.iconContainerColor
 
                 MaterialSymbol {
                     anchors.centerIn: parent
                     text: root.iconName
-                    iconSize: Metrics.iconM
-                    fill: root.hasIconContainer ? 1 : 0
-                    color: root.hasIconContainer ? Appearance.colors.colOnSecondaryContainer :
-                                                   Appearance.colors.colOnSurfaceVariant
+                    iconSize: 18
+                    fill: 1
+                    color: root.iconColor
                 }
             }
 
@@ -62,10 +57,10 @@ Rectangle {
                 Layout.fillWidth: true
                 visible: root.title.length > 0
                 text: root.title
-                color: root.flat ? Appearance.colors.colOnSurface : Appearance.colors.colOnLayer2
-                font.family: Typography.titleMedium.family
-                font.pixelSize: Typography.titleMedium.pixelSize
-                font.weight: Typography.titleMedium.weight
+                color: Appearance.colors.colOnSurfaceVariant
+                font.family: Typography.labelLarge.family
+                font.pixelSize: Typography.labelLarge.pixelSize
+                font.weight: Font.DemiBold
                 elide: Text.ElideRight
             }
 
@@ -80,25 +75,46 @@ Rectangle {
 
         Text {
             Layout.fillWidth: true
+            Layout.leftMargin: Metrics.spacingXS
+            Layout.rightMargin: Metrics.spacingXS
             visible: root.supportingText.length > 0
             text: root.supportingText
-            color: root.flat ? Appearance.colors.colOnSurfaceVariant : Appearance.colors.colOnLayer1
-            font.family: Fonts.ui
-            font.pixelSize: 12
+            color: Appearance.colors.colOnSurfaceVariant
+            font.family: Typography.bodySmall.family
+            font.pixelSize: Typography.bodySmall.pixelSize
             wrapMode: Text.Wrap
         }
 
-        ColumnLayout {
-            id: body
+        Rectangle {
+            id: bodySurface
 
             Layout.fillWidth: true
-            spacing: root.contentSpacing + root.pullExpansion
+            implicitHeight: body.implicitHeight + Metrics.spacingS * 2
+            radius: Metrics.cornerM
+            color: Appearance.applyAlpha(Appearance.colors.colLayer1Base, BlurService.enabled ? 0.66 : 1)
+            border.width: Metrics.dividerWidth
+            border.color: Appearance.colors.colLayer0Border
+            clip: true
+
+            GlassHighlight {
+                anchors.fill: parent
+                radius: parent.radius
+                topStrength: 0.045
+                bottomStrength: 0.012
+            }
+
+            ColumnLayout {
+                id: body
+
+                anchors.fill: parent
+                anchors.margins: Metrics.spacingS
+                spacing: root.contentSpacing + root.pullExpansion
+            }
         }
     }
 
     Behavior on implicitHeight {
-        enabled: !root.flat && root.pullExpansion === 0
-
+        enabled: root.pullExpansion === 0
         ElementMoveAnimation {}
     }
 }

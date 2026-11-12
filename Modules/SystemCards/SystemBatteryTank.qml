@@ -12,6 +12,11 @@ Item {
 
     property color containerColor: Appearance.colors.colSecondaryContainer
     property color levelColor: Appearance.colors.colSecondary
+    property bool glassSurface: false
+    property color foregroundColor: Appearance.colors.colOnSecondaryContainer
+    property color secondaryForegroundColor: Appearance.applyAlpha(Appearance.colors.colOnSecondaryContainer,
+                                                                   0.78)
+    property color accentColor: Appearance.colors.colSecondary
     readonly property bool present: PowerService.present
     readonly property bool valueAvailable: root.present && Format.isNumber(PowerService.percentage)
     readonly property real chargePercent: root.valueAvailable ? PowerService.percentage * 100 : NaN
@@ -122,6 +127,7 @@ Item {
         id: bodyShadow
 
         anchors.fill: batteryBody
+        visible: !root.glassSurface
         radius: root.bodyRadius
         color: root.containerColor
         layer.enabled: true
@@ -140,7 +146,8 @@ Item {
         height: 12
         radius: 6
         // Match the body at its top edge, including the filled state.
-        color: root.animatedLevel >= 1 ? root.levelColor : root.containerColor
+        color: root.glassSurface ? Qt.rgba(1, 1, 1, 0.34) : root.animatedLevel >= 1 ? root.levelColor :
+                                                                                      root.containerColor
 
         anchors {
             top: parent.top
@@ -171,7 +178,7 @@ Item {
         z: 1
         anchors.fill: parent
         anchors.margins: Appearance.spacing.medium
-        foregroundColor: Appearance.colors.colOnSecondaryContainer
+        foregroundColor: root.glassSurface ? root.foregroundColor : Appearance.colors.colOnSecondaryContainer
     }
 
     // Item.clip is rectangular, so mask the liquid layer explicitly to the
@@ -214,7 +221,8 @@ Item {
                 BatteryContents {
                     anchors.fill: parent
                     anchors.margins: Appearance.spacing.medium
-                    foregroundColor: Appearance.colors.colOnSecondary
+                    foregroundColor: root.glassSurface ? root.foregroundColor :
+                                                         Appearance.colors.colOnSecondary
                     Accessible.ignored: true
                 }
             }
@@ -232,6 +240,13 @@ Item {
         iconSize: 36
         fill: 1
         color: {
+            if (root.glassSurface) {
+                if (root.lowBattery)
+                    return "#FFB4AB";
+
+                return root.foregroundColor;
+            }
+
             if (root.batteryIconCovered)
                 return Appearance.colors.colOnSecondary;
 
@@ -277,7 +292,7 @@ Item {
             text: qsTr("Battery")
             color: contents.foregroundColor
             font.family: Fonts.ui
-            font.pixelSize: Typography.titleSmall.pixelSize
+            font.pixelSize: root.glassSurface ? 16 : Typography.titleSmall.pixelSize
             font.weight: Font.DemiBold
 
             anchors {
@@ -393,7 +408,7 @@ Item {
                 Layout.alignment: Qt.AlignRight
                 text: root.present ? root.statusText() : qsTr("Unavailable")
                 color: contents.foregroundColor
-                opacity: 0.74
+                opacity: root.glassSurface ? 0.78 : 0.74
                 font.family: Fonts.ui
                 font.pixelSize: Typography.bodySmall.pixelSize
             }
@@ -418,7 +433,7 @@ Item {
                     text: root.present ? Format.percent(root.chargePercent, 0) : "—"
                     color: contents.foregroundColor
                     font.family: Fonts.numeric
-                    font.pixelSize: Typography.headlineSmall.pixelSize
+                    font.pixelSize: root.glassSurface ? 30 : Typography.headlineSmall.pixelSize
                     font.weight: Font.Bold
                 }
             }

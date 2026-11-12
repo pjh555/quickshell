@@ -8,6 +8,7 @@ StyledFlickable {
     id: root
 
     signal sectionRequested(string section)
+    signal navigateRequested(string pageId)
 
     clip: true
     contentWidth: width
@@ -16,10 +17,10 @@ StyledFlickable {
     ColumnLayout {
         id: contentColumn
 
-        width: Math.min(640, Math.max(0, root.width - Metrics.pageMargin * 2))
+        width: Math.min(680, Math.max(0, root.width - Metrics.pageMargin * 2))
         x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
         y: Metrics.pageMargin
-        spacing: Metrics.spacingL
+        spacing: Metrics.spacingXL
 
         SettingsSection {
             id: searchSection0
@@ -38,9 +39,36 @@ StyledFlickable {
 
             SettingsActionRow {
                 Layout.fillWidth: true
+                iconName: "wallpaper"
+                text: SpotlightCatalog.title("wallpaper")
+                onClicked: root.navigateRequested("wallpaper")
+            }
+
+            SettingsActionRow {
+                Layout.fillWidth: true
+                iconName: "palette"
+                text: SpotlightCatalog.title("theme")
+                onClicked: root.navigateRequested("theme")
+            }
+
+            SettingsActionRow {
+                Layout.fillWidth: true
+                iconName: "blur_on"
+                text: SpotlightCatalog.title("general.effects")
+                onClicked: root.sectionRequested("effects")
+            }
+
+            SettingsActionRow {
+                Layout.fillWidth: true
+                iconName: "toggle_off"
+                text: SpotlightCatalog.title("keystone")
+                onClicked: root.navigateRequested("keystone")
+            }
+
+            SettingsActionRow {
+                Layout.fillWidth: true
                 iconName: "dock_to_bottom"
                 text: SpotlightCatalog.title("general.bar")
-                trailingIconName: "chevron_right"
                 onClicked: root.sectionRequested("bar")
             }
 
@@ -48,7 +76,6 @@ StyledFlickable {
                 Layout.fillWidth: true
                 iconName: "dock_to_bottom"
                 text: SpotlightCatalog.title("general.dock")
-                trailingIconName: "chevron_right"
                 onClicked: root.sectionRequested("dock")
             }
 
@@ -56,7 +83,6 @@ StyledFlickable {
                 Layout.fillWidth: true
                 iconName: "side_navigation"
                 text: SpotlightCatalog.title("general.sidebar")
-                trailingIconName: "chevron_right"
                 onClicked: root.sectionRequested("sidebar")
             }
 
@@ -64,16 +90,8 @@ StyledFlickable {
                 Layout.fillWidth: true
                 iconName: "search"
                 text: "Spotlight"
-                trailingIconName: "chevron_right"
+                showDivider: false
                 onClicked: root.sectionRequested("spotlight")
-            }
-
-            SettingsActionRow {
-                Layout.fillWidth: true
-                iconName: "blur_on"
-                text: SpotlightCatalog.title("general.effects")
-                trailingIconName: "chevron_right"
-                onClicked: root.sectionRequested("effects")
             }
         }
 
@@ -96,24 +114,7 @@ StyledFlickable {
                 Layout.fillWidth: true
                 iconName: "monitor"
                 text: SpotlightCatalog.title("general.displays")
-                trailingIconName: "chevron_right"
                 onClicked: root.sectionRequested("displays")
-            }
-
-            SettingsActionRow {
-                Layout.fillWidth: true
-                iconName: "keyboard"
-                text: SpotlightCatalog.title("general.shortcuts")
-                trailingIconName: "chevron_right"
-                onClicked: root.sectionRequested("shortcuts")
-            }
-
-            SettingsActionRow {
-                Layout.fillWidth: true
-                iconName: "language"
-                text: SpotlightCatalog.title("general.language-region")
-                trailingIconName: "chevron_right"
-                onClicked: root.sectionRequested("language-region")
             }
 
             SettingsActionRow {
@@ -122,7 +123,6 @@ StyledFlickable {
                 text: SpotlightCatalog.title("general.network")
                 description: NetworkService.available ? NetworkService.activeConnection : qsTr(
                                                             "Network unavailable")
-                trailingIconName: "chevron_right"
                 onClicked: root.sectionRequested("network")
             }
 
@@ -133,20 +133,30 @@ StyledFlickable {
                 description: {
                     if (!BluetoothService.available)
                         return qsTr("Bluetooth unavailable");
-
                     if (!BluetoothService.enabled)
                         return qsTr("Bluetooth is off");
-
                     if (BluetoothService.connectedDevices.length === 1)
                         return BluetoothService.connectedDevices[0].name;
-
                     if (BluetoothService.connectedDevices.length > 1)
                         return qsTr("%1 devices connected").arg(BluetoothService.connectedDevices.length);
-
                     return "";
                 }
-                trailingIconName: "chevron_right"
                 onClicked: root.sectionRequested("connected-devices")
+            }
+
+            SettingsActionRow {
+                Layout.fillWidth: true
+                iconName: "keyboard"
+                text: SpotlightCatalog.title("general.shortcuts")
+                onClicked: root.sectionRequested("shortcuts")
+            }
+
+            SettingsActionRow {
+                Layout.fillWidth: true
+                iconName: "language"
+                text: SpotlightCatalog.title("general.language-region")
+                showDivider: false
+                onClicked: root.sectionRequested("language-region")
             }
         }
 
@@ -167,9 +177,22 @@ StyledFlickable {
 
             SettingsActionRow {
                 Layout.fillWidth: true
+                iconName: "smart_toy"
+                text: SpotlightCatalog.title("agent")
+                onClicked: root.navigateRequested("agent")
+            }
+
+            SettingsActionRow {
+                Layout.fillWidth: true
+                iconName: "android"
+                text: SpotlightCatalog.title("android")
+                onClicked: root.navigateRequested("android")
+            }
+
+            SettingsActionRow {
+                Layout.fillWidth: true
                 iconName: "rocket_launch"
                 text: SpotlightCatalog.title("general.autostart")
-                trailingIconName: "chevron_right"
                 onClicked: root.sectionRequested("autostart")
             }
 
@@ -177,7 +200,7 @@ StyledFlickable {
                 Layout.fillWidth: true
                 iconName: "apps"
                 text: SpotlightCatalog.title("general.default-apps")
-                trailingIconName: "chevron_right"
+                showDivider: false
                 onClicked: root.sectionRequested("default-apps")
             }
         }

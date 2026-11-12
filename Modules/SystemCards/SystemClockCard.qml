@@ -8,6 +8,10 @@ Item {
     id: root
 
     property bool active: true
+    property bool glassSurface: false
+    property color glassForeground: Appearance.colors.colOnSurface
+    property color glassSecondaryForeground: Appearance.colors.colOnSurfaceVariant
+    property color glassAccent: Appearance.colors.colPrimary
     property date currentTime: new Date()
     readonly property int hour24: currentTime.getHours()
     readonly property int hour12: ((hour24 + 11) % 12) + 1
@@ -108,7 +112,7 @@ Item {
                     y: -root.topOffset(hourMetrics)
                     width: UiPreferences.useTwelveHourClock ? implicitWidth : glyphGroup.equalColumnWidth
                     text: root.hourText
-                    color: Appearance.colors.colPrimary
+                    color: root.glassSurface ? root.glassAccent : Appearance.colors.colPrimary
                     renderType: Text.NativeRendering
                     horizontalAlignment: Text.AlignHCenter
 
@@ -149,7 +153,7 @@ Item {
                         y: -root.topOffset(minuteMetrics)
                         width: parent.width
                         text: root.minuteText
-                        color: Appearance.colors.colSecondary
+                        color: root.glassSurface ? root.glassForeground : Appearance.colors.colSecondary
                         renderType: Text.NativeRendering
                         horizontalAlignment: Text.AlignHCenter
 
@@ -175,7 +179,8 @@ Item {
                         width: periodLabel.implicitWidth + Appearance.spacing.medium
                         height: periodLabel.implicitHeight + Appearance.spacing.small
                         radius: Appearance.rounding.small
-                        color: BlurService.solidBackgroundColor(Appearance.colors.colSecondaryContainer)
+                        color: root.glassSurface ? Qt.rgba(1, 1, 1, 0.18) : BlurService.solidBackgroundColor(
+                                                       Appearance.colors.colSecondaryContainer)
 
                         anchors {
                             horizontalCenter: parent.horizontalCenter
@@ -187,7 +192,8 @@ Item {
 
                             anchors.centerIn: parent
                             text: root.periodText
-                            color: Appearance.colors.colOnSecondaryContainer
+                            color: root.glassSurface ? root.glassForeground :
+                                                       Appearance.colors.colOnSecondaryContainer
                             renderType: Text.NativeRendering
 
                             font {
@@ -206,7 +212,7 @@ Item {
 
                 width: parent.width
                 text: root.dateText
-                color: Appearance.colors.colOnSurface
+                color: root.glassSurface ? root.glassSecondaryForeground : Appearance.colors.colOnSurface
                 renderType: Text.NativeRendering
                 horizontalAlignment: Text.AlignHCenter
                 elide: Text.ElideRight

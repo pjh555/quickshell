@@ -23,7 +23,7 @@ TestCase {
     function test_defaultLayoutCompactsPartialDrawer() {
         const layout = GridLayout.defaultLayout();
         verify(GridLayout.validateLayout(layout));
-        compare(layout.length, 11);
+        compare(layout.length, 15);
         compare(GridLayout.placementFor(layout, "time").x, 0);
         compare(GridLayout.placementFor(layout, "time").y, 0);
         compare(GridLayout.placementFor(layout, "battery").x, 320);
@@ -194,8 +194,8 @@ TestCase {
         const moved = GridLayout.moveLayout(GridLayout.defaultLayout(), "storage", 900, 2400);
         verify(GridLayout.validateLayout(moved));
         compare(GridLayout.placementFor(moved, "storage").x, 0);
-        compare(GridLayout.placementFor(moved, "storage").y, 1176);
-        compare(GridLayout.contentHeight(moved), 1336);
+        compare(GridLayout.placementFor(moved, "storage").y, 2184);
+        compare(GridLayout.contentHeight(moved), 2680);
         verifyCompacted(moved);
     }
 

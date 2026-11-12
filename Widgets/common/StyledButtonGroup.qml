@@ -8,11 +8,11 @@ RowLayout {
 
     property var model: []
     property var currentValue: ""
-    property int buttonHeight: Metrics.controlHeightM
-    property int horizontalPadding: 24
-    readonly property int innerRadius: 6
-    property real edgeRadius: buttonHeight / 2
-    readonly property int pressedExpansion: 10
+    property int buttonHeight: 36
+    property int horizontalPadding: 20
+    readonly property int innerRadius: 9
+    property real edgeRadius: 9
+    readonly property int pressedExpansion: 0
     property int buttonMinWidth: 0
     property bool iconOnly: false
     property bool roundOuterSegments: true
@@ -26,14 +26,14 @@ RowLayout {
     property string tooltipRole: "tooltip"
     property string enabledRole: "enabled"
     property string widthRole: "width"
-    property color activeContainerColor: Appearance.colors.colPrimary
-    property color activeHoverContainerColor: Appearance.colors.colPrimaryHover
-    property color activePressedContainerColor: Appearance.colors.colPrimaryActive
-    property color inactiveContainerColor: Appearance.colors.colSecondaryContainer
-    property color inactiveHoverContainerColor: Appearance.colors.colSecondaryContainerHover
-    property color inactivePressedContainerColor: Appearance.colors.colSecondaryContainerActive
-    property color activeContentColor: Appearance.colors.colOnPrimary
-    property color inactiveContentColor: Appearance.colors.colOnSecondaryContainer
+    property color activeContainerColor: Appearance.colors.colLayer1
+    property color activeHoverContainerColor: Appearance.colors.colLayer1Hover
+    property color activePressedContainerColor: Appearance.colors.colLayer1Active
+    property color inactiveContainerColor: Appearance.colors.colSurfaceContainerHighest
+    property color inactiveHoverContainerColor: Appearance.colors.colLayer2Hover
+    property color inactivePressedContainerColor: Appearance.colors.colLayer2Active
+    property color activeContentColor: Appearance.colors.colPrimary
+    property color inactiveContentColor: Appearance.colors.colOnSurface
 
     signal valueSelected(var value, var modelData)
 
@@ -75,22 +75,27 @@ RowLayout {
 
         const labelVisible = !iconOnly && textFor(item) !== "";
         const iconVisible = iconFor(item) !== "";
-        const contentWidth = (labelVisible ? labelWidth : 0) + (iconVisible ? iconWidth : 0) + (labelVisible && iconVisible ? contentSpacing : 0);
+        const contentWidth = (labelVisible ? labelWidth : 0) + (iconVisible ? iconWidth : 0) + (labelVisible
+                                                                                                && iconVisible
+                                                                                                ? contentSpacing :
+                                                                                                  0);
         return Math.max(buttonMinWidth, contentWidth + horizontalPadding);
     }
 
     function fillColor(active, hovered, pressed) {
         if (active)
-            return pressed ? activePressedContainerColor : hovered ? activeHoverContainerColor : activeContainerColor;
+            return pressed ? activePressedContainerColor : hovered ? activeHoverContainerColor :
+                                                                     activeContainerColor;
 
-        return pressed ? inactivePressedContainerColor : hovered ? inactiveHoverContainerColor : inactiveContainerColor;
+        return pressed ? inactivePressedContainerColor : hovered ? inactiveHoverContainerColor :
+                                                                   inactiveContainerColor;
     }
 
     function contentColor(active) {
         return active ? activeContentColor : inactiveContentColor;
     }
 
-    spacing: Metrics.spacingXS
+    spacing: 2
 
     Repeater {
         model: root.model
@@ -107,15 +112,22 @@ RowLayout {
             readonly property bool last: index === root.model.length - 1
             readonly property bool pressed: segmentMouse.pressed && segmentEnabled
             readonly property bool hovered: segmentMouse.containsMouse && segmentEnabled
-            readonly property real leftRadius: (active || (root.roundOuterSegments && first) || (pressed && root.pressedExpansion > 0)) ? root.edgeRadius : root.innerRadius
-            readonly property real rightRadius: (active || (root.roundOuterSegments && last) || (pressed && root.pressedExpansion > 0)) ? root.edgeRadius : root.innerRadius
+            readonly property real leftRadius: (active || (root.roundOuterSegments && first) || (pressed
+                                                                                                 && root.pressedExpansion
+                                                                                                 > 0)) ? root.edgeRadius :
+                                                                                                         root.innerRadius
+            readonly property real rightRadius: (active || (root.roundOuterSegments && last) || (pressed
+                                                                                                 && root.pressedExpansion
+                                                                                                 > 0)) ? root.edgeRadius :
+                                                                                                         root.innerRadius
             readonly property color segmentColor: root.fillColor(active, hovered, pressed)
             readonly property color inkColor: root.contentColor(active)
             readonly property string labelText: root.textFor(modelData)
             readonly property string iconText: root.iconFor(modelData)
             readonly property string tooltipText: root.tooltipFor(modelData)
 
-            Layout.preferredWidth: root.segmentWidth(modelData, label.implicitWidth, root.iconSize) + (pressed ? root.pressedExpansion : 0)
+            Layout.preferredWidth: root.segmentWidth(modelData, label.implicitWidth, root.iconSize) + (
+                                       pressed ? root.pressedExpansion : 0)
             Layout.preferredHeight: root.buttonHeight
             opacity: segmentEnabled ? 1 : 0.45
             scale: pressed && root.pressedExpansion > 0 ? 0.97 : 1
@@ -136,7 +148,6 @@ RowLayout {
                         easing.type: Appearance.animation.elementResize.type
                         easing.bezierCurve: Appearance.animation.elementResize.bezierCurve
                     }
-
                 }
 
                 Behavior on color {
@@ -145,7 +156,6 @@ RowLayout {
                         easing.type: Appearance.animation.expressiveEffects.type
                         easing.bezierCurve: Appearance.animation.expressiveEffects.bezierCurve
                     }
-
                 }
 
                 Behavior on topRightRadius {
@@ -154,7 +164,6 @@ RowLayout {
                         easing.type: Appearance.animation.elementResize.type
                         easing.bezierCurve: Appearance.animation.elementResize.bezierCurve
                     }
-
                 }
 
                 Behavior on bottomLeftRadius {
@@ -163,7 +172,6 @@ RowLayout {
                         easing.type: Appearance.animation.elementResize.type
                         easing.bezierCurve: Appearance.animation.elementResize.bezierCurve
                     }
-
                 }
 
                 Behavior on bottomRightRadius {
@@ -172,9 +180,7 @@ RowLayout {
                         easing.type: Appearance.animation.elementResize.type
                         easing.bezierCurve: Appearance.animation.elementResize.bezierCurve
                     }
-
                 }
-
             }
 
             Row {
@@ -195,9 +201,7 @@ RowLayout {
                             easing.type: Appearance.animation.expressiveEffects.type
                             easing.bezierCurve: Appearance.animation.expressiveEffects.bezierCurve
                         }
-
                     }
-
                 }
 
                 Text {
@@ -217,11 +221,8 @@ RowLayout {
                             easing.type: Appearance.animation.expressiveEffects.type
                             easing.bezierCurve: Appearance.animation.expressiveEffects.bezierCurve
                         }
-
                     }
-
                 }
-
             }
 
             MouseArea {
@@ -246,7 +247,6 @@ RowLayout {
                     easing.type: Appearance.animation.elementResize.type
                     easing.bezierCurve: Appearance.animation.elementResize.bezierCurve
                 }
-
             }
 
             Behavior on scale {
@@ -255,11 +255,7 @@ RowLayout {
                     easing.type: Appearance.animation.clickBounce.type
                     easing.bezierCurve: Appearance.animation.clickBounce.bezierCurve
                 }
-
             }
-
         }
-
     }
-
 }

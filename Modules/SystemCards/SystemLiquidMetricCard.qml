@@ -14,29 +14,23 @@ Item {
     required property string supportingText
     required property real level
     property bool valueAvailable: true
+    property bool glassSurface: false
+    property string title: ""
     property string accessibilityName: ""
     property int shapeId: MaterialShape.Cookie4Sided
-    property color shapeColor:
-        Appearance.colors.colPrimaryContainer
-    property color liquidColor: Appearance.applyAlpha(
-        Appearance.colors.colPrimary,
-        0.62
-    )
-    property color contentColor:
-        Appearance.colors.colOnPrimaryContainer
-    readonly property real targetLevel: root.valueAvailable
-        ? Math.max(0, Math.min(1, root.level))
-        : 0
+    property color shapeColor: Appearance.colors.colPrimaryContainer
+    property color liquidColor: Appearance.applyAlpha(Appearance.colors.colPrimary, 0.62)
+    property color contentColor: Appearance.colors.colOnPrimaryContainer
+    property color accentColor: root.contentColor
+    property color accentBackgroundColor: Appearance.applyAlpha(root.contentColor, 0.10)
+    readonly property real targetLevel: root.valueAvailable ? Math.max(0, Math.min(1, root.level)) : 0
     property real animatedLevel: targetLevel
     readonly property string metricFontFamily: Fonts.expressive
-    readonly property var metricFontAxes:
-        Fonts.familyAvailable(Fonts.bundledFamilyName)
-            && Fonts.expressive === Fonts.bundledFamilyName
-            ? ({
-                "ROND": 25,
-                "wdth": 62
-            })
-            : ({})
+    readonly property var metricFontAxes: Fonts.familyAvailable(Fonts.bundledFamilyName) && Fonts.expressive
+                                          === Fonts.bundledFamilyName ? ({
+                                                                             "ROND": 25,
+                                                                             "wdth": 62
+                                                                         }) : ({})
 
     Accessible.name: root.accessibilityName
 
@@ -44,20 +38,16 @@ Item {
         NumberAnimation {
             duration: Appearance.animation.expressiveSlowSpatial.duration
             easing.type: Appearance.animation.expressiveSlowSpatial.type
-            easing.bezierCurve:
-                Appearance.animation.expressiveSlowSpatial.bezierCurve
+            easing.bezierCurve: Appearance.animation.expressiveSlowSpatial.bezierCurve
         }
     }
 
     Item {
         id: shapeFrame
 
+        visible: !root.glassSurface
         anchors.centerIn: parent
-        width: Math.max(
-            72,
-            Math.min(parent.width, parent.height)
-                - Appearance.spacing.small
-        )
+        width: Math.max(72, Math.min(parent.width, parent.height) - Appearance.spacing.small)
         height: width
 
         MaterialShape {
@@ -91,10 +81,7 @@ Item {
                     right: parent.right
                     bottom: parent.bottom
                 }
-                height: Math.min(
-                    parent.height + 8,
-                    parent.height * root.animatedLevel + 8
-                )
+                height: Math.min(parent.height + 8, parent.height * root.animatedLevel + 8)
                 visible: root.animatedLevel > 0
                 preferredRendererType: Shape.CurveRenderer
 
@@ -109,31 +96,19 @@ Item {
                     PathSvg {
                         path: {
                             const width = shapeFrame.width;
-                            const height = Math.max(
-                                8,
-                                liquidFill.height
-                            );
-                            const amplitude = Math.min(
-                                3.5,
-                                shapeFrame.height * 0.035
-                            );
+                            const height = Math.max(8, liquidFill.height);
+                            const amplitude = Math.min(3.5, shapeFrame.height * 0.035);
                             const waveLength = width / 4;
                             const half = waveLength / 2;
                             let result = "M 0," + amplitude + " ";
                             for (let index = 0; index < 4; index += 1) {
                                 const x = index * waveLength;
-                                result += "Q "
-                                    + (x + half / 2) + ",0 "
-                                    + (x + half) + "," + amplitude + " ";
-                                result += "Q "
-                                    + (x + half + half / 2) + ","
-                                    + (amplitude * 2) + " "
-                                    + (x + waveLength) + ","
-                                    + amplitude + " ";
+                                result += "Q " + (x + half / 2) + ",0 " + (x + half) + "," + amplitude + " ";
+                                result += "Q " + (x + half + half / 2) + "," + (amplitude * 2) + " " + (x
+                                                                                                        + waveLength)
+                                        + "," + amplitude + " ";
                             }
-                            return result
-                                + "L " + width + "," + height
-                                + " L 0," + height + " Z";
+                            return result + "L " + width + "," + height + " L 0," + height + " Z";
                         }
                     }
                 }
@@ -188,6 +163,76 @@ Item {
             Item {
                 Layout.fillHeight: true
             }
+        }
+    }
+
+    ColumnLayout {
+        id: glassContent
+
+        visible: root.glassSurface
+        anchors.fill: parent
+        anchors.margins: 16
+        spacing: 3
+
+        Text {
+            Layout.fillWidth: true
+            visible: text.length > 0
+            text: root.title
+            color: root.contentColor
+            font.family: Fonts.ui
+            font.pixelSize: 16
+            font.weight: Font.DemiBold
+            elide: Text.ElideRight
+        }
+
+        Item {
+            Layout.fillHeight: true
+        }
+
+        Rectangle {
+            Layout.alignment: Qt.AlignHCenter
+            Layout.preferredWidth: 40
+            Layout.preferredHeight: 40
+            radius: Appearance.rounding.normal
+            color: root.accentBackgroundColor
+
+            MaterialSymbol {
+                anchors.centerIn: parent
+                text: root.iconName
+                color: root.accentColor
+                iconSize: 24
+                fill: 1
+            }
+        }
+
+        Text {
+            Layout.fillWidth: true
+            text: root.valueText
+            color: root.contentColor
+            renderType: Text.NativeRendering
+            font {
+                family: Fonts.ui
+                pixelSize: 30
+                weight: Font.Bold
+            }
+            horizontalAlignment: Text.AlignHCenter
+            elide: Text.ElideRight
+        }
+
+        Text {
+            Layout.fillWidth: true
+            text: root.supportingText
+            color: root.contentColor
+            opacity: 0.78
+            font.family: Fonts.ui
+            font.pixelSize: 12
+            font.weight: Font.DemiBold
+            horizontalAlignment: Text.AlignHCenter
+            elide: Text.ElideMiddle
+        }
+
+        Item {
+            Layout.fillHeight: true
         }
     }
 }

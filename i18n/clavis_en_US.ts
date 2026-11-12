@@ -13392,6 +13392,30 @@ detected</translation>
         <source>Weather</source>
         <translation>Weather</translation>
     </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="122"/>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="231"/>
+        <source>Now Playing</source>
+        <translation>Now Playing</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="132"/>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="233"/>
+        <source>Notifications</source>
+        <translation>Notifications</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="142"/>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="235"/>
+        <source>Notes</source>
+        <translation>Notes</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="152"/>
+        <location filename="../Modules/SystemCards/SystemCardCatalog.js" line="237"/>
+        <source>Photos</source>
+        <translation>Photos</translation>
+    </message>
 </context>
 <context>
     <name>SystemCardContent</name>
@@ -13460,6 +13484,169 @@ detected</translation>
         <location filename="../Modules/SystemCards/SystemCardContent.qml" line="370"/>
         <source>Disk %1, %2 of %3 used, %4 occupied</source>
         <translation>Disk %1, %2 of %3 used, %4 occupied</translation>
+    </message>
+        <message>
+            <source>Clock</source>
+            <translation>Clock</translation>
+        </message>
+        <message>
+            <source>Battery</source>
+            <translation>Battery</translation>
+        </message>
+        <message>
+            <source>Memory</source>
+            <translation>Memory</translation>
+        </message>
+        <message>
+            <source>Wi-Fi</source>
+            <translation>Wi-Fi</translation>
+        </message>
+        <message>
+            <source>Network</source>
+            <translation>Network</translation>
+        </message>
+        <message>
+            <source>Disk I/O</source>
+            <translation>Disk I/O</translation>
+        </message>
+        <message>
+            <source>Disk capacity</source>
+            <translation>Disk capacity</translation>
+        </message>
+        <message>
+            <source>Calendar</source>
+            <translation>Calendar</translation>
+        </message>
+        <message>
+            <source>Weather</source>
+            <translation>Weather</translation>
+        </message>
+        <message>
+            <source>Now Playing</source>
+            <translation>Now Playing</translation>
+        </message>
+        <message>
+            <source>Notifications</source>
+            <translation>Notifications</translation>
+        </message>
+        <message>
+            <source>Notes</source>
+            <translation>Notes</translation>
+        </message>
+        <message>
+            <source>Photos</source>
+            <translation>Photos</translation>
+        </message>
+</context>
+<context>
+    <name>SystemMusicCard</name>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="17"/>
+        <source>Nothing playing</source>
+        <translation>Nothing playing</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="20"/>
+        <source>No active player</source>
+        <translation>No active player</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="38"/>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="58"/>
+        <source>Now Playing</source>
+        <translation>Now Playing</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="133"/>
+        <source>Previous track</source>
+        <translation>Previous track</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="142"/>
+        <source>Pause</source>
+        <translation>Pause</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="142"/>
+        <source>Play</source>
+        <translation>Play</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="152"/>
+        <source>Next track</source>
+        <translation>Next track</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="83"/>
+        <source>Playing</source>
+        <translation>Playing</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemMusicCard.qml" line="83"/>
+        <source>Paused</source>
+        <translation>Paused</translation>
+    </message>
+</context>
+<context>
+    <name>SystemNotificationsCard</name>
+    <message>
+        <location filename="../Modules/SystemCards/SystemNotificationsCard.qml" line="39"/>
+        <location filename="../Modules/SystemCards/SystemNotificationsCard.qml" line="59"/>
+        <source>Notifications</source>
+        <translation>Notifications</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemNotificationsCard.qml" line="80"/>
+        <source>No notifications</source>
+        <translation>No notifications</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemNotificationsCard.qml" line="192"/>
+        <source>View all</source>
+        <translation>View all</translation>
+    </message>
+</context>
+<context>
+    <name>SystemNotesCard</name>
+    <message>
+        <location filename="../Modules/SystemCards/SystemNotesCard.qml" line="25"/>
+        <location filename="../Modules/SystemCards/SystemNotesCard.qml" line="45"/>
+        <source>Notes</source>
+        <translation>Notes</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemNotesCard.qml" line="66"/>
+        <source>No notes yet</source>
+        <translation>No notes yet</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemNotesCard.qml" line="161"/>
+        <source>Add a note</source>
+        <translation>Add a note</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemNotesCard.qml" line="170"/>
+        <source>Add note</source>
+        <translation>Add note</translation>
+    </message>
+</context>
+<context>
+    <name>SystemPhotosCard</name>
+    <message>
+        <location filename="../Modules/SystemCards/SystemPhotosCard.qml" line="73"/>
+        <location filename="../Modules/SystemCards/SystemPhotosCard.qml" line="142"/>
+        <source>Photos</source>
+        <translation>Photos</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemPhotosCard.qml" line="224"/>
+        <source>No photos found</source>
+        <translation>No photos found</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemPhotosCard.qml" line="269"/>
+        <source>Open photo</source>
+        <translation>Open photo</translation>
     </message>
 </context>
 <context>
@@ -13998,6 +14185,11 @@ detected</translation>
         <location filename="../Modules/SystemCards/SystemWeatherCard.qml" line="22"/>
         <source>Weather,</source>
         <translation>Weather,</translation>
+    </message>
+    <message>
+        <location filename="../Modules/SystemCards/SystemWeatherCard.qml" line="100"/>
+        <source>Weather</source>
+        <translation>Weather</translation>
     </message>
     <message>
         <location filename="../Modules/SystemCards/SystemWeatherCard.qml" line="23"/>

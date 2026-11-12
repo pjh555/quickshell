@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import qs.Common
 import qs.Components
+import "../../Common/functions/SettingsIconPalette.js" as IconPalette
 
 Rectangle {
     id: root
@@ -11,27 +12,26 @@ Rectangle {
     property string supportingText: ""
     property bool interactive: false
     property bool highlighted: false
-    property real iconFill: highlighted ? 1 : 0
+    property bool showDivider: true
+    property real iconFill: 1
+    property color iconContainerColor: IconPalette.backgroundFor(root.iconName)
+    property color iconColor: IconPalette.foregroundFor(root.iconName)
     property Component leading
     property alias trailing: trailingSlot.data
 
-    signal clicked()
+    signal clicked
 
     implicitHeight: Math.max(Metrics.controlHeightXL, rowLayout.implicitHeight + Metrics.spacingS * 2)
-    radius: Metrics.cornerM
+    radius: Metrics.cornerS
     color: {
         if (root.highlighted)
-            return Appearance.colors.colLayer3;
-
+            return Appearance.colors.colPrimaryContainer;
         if (!root.interactive)
             return "transparent";
-
         if (pointer.pressed)
-            return Appearance.colors.colLayer2Active;
-
+            return Appearance.colors.colLayer1Active;
         if (pointer.containsMouse)
-            return Appearance.colors.colLayer2Hover;
-
+            return Appearance.colors.colLayer1Hover;
         return "transparent";
     }
     opacity: enabled ? 1 : 0.45
@@ -40,7 +40,7 @@ Rectangle {
         id: rowLayout
 
         z: 1
-        spacing: Metrics.spacingS
+        spacing: Metrics.spacingM
 
         anchors {
             fill: parent
@@ -60,19 +60,18 @@ Rectangle {
 
         Rectangle {
             visible: root.leading === null && root.iconName.length > 0
-            Layout.preferredWidth: Metrics.controlHeightM
-            Layout.preferredHeight: Metrics.controlHeightM
-            radius: Appearance.rounding.full
-            color: root.highlighted ? Appearance.colors.colPrimaryContainer : Appearance.colors.colLayer2
+            Layout.preferredWidth: 32
+            Layout.preferredHeight: 32
+            radius: 8
+            color: root.iconContainerColor
 
             MaterialSymbol {
                 anchors.centerIn: parent
                 text: root.iconName
-                iconSize: Metrics.iconM - Metrics.spacingXXS
+                iconSize: 20
                 fill: root.iconFill
-                color: root.highlighted ? Appearance.colors.colOnPrimaryContainer : Appearance.colors.colOnLayer2
+                color: root.iconColor
             }
-
         }
 
         ColumnLayout {
@@ -84,9 +83,9 @@ Rectangle {
                 Layout.fillWidth: true
                 text: root.title
                 color: Appearance.colors.colOnSurface
-                font.family: Fonts.ui
-                font.pixelSize: root.supportingText.length > 0 ? Typography.bodyMedium.pixelSize : Typography.bodyLarge.pixelSize
-                font.weight: root.supportingText.length > 0 ? Typography.bodyMedium.weight : Font.Medium
+                font.family: Typography.bodyLarge.family
+                font.pixelSize: Typography.bodyLarge.pixelSize
+                font.weight: Font.Normal
                 elide: Text.ElideRight
             }
 
@@ -94,14 +93,13 @@ Rectangle {
                 Layout.fillWidth: true
                 visible: root.supportingText.length > 0
                 text: root.supportingText
-                color: Appearance.colors.colOnLayer1
-                font.family: Fonts.ui
-                font.pixelSize: 12
+                color: Appearance.colors.colOnSurfaceVariant
+                font.family: Typography.bodySmall.family
+                font.pixelSize: Typography.bodySmall.pixelSize
                 wrapMode: Text.Wrap
                 elide: Text.ElideRight
                 maximumLineCount: 2
             }
-
         }
 
         RowLayout {
@@ -110,7 +108,17 @@ Rectangle {
             Layout.alignment: Qt.AlignVCenter
             spacing: Metrics.spacingXS
         }
+    }
 
+    Rectangle {
+        anchors.left: parent.left
+        anchors.leftMargin: root.iconName.length > 0 || root.leading !== null ? 52 : Metrics.spacingM
+        anchors.right: parent.right
+        anchors.rightMargin: Metrics.spacingS
+        anchors.bottom: parent.bottom
+        height: Metrics.dividerWidth
+        visible: root.showDivider
+        color: Appearance.applyAlpha(Appearance.colors.colOutlineVariant, 0.5)
     }
 
     MouseArea {
@@ -129,7 +137,5 @@ Rectangle {
             easing.type: Appearance.animation.expressiveFastEffects.type
             easing.bezierCurve: Appearance.animation.expressiveFastEffects.bezierCurve
         }
-
     }
-
 }
