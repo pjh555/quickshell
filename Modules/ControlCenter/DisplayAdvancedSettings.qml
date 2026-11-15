@@ -49,7 +49,7 @@ ColumnLayout {
     GridLayout {
         Layout.fillWidth: true
         columns: width > 420 ? 2 : 1
-        visible: root.settings.hotCorners && root.settings.hotCorners.indexOf("off") < 0
+        visible: Array.isArray(root.settings.hotCorners) && root.settings.hotCorners.indexOf("off") < 0
         Repeater {
             model: [
                 {
@@ -80,7 +80,7 @@ ColumnLayout {
                     onToggled: {
                         const corners = root.settings.hotCorners || [];
                         const next = checked ? corners.concat([modelData.key]) : corners.filter(c => c
-                                                                                                     !== modelData.key);
+                                                                                                !== modelData.key);
                         root.edit("hotCorners", next.length ? next : ["off"]);
                     }
                 }

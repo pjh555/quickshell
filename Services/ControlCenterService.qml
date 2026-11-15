@@ -102,7 +102,7 @@ Singleton {
         interval: 4000
         onTriggered: {
             if (!root.searchTarget)
-                return;
+            return;
             root.cancelSearch();
             root.reportSearchError(qsTr("This setting is currently unavailable"));
         }
@@ -111,8 +111,9 @@ Singleton {
     property bool _openRequested: false
     property string _pendingPage: ""
 
-    readonly property bool loaded: controlCenterWindow !== null
-    readonly property bool visible: loaded && controlCenterWindow.visible
+    readonly property bool loaded: root.controlCenterWindow !== null && root.controlCenterWindow !== undefined
+    readonly property bool visible: root.loaded && root.controlCenterWindow
+                                    ? root.controlCenterWindow.visible === true : false
 
     function registerLoader(loader) {
         root.controlCenterLoader = loader;
@@ -178,7 +179,7 @@ Singleton {
         if (!root.visible)
             return;
         const target = ToplevelManager.toplevels.values.find(window => window.title
-                                                                       === root.controlCenterWindow.title);
+                                                             === root.controlCenterWindow.title);
         if (target)
             target.activate();
     }
@@ -187,7 +188,7 @@ Singleton {
         WidgetState.closeAllPopups();
         if (root.visible) {
             const target = ToplevelManager.toplevels.values.find(window => window.title
-                                                                           === root.controlCenterWindow.title);
+                                                                 === root.controlCenterWindow.title);
             if (target) {
                 target.activate();
                 return true;

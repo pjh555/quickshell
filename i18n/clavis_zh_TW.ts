@@ -16329,4 +16329,487 @@ Windows: </source>
         <translation>開啟主目錄</translation>
     </message>
 </context>
+<context>
+    <name>SettingsBusinessHub</name>
+    <message>
+        <location filename="../Modules/ControlCenter/SettingsBusinessHub.qml" line="205"/>
+        <source>Back to settings categories</source>
+        <translation>返回設定分類</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="15"/>
+        <source>Account</source>
+        <translation>賬戶</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="19"/>
+        <source>Profile and devices</source>
+        <translation>個人資料與裝置</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="24"/>
+        <location filename="../Modules/ControlCenter/LanguageRegionSettingsPage.qml" line="7"/>
+        <source>Language &amp; region</source>
+        <translation>語言與地區</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="32"/>
+        <location filename="../Modules/ControlCenter/NetworkSettingsPage.qml" line="8"/>
+        <source>Connections</source>
+        <translation>連線</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="36"/>
+        <source>Bluetooth devices</source>
+        <translation>藍牙裝置</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="41"/>
+        <location filename="../Modules/ControlCenter/AdvancedSettingsPage.qml" line="16"/>
+        <source>Cloud storage</source>
+        <translation>雲端儲存</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="48"/>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="52"/>
+        <source>Personalization</source>
+        <translation>個性化</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="57"/>
+        <location filename="../Modules/ControlCenter/ShortcutsSettingsPage.qml" line="7"/>
+        <source>Keyboard shortcuts</source>
+        <translation>快捷鍵</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AdvancedSettingsPage.qml" line="7"/>
+        <source>Services</source>
+        <translation>服務</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AdvancedSettingsPage.qml" line="11"/>
+        <source>Map and weather services</source>
+        <translation>地圖與天氣服務</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AdvancedSettingsPage.qml" line="23"/>
+        <source>Generation</source>
+        <translation>產生</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AdvancedSettingsPage.qml" line="27"/>
+        <source>Matugen templates</source>
+        <translation>Matugen 範本</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="7"/>
+        <source>Connection</source>
+        <translation>連線</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="11"/>
+        <source>Agent backend</source>
+        <translation>Agent 後端</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="16"/>
+        <source>Provider</source>
+        <translation>供應商</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="23"/>
+        <source>Capabilities</source>
+        <translation>功能</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="27"/>
+        <source>Computer control</source>
+        <translation>電腦操作</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="32"/>
+        <source>MCP servers</source>
+        <translation>MCP 伺服器</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="37"/>
+        <source>Agent skills</source>
+        <translation>Agent 技能</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="44"/>
+        <source>Presence</source>
+        <translation>桌面形象</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="48"/>
+        <source>Desktop pet</source>
+        <translation>桌寵</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="53"/>
+        <source>Conversation</source>
+        <translation>對話</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AutostartSettingsPage.qml" line="7"/>
+        <source>Autostart</source>
+        <translation>開機啟動</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AutostartSettingsPage.qml" line="11"/>
+        <location filename="../Modules/ControlCenter/SpotlightSettingsPage.qml" line="11"/>
+        <source>Applications</source>
+        <translation>應用程式</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AutostartSettingsPage.qml" line="16"/>
+        <source>Add application</source>
+        <translation>新增應用程式</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/BarSettingsPage.qml" line="7"/>
+        <source>Bar</source>
+        <translation>條欄</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/BarSettingsPage.qml" line="11"/>
+        <source>Position</source>
+        <translation>位置</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/BarSettingsPage.qml" line="16"/>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="26"/>
+        <source>Size and spacing</source>
+        <translation>尺寸與間距</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/BarSettingsPage.qml" line="21"/>
+        <source>Components</source>
+        <translation>元件</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ConnectedDevicesSettingsPage.qml" line="8"/>
+        <source>Bluetooth</source>
+        <translation>藍牙</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ConnectedDevicesSettingsPage.qml" line="12"/>
+        <source>Saved devices</source>
+        <translation>已儲存的裝置</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ConnectedDevicesSettingsPage.qml" line="20"/>
+        <source>Bluetooth adapter</source>
+        <translation>藍牙介面卡</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ConnectedDevicesSettingsPage.qml" line="25"/>
+        <source>Advanced settings</source>
+        <translation>進階設定</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DefaultAppsSettingsPage.qml" line="7"/>
+        <source>Default applications</source>
+        <translation>預設應用</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DefaultAppsSettingsPage.qml" line="11"/>
+        <source>Internet</source>
+        <translation>網際網路</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DefaultAppsSettingsPage.qml" line="16"/>
+        <source>Utilities</source>
+        <translation>實用工具</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DefaultAppsSettingsPage.qml" line="21"/>
+        <source>Documents</source>
+        <translation>文件</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DefaultAppsSettingsPage.qml" line="26"/>
+        <source>Multimedia</source>
+        <translation>多媒體</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DisplaysSettingsPage.qml" line="7"/>
+        <source>Displays</source>
+        <translation>顯示器</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DockSettingsPage.qml" line="7"/>
+        <source>Dock</source>
+        <translation>Dock</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DockSettingsPage.qml" line="11"/>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="16"/>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="8"/>
+        <source>Appearance</source>
+        <translation>外觀</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DockSettingsPage.qml" line="16"/>
+        <source>Behavior</source>
+        <translation>行為</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DockSettingsPage.qml" line="21"/>
+        <source>Window previews</source>
+        <translation>視窗預覽</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/EffectsSettingsPage.qml" line="7"/>
+        <source>Visual effects</source>
+        <translation>視覺效果</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/EffectsSettingsPage.qml" line="11"/>
+        <source>Background transparency and blur</source>
+        <translation>背景透明度與模糊</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="20"/>
+        <source>Keystone style</source>
+        <translation>拱心石樣式</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="31"/>
+        <source>Horizontal clock</source>
+        <translation>橫向時鐘</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="41"/>
+        <source>Interaction</source>
+        <translation>互動</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="45"/>
+        <source>Mouse actions</source>
+        <translation>滑鼠操作</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="50"/>
+        <source>Media controls</source>
+        <translation>媒體控制</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="55"/>
+        <source>Keyhole</source>
+        <translation>鑰匙孔</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="62"/>
+        <source>System</source>
+        <translation>系統</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="66"/>
+        <source>Keyboard indicators</source>
+        <translation>鍵盤狀態提示</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="72"/>
+        <source>Recording</source>
+        <translation>錄製</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/LanguageRegionSettingsPage.qml" line="11"/>
+        <source>Language</source>
+        <translation>語言</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/LanguageRegionSettingsPage.qml" line="16"/>
+        <source>Region &amp; weather location</source>
+        <translation>地區與天氣位置</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/LanguageRegionSettingsPage.qml" line="21"/>
+        <source>Units</source>
+        <translation>單位</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/LanguageRegionSettingsPage.qml" line="26"/>
+        <source>Time &amp; date</source>
+        <translation>時間與日期</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/LanguageRegionSettingsPage.qml" line="33"/>
+        <source>Weather</source>
+        <translation>天氣</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/LanguageRegionSettingsPage.qml" line="37"/>
+        <source>Weather map</source>
+        <translation>天氣地圖</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/NetworkSettingsPage.qml" line="12"/>
+        <source>Wi-Fi</source>
+        <translation>Wi-Fi</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/NetworkSettingsPage.qml" line="19"/>
+        <source>Wired connections</source>
+        <translation>有線連線</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/NetworkSettingsPage.qml" line="26"/>
+        <source>Details</source>
+        <translation>詳細資訊</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/NetworkSettingsPage.qml" line="30"/>
+        <source>Connection information</source>
+        <translation>連線資訊</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/NetworkSettingsPage.qml" line="35"/>
+        <source>Other settings</source>
+        <translation>其他設定</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ShortcutsSettingsPage.qml" line="11"/>
+        <source>All shortcuts</source>
+        <translation>全部快捷鍵</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ShortcutsSettingsPage.qml" line="18"/>
+        <source>Assigned shortcuts</source>
+        <translation>已指派快捷鍵</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ShortcutsSettingsPage.qml" line="25"/>
+        <source>Managed shortcuts</source>
+        <translation>受管理快捷鍵</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ShortcutsSettingsPage.qml" line="32"/>
+        <source>Unassigned shortcuts</source>
+        <translation>未指派快捷鍵</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SidebarSettingsPage.qml" line="7"/>
+        <location filename="../Modules/ControlCenter/SidebarSettingsPage.qml" line="11"/>
+        <source>Sidebars</source>
+        <translation>側邊欄</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SidebarSettingsPage.qml" line="16"/>
+        <source>Clock style</source>
+        <translation>時鐘樣式</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SidebarSettingsPage.qml" line="23"/>
+        <source>Cards</source>
+        <translation>卡片</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SidebarSettingsPage.qml" line="27"/>
+        <source>Desktop card layout</source>
+        <translation>桌面卡片佈局</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SidebarSettingsPage.qml" line="32"/>
+        <source>System cards</source>
+        <translation>系統卡片</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SpotlightSettingsPage.qml" line="7"/>
+        <source>Spotlight</source>
+        <translation>Spotlight</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SpotlightSettingsPage.qml" line="16"/>
+        <source>Web search</source>
+        <translation>網頁搜尋</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SpotlightSettingsPage.qml" line="21"/>
+        <source>Clipboard</source>
+        <translation>剪貼簿</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="12"/>
+        <source>Color scheme</source>
+        <translation>配色方案</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="14"/>
+        <source>Light</source>
+        <translation>淺色</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="15"/>
+        <source>Dark</source>
+        <translation>深色</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="20"/>
+        <source>Icons</source>
+        <translation>圖示</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="25"/>
+        <source>Fonts</source>
+        <translation>字型</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="30"/>
+        <source>Cursor</source>
+        <translation>游標</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="37"/>
+        <source>Interface</source>
+        <translation>介面</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="41"/>
+        <source>Settings window</source>
+        <translation>設定視窗</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="46"/>
+        <source>Super key</source>
+        <translation>Super 鍵</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="51"/>
+        <source>Lock screen</source>
+        <translation>鎖定螢幕</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/WallpaperSettingsPage.qml" line="7"/>
+        <source>Backgrounds</source>
+        <translation>背景</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/WallpaperSettingsPage.qml" line="11"/>
+        <source>Desktop wallpaper</source>
+        <translation>桌面桌布</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/WallpaperSettingsPage.qml" line="16"/>
+        <source>Overview background</source>
+        <translation>Overview 背景</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/WallpaperSettingsPage.qml" line="23"/>
+        <source>Motion</source>
+        <translation>動態效果</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/WallpaperSettingsPage.qml" line="27"/>
+        <source>Transition</source>
+        <translation>過渡效果</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/WallpaperSettingsPage.qml" line="32"/>
+        <source>Parallax effects</source>
+        <translation>視差效果</translation>
+    </message>
+</context>
 </TS>

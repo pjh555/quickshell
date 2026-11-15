@@ -12,12 +12,12 @@ Item {
     property string backAccessibleName: qsTr("Back to General settings")
     signal backRequested
 
-    implicitHeight: 56
+    implicitHeight: 52
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: Metrics.spacingL
-        anchors.rightMargin: Metrics.spacingL
+        anchors.leftMargin: Metrics.spacingM
+        anchors.rightMargin: Metrics.spacingM
         spacing: Metrics.spacingS
 
         IconButton {
@@ -31,15 +31,15 @@ Item {
 
         Rectangle {
             visible: root.iconName !== ""
-            Layout.preferredWidth: Metrics.controlHeightM
-            Layout.preferredHeight: Metrics.controlHeightM
-            radius: Appearance.rounding.normal
+            Layout.preferredWidth: 32
+            Layout.preferredHeight: 32
+            radius: 8
             color: Appearance.colors.colSecondaryContainer
 
             MaterialSymbol {
                 anchors.centerIn: parent
                 text: root.iconName
-                iconSize: Metrics.iconM
+                iconSize: 20
                 fill: 1
                 color: Appearance.colors.colOnSecondaryContainer
             }
@@ -54,5 +54,13 @@ Item {
             font.weight: Font.DemiBold
             elide: Text.ElideRight
         }
+    }
+
+    Rectangle {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        height: 1
+        color: Appearance.applyAlpha(Appearance.colors.colOutlineVariant, 0.36)
     }
 }

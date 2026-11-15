@@ -16,12 +16,21 @@ FloatingWindow {
     id: root
 
     property bool _wasShown: false
-    property real contentPadding: Metrics.spacingM
+    property real contentPadding: 10
     property int currentPage: 0
     property bool navExpanded: width >= 880
     property string pendingPageSection: ""
     readonly property var pageOrder: ["account", "general", "wallpaper", "theme", "keystone", "agent",
         "android", "advanced"]
+    readonly property var hierarchicalPageSources: ({
+                                                        "account": "AccountSettingsPage.qml",
+                                                        "wallpaper": "WallpaperSettingsPage.qml",
+                                                        "theme": "ThemeSettingsPage.qml",
+                                                        "keystone": "KeystoneSettingsPage.qml",
+                                                        "agent": "AgentSettingsPage.qml",
+                                                        "android": "AndroidSettingsPage.qml",
+                                                        "advanced": "AdvancedSettingsPage.qml"
+                                                    })
     readonly property var pages: root.pageOrder.map(pageId => SpotlightCatalog.route(pageId)).filter(entry => entry
                                                                                                      !== null).map(
                                      entry => Object.assign({}, entry, {
@@ -98,7 +107,8 @@ FloatingWindow {
         if (index < 0 || index >= pages.length)
             return Qt.resolvedUrl("AccountPage.qml");
 
-        return Qt.resolvedUrl(pages[index].source);
+        const page = pages[index];
+        return Qt.resolvedUrl(root.hierarchicalPageSources[page.id] || page.source);
     }
 
     function openPage(pageId) {
@@ -188,13 +198,16 @@ FloatingWindow {
         anchors.fill: parent
 
         LiquidGlassSurface {
+            id: outerGlass
+
             anchors.fill: parent
             radius: root.maximized ? 0 : Appearance.rounding.extraLarge
             baseColor: Appearance.colors.colLayer0Base
-            blurOpacity: 0.30
-            fallbackOpacity: 0.98
-            topHighlight: 0.13
-            bottomReflection: 0.025
+            blurOpacity: 0.18
+            fallbackOpacity: 0.78
+            topHighlight: 0.18
+            bottomReflection: 0.045
+            clearMaterial: true
         }
 
         Shortcut {
@@ -243,7 +256,7 @@ FloatingWindow {
                 id: titlebar
 
                 Layout.fillWidth: true
-                Layout.preferredHeight: 40
+                Layout.preferredHeight: 30
 
                 SettingsWindowControls {
                     id: windowControls
@@ -284,9 +297,10 @@ FloatingWindow {
                     implicitWidth: root.navExpanded ? 248 : 72
                     radius: Metrics.cornerL
                     baseColor: Appearance.colors.colLayer1Base
-                    blurOpacity: 0.28
-                    fallbackOpacity: 0.92
-                    topHighlight: 0.17
+                    blurOpacity: 0.24
+                    fallbackOpacity: 0.82
+                    topHighlight: 0.18
+                    clearMaterial: true
                     clipContent: true
 
                     ColumnLayout {
@@ -402,24 +416,20 @@ FloatingWindow {
                     }
                 }
 
-                Rectangle {
+                LiquidGlassSurface {
                     id: bodyBackground
 
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     radius: Metrics.cornerL
-                    color: Appearance.applyAlpha(Appearance.m3colors.m3surfaceContainerLowest,
-                                                 BlurService.enabled ? 0.78 : 1)
-                    border.width: 1
-                    border.color: Appearance.applyAlpha(Appearance.macos.glassBorder, 0.56)
-                    clip: true
-
-                    GlassHighlight {
-                        anchors.fill: parent
-                        radius: parent.radius
-                        topStrength: 0.055
-                        bottomStrength: 0.018
-                    }
+                    baseColor: Appearance.colors.colLayer0Base
+                    blurOpacity: 0.28
+                    fallbackOpacity: 0.84
+                    topHighlight: 0.14
+                    bottomReflection: 0.035
+                    clearMaterial: true
+                    elevated: false
+                    clipContent: true
 
                     Item {
                         id: currentPageHeader
@@ -429,25 +439,27 @@ FloatingWindow {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         anchors.top: parent.top
-                        height: visible ? 72 : 0
-                        visible: !pageLoader.item || !("currentSection" in pageLoader.item) || pageLoader.item.currentSection
-                                 === "overview"
+                        height: visible ? 54 : 0
+                        visible: (!pageLoader.item || !("currentSection" in pageLoader.item)
+                                  || pageLoader.item.currentSection === "overview") && (!pageLoader.item || !(
+                                                                                            "detailOpen" in pageLoader.item)
+                                                                                        || !pageLoader.item.detailOpen)
                         z: 2
 
                         Rectangle {
                             anchors.left: parent.left
-                            anchors.leftMargin: Metrics.spacingXL
+                            anchors.leftMargin: Metrics.spacingL
                             anchors.verticalCenter: parent.verticalCenter
-                            width: 36
-                            height: 36
-                            radius: 9
+                            width: 32
+                            height: 32
+                            radius: 8
                             color: currentPageHeader.page ? IconPalette.backgroundFor(
                                                                 currentPageHeader.page.icon) : "transparent"
 
                             MaterialSymbol {
                                 anchors.centerIn: parent
                                 text: currentPageHeader.page ? currentPageHeader.page.icon : "settings"
-                                iconSize: 22
+                                iconSize: 20
                                 fill: 1
                                 color: "white"
                             }
@@ -455,16 +467,24 @@ FloatingWindow {
 
                         Text {
                             anchors.left: parent.left
-                            anchors.leftMargin: Metrics.spacingXL + 48
+                            anchors.leftMargin: Metrics.spacingL + 42
                             anchors.right: parent.right
-                            anchors.rightMargin: Metrics.spacingXL
+                            anchors.rightMargin: Metrics.spacingL
                             anchors.verticalCenter: parent.verticalCenter
                             text: currentPageHeader.page ? currentPageHeader.page.title : ""
                             color: Appearance.colors.colOnSurface
-                            font.family: Typography.headlineSmall.family
-                            font.pixelSize: Typography.headlineSmall.pixelSize
+                            font.family: Typography.titleLarge.family
+                            font.pixelSize: Typography.titleLarge.pixelSize
                             font.weight: Font.DemiBold
                             elide: Text.ElideRight
+                        }
+
+                        Rectangle {
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            height: 1
+                            color: Appearance.applyAlpha(Appearance.colors.colOutlineVariant, 0.36)
                         }
                     }
 
@@ -527,6 +547,12 @@ FloatingWindow {
             barSlot: searchBarSlot
             sideMargin: root.navExpanded ? 288 : 112
             onCollapsed: focusBoundary.forceActiveFocus(Qt.OtherFocusReason)
+        }
+
+        CompositorBlurRegion {
+            targetWindow: root
+            backgroundItem: outerGlass
+            radius: root.maximized ? 0 : Appearance.rounding.extraLarge
         }
     }
 }

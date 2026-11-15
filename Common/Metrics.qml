@@ -27,6 +27,10 @@ QtObject {
     readonly property real cornerXL: 28
     readonly property real cardPadding: spacingL
     readonly property real pageMargin: spacingXL
+    // Settings use the denser inset of iPadOS grouped lists. Keep the general
+    // page margin unchanged for non-settings surfaces.
+    readonly property real settingsPageMargin: 18
+    readonly property real settingsGroupSpacing: 16
     readonly property real popupMargin: spacingL
     readonly property real dividerWidth: 1
     readonly property real sidebarWidthCompact: 420

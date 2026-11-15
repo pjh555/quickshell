@@ -79,7 +79,7 @@ Singleton {
                                                            return device.type === "wired";
                                                        })
     readonly property bool wifiAvailable: wifiDevices.length > 0
-    readonly property bool wifiConnected: activeWifi !== null
+    readonly property bool wifiConnected: root.activeWifi !== null && root.activeWifi !== undefined
     readonly property bool wiredConnected: wiredDevices.some(device => {
                                                                  return device.connected;
                                                              })
@@ -195,13 +195,19 @@ Singleton {
         }
         return activeWifi;
     }
-    readonly property string activeSsid: activeWifi ? activeWifi.ssid : ""
-    readonly property string activeConnection: activeNetwork ? activeNetwork.name : qsTr("Disconnected")
-    readonly property string activeConnectionType: activeNetwork ? (activeNetwork.type === "wired" ? qsTr(
-                                                                                                         "Wired") :
-                                                                                                     "Wi-Fi") :
+    readonly property string activeSsid: root.activeWifi && root.activeWifi.ssid !== undefined ? String(
+                                                                                                     root.activeWifi.ssid) :
+                                                                                                 ""
+    readonly property string activeConnection: root.activeNetwork && root.activeNetwork.name !== undefined ? String(
+                                                                                                                 root.activeNetwork.name) :
+                                                                                                             qsTr("Disconnected")
+    readonly property string activeConnectionType: root.activeNetwork && root.activeNetwork.type
+                                                   !== undefined ? (root.activeNetwork.type === "wired" ? qsTr(
+                                                                                                              "Wired") :
+                                                                                                          "Wi-Fi") :
                                                                    ""
-    readonly property int signalStrength: activeWifi ? activeWifi.strength : 0
+    readonly property int signalStrength: root.activeWifi && isFinite(Number(root.activeWifi.strength))
+                                          ? Number(root.activeWifi.strength) : 0
     readonly property var wifiConnectTarget: connectTargetSsid.length > 0 ? accessPoints.find(network => {
                                                                                                   return network.ssid
                                                                                                   === connectTargetSsid

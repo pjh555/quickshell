@@ -7,24 +7,28 @@ import qs.Widgets.common
 StyledFlickable {
     id: root
 
+    property string sectionFilter: ""
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
+    }
+
     clip: true
     contentWidth: width
-    contentHeight: contentColumn.implicitHeight + Metrics.pageMargin * 2
+    contentHeight: contentColumn.implicitHeight + Metrics.settingsPageMargin * 2
 
     ColumnLayout {
         id: contentColumn
 
-        width: Math.min(640, Math.max(0, root.width - Metrics.pageMargin * 2))
-        x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
-        y: Metrics.pageMargin
+        width: Math.min(680, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
         spacing: Metrics.spacingL
 
         NiriSetupPrompt {
             Layout.fillWidth: true
-            visible: DockService.supportsMinimizeEffects && integrationState !== "ready" && (integrationState
-                                                                                             !== "loading"
-                                                                                             || error.length
-                                                                                             > 0)
+            visible: root.showsSection("behavior") && DockService.supportsMinimizeEffects && integrationState
+                     !== "ready" && (integrationState !== "loading" || error.length > 0)
             title: qsTr("First-time setup")
             description: qsTr("Set up window minimization animations.")
             integrationState: NiriConfigService.state("minimize-animation")
@@ -37,6 +41,7 @@ StyledFlickable {
 
         SettingsRow {
             Layout.fillWidth: true
+            visible: root.showsSection("appearance")
             title: qsTr("Show Dock")
 
             trailing: StyledSwitch {
@@ -55,6 +60,7 @@ StyledFlickable {
 
         SettingsSection {
             id: appearanceSection
+            visible: root.showsSection("appearance")
 
             Layout.fillWidth: true
             flat: true
@@ -99,8 +105,8 @@ StyledFlickable {
                     buttonMinWidth: 64
                     horizontalPadding: Metrics.spacingL
                     onValueSelected: value => {
-                        return DockService.setOption("position", String(value));
-                    }
+                                         return DockService.setOption("position", String(value));
+                                     }
                 }
             }
 
@@ -112,8 +118,8 @@ StyledFlickable {
                 suffix: " px"
                 value: DockService.iconSize
                 onMoved: value => {
-                    return DockService.setOption("iconSize", value);
-                }
+                             return DockService.setOption("iconSize", value);
+                         }
             }
 
             SettingsRow {
@@ -136,13 +142,14 @@ StyledFlickable {
                 suffix: "%"
                 value: DockService.magnificationScale * 100
                 onMoved: value => {
-                    return DockService.setOption("magnificationScale", value / 100);
-                }
+                             return DockService.setOption("magnificationScale", value / 100);
+                         }
             }
         }
 
         SettingsSection {
             id: behaviorSection
+            visible: root.showsSection("behavior")
 
             Layout.fillWidth: true
             flat: true
@@ -265,7 +272,7 @@ StyledFlickable {
             id: previewsSection
             Layout.fillWidth: true
             flat: true
-            visible: DockService.supportsThumbnails
+            visible: root.showsSection("previews") && DockService.supportsThumbnails
             title: previewsAnchor.title
             iconName: "preview"
 

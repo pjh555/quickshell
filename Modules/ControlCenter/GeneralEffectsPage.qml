@@ -9,16 +9,16 @@ StyledFlickable {
 
     clip: true
     contentWidth: width
-    contentHeight: contentColumn.implicitHeight + Metrics.pageMargin * 2
+    contentHeight: contentColumn.implicitHeight + Metrics.settingsPageMargin * 2
 
     Component.onCompleted: NiriConfigService.refresh()
 
     ColumnLayout {
         id: contentColumn
 
-        width: Math.min(640, Math.max(0, root.width - Metrics.pageMargin * 2))
-        x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
-        y: Metrics.pageMargin
+        width: Math.min(680, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
 
         NiriSetupPrompt {
             Layout.fillWidth: true

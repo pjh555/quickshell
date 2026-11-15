@@ -49,10 +49,10 @@ StyledFlickable {
     ColumnLayout {
         id: contentColumn
 
-        width: Math.min(root.pageContentWidth, Math.max(0, root.width - Metrics.pageMargin * 2))
-        x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
-        y: 28
-        spacing: 30
+        width: Math.min(root.pageContentWidth, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
+        spacing: Metrics.settingsGroupSpacing
 
         KeystoneSection {
             id: searchSection0
@@ -102,11 +102,11 @@ StyledFlickable {
                 stepSize: 1
                 value: PersonalizationConfig.horizontalClockFontSize
                 onMoved: value => {
-                    return PersonalizationConfig.setHorizontalClockFontSize(value, false);
-                }
+                             return PersonalizationConfig.setHorizontalClockFontSize(value, false);
+                         }
                 onCommitted: value => {
-                    return PersonalizationConfig.setHorizontalClockFontSize(value, true);
-                }
+                                 return PersonalizationConfig.setHorizontalClockFontSize(value, true);
+                             }
             }
 
             ClockSliderSetting {
@@ -117,11 +117,11 @@ StyledFlickable {
                 stepSize: 1
                 value: PersonalizationConfig.horizontalClockAxes.wght
                 onMoved: value => {
-                    return PersonalizationConfig.setHorizontalClockAxis("wght", value, false);
-                }
+                             return PersonalizationConfig.setHorizontalClockAxis("wght", value, false);
+                         }
                 onCommitted: value => {
-                    return PersonalizationConfig.setHorizontalClockAxis("wght", value, true);
-                }
+                                 return PersonalizationConfig.setHorizontalClockAxis("wght", value, true);
+                             }
             }
 
             ClockSliderSetting {
@@ -132,11 +132,11 @@ StyledFlickable {
                 stepSize: 1
                 value: PersonalizationConfig.horizontalClockAxes.wdth
                 onMoved: value => {
-                    return PersonalizationConfig.setHorizontalClockAxis("wdth", value, false);
-                }
+                             return PersonalizationConfig.setHorizontalClockAxis("wdth", value, false);
+                         }
                 onCommitted: value => {
-                    return PersonalizationConfig.setHorizontalClockAxis("wdth", value, true);
-                }
+                                 return PersonalizationConfig.setHorizontalClockAxis("wdth", value, true);
+                             }
             }
 
             ClockSliderSetting {
@@ -147,11 +147,11 @@ StyledFlickable {
                 stepSize: 1
                 value: PersonalizationConfig.horizontalClockAxes.opsz
                 onMoved: value => {
-                    return PersonalizationConfig.setHorizontalClockAxis("opsz", value, false);
-                }
+                             return PersonalizationConfig.setHorizontalClockAxis("opsz", value, false);
+                         }
                 onCommitted: value => {
-                    return PersonalizationConfig.setHorizontalClockAxis("opsz", value, true);
-                }
+                                 return PersonalizationConfig.setHorizontalClockAxis("opsz", value, true);
+                             }
             }
 
             ClockSliderSetting {
@@ -162,11 +162,11 @@ StyledFlickable {
                 stepSize: 1
                 value: PersonalizationConfig.horizontalClockAxes.GRAD
                 onMoved: value => {
-                    return PersonalizationConfig.setHorizontalClockAxis("GRAD", value, false);
-                }
+                             return PersonalizationConfig.setHorizontalClockAxis("GRAD", value, false);
+                         }
                 onCommitted: value => {
-                    return PersonalizationConfig.setHorizontalClockAxis("GRAD", value, true);
-                }
+                                 return PersonalizationConfig.setHorizontalClockAxis("GRAD", value, true);
+                             }
             }
 
             ClockSliderSetting {
@@ -177,11 +177,11 @@ StyledFlickable {
                 stepSize: 1
                 value: PersonalizationConfig.horizontalClockAxes.ROND
                 onMoved: value => {
-                    return PersonalizationConfig.setHorizontalClockAxis("ROND", value, false);
-                }
+                             return PersonalizationConfig.setHorizontalClockAxis("ROND", value, false);
+                         }
                 onCommitted: value => {
-                    return PersonalizationConfig.setHorizontalClockAxis("ROND", value, true);
-                }
+                                 return PersonalizationConfig.setHorizontalClockAxis("ROND", value, true);
+                             }
             }
 
             ClockSliderSetting {
@@ -193,11 +193,11 @@ StyledFlickable {
                 stepSize: 1
                 value: PersonalizationConfig.horizontalClockAxes.slnt
                 onMoved: value => {
-                    return PersonalizationConfig.setHorizontalClockAxis("slnt", value, false);
-                }
+                             return PersonalizationConfig.setHorizontalClockAxis("slnt", value, false);
+                         }
                 onCommitted: value => {
-                    return PersonalizationConfig.setHorizontalClockAxis("slnt", value, true);
-                }
+                                 return PersonalizationConfig.setHorizontalClockAxis("slnt", value, true);
+                             }
             }
 
             Text {
@@ -238,9 +238,9 @@ StyledFlickable {
                 currentValue: root.selectedDigit
                 buttonMinWidth: 52
                 onValueSelected: value => {
-                    root.selectedDigit = String(value);
-                    root.updateCustomColorDraft();
-                }
+                                     root.selectedDigit = String(value);
+                                     root.updateCustomColorDraft();
+                                 }
             }
 
             SettingsRow {
@@ -262,13 +262,14 @@ StyledFlickable {
                     currentValue: root.selectedDigitData().colorRole
                     buttonMinWidth: 64
                     onValueSelected: value => {
-                        const role = String(value);
-                        const color = role === "custom" ? root.selectedDigitCustomColor()
-                                                          || root.selectedDigitThemeColor() :
-                                                          root.selectedDigitCustomColor();
-                        PersonalizationConfig.setHorizontalClockDigitColor(root.selectedDigit, role, color,
-                                                                           true);
-                    }
+                                         const role = String(value);
+                                         const color = role === "custom" ? root.selectedDigitCustomColor()
+                                                                           || root.selectedDigitThemeColor() :
+                                                                           root.selectedDigitCustomColor();
+                                         PersonalizationConfig.setHorizontalClockDigitColor(root.selectedDigit,
+                                                                                            role, color,
+                                                                                            true);
+                                     }
                 }
             }
 
@@ -306,13 +307,13 @@ StyledFlickable {
                 stepSize: 1
                 value: root.selectedDigitData().x
                 onMoved: value => {
-                    return PersonalizationConfig.setHorizontalClockDigitValue(root.selectedDigit, "x", value,
-                                                                              false);
-                }
+                             return PersonalizationConfig.setHorizontalClockDigitValue(root.selectedDigit, "x",
+                                                                                       value, false);
+                         }
                 onCommitted: value => {
-                    return PersonalizationConfig.setHorizontalClockDigitValue(root.selectedDigit, "x", value,
-                                                                              true);
-                }
+                                 return PersonalizationConfig.setHorizontalClockDigitValue(root.selectedDigit,
+                                                                                           "x", value, true);
+                             }
             }
 
             ClockSliderSetting {
@@ -324,13 +325,13 @@ StyledFlickable {
                 stepSize: 1
                 value: root.selectedDigitData().y
                 onMoved: value => {
-                    return PersonalizationConfig.setHorizontalClockDigitValue(root.selectedDigit, "y", value,
-                                                                              false);
-                }
+                             return PersonalizationConfig.setHorizontalClockDigitValue(root.selectedDigit, "y",
+                                                                                       value, false);
+                         }
                 onCommitted: value => {
-                    return PersonalizationConfig.setHorizontalClockDigitValue(root.selectedDigit, "y", value,
-                                                                              true);
-                }
+                                 return PersonalizationConfig.setHorizontalClockDigitValue(root.selectedDigit,
+                                                                                           "y", value, true);
+                             }
             }
 
             ClockSliderSetting {
@@ -342,13 +343,15 @@ StyledFlickable {
                 value: root.selectedDigitData().rotation
                 suffix: "°"
                 onMoved: value => {
-                    return PersonalizationConfig.setHorizontalClockDigitValue(root.selectedDigit, "rotation",
-                                                                              value, false);
-                }
+                             return PersonalizationConfig.setHorizontalClockDigitValue(root.selectedDigit,
+                                                                                       "rotation", value,
+                                                                                       false);
+                         }
                 onCommitted: value => {
-                    return PersonalizationConfig.setHorizontalClockDigitValue(root.selectedDigit, "rotation",
-                                                                              value, true);
-                }
+                                 return PersonalizationConfig.setHorizontalClockDigitValue(root.selectedDigit,
+                                                                                           "rotation", value,
+                                                                                           true);
+                             }
             }
         }
 

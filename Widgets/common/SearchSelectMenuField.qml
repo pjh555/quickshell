@@ -32,8 +32,8 @@ FocusScope {
     readonly property string currentText: labelFor(visualSelectedValue)
     readonly property string displayText: currentText !== "" ? currentText : placeholder
     readonly property bool showingPlaceholder: currentText === "" && placeholder !== ""
-    readonly property color menuSurfaceColor: Appearance.m3colors.m3surfaceContainerHigh
-    readonly property color menuHoverColor: Appearance.m3colors.m3surfaceContainerHighest
+    readonly property color menuSurfaceColor: Appearance.macos.surfaceElevated
+    readonly property color menuHoverColor: Appearance.macos.surfaceTertiary
     readonly property real menuGap: 6
     readonly property real menuPadding: 6
     readonly property real listTargetHeight: Math.min(Math.max(1, maxVisibleItems) * itemHeight, Math.max(
@@ -270,10 +270,10 @@ FocusScope {
             updatePopupGeometry();
             optionsPopup.open();
             Qt.callLater(() => {
-                updatePopupGeometry();
-                root.forceActiveFocus();
-                ensureHighlightedVisible();
-            });
+                             updatePopupGeometry();
+                             root.forceActiveFocus();
+                             ensureHighlightedVisible();
+                         });
         } else {
             closeDelay.stop();
             hasPendingAccepted = false;
@@ -292,23 +292,26 @@ FocusScope {
     }
 
     Keys.onPressed: event => {
-        if (root.expanded) {
-            root.handleMenuKey(event);
-        } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter || event.key === Qt.Key_Space
-                   || event.key === Qt.Key_Down) {
-            root.openMenu();
-            event.accepted = true;
-        }
-    }
+                        if (root.expanded) {
+                            root.handleMenuKey(event);
+                        } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter || event.key
+                                   === Qt.Key_Space || event.key === Qt.Key_Down) {
+                            root.openMenu();
+                            event.accepted = true;
+                        }
+                    }
 
     Rectangle {
         id: fieldFrame
 
         anchors.fill: parent
-        radius: 0
-        color: root.expanded ? Appearance.colors.colLayer2Active : fieldMouse.pressed
-                               ? Appearance.colors.colLayer2Active : fieldMouse.containsMouse
-                                 ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2
+        radius: Metrics.cornerS
+        color: Appearance.applyAlpha(root.expanded || fieldMouse.pressed ? Appearance.macos.surfaceTertiary :
+                                                                           Appearance.macos.surfaceElevated,
+                                     fieldMouse.containsMouse || root.expanded ? 0.72 : 0.52)
+        border.width: root.expanded ? 2 : 1
+        border.color: root.expanded ? Appearance.colors.colPrimary : Appearance.applyAlpha(
+                                          Appearance.macos.textPrimary, 0.14)
         clip: true
 
         Behavior on color {
@@ -386,9 +389,8 @@ FocusScope {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            height: !root.showActiveIndicator ? 0 : root.expanded ? 2 : 1
-            color: root.expanded ? Appearance.colors.colPrimary : Appearance.colors.colOutlineVariant
-            visible: root.showActiveIndicator
+            height: 0
+            visible: false
 
             Behavior on height {
                 NumberAnimation {
@@ -446,9 +448,9 @@ FocusScope {
             Qt.callLater(() => revealProgress = 1);
         }
         onOpened: Qt.callLater(() => {
-            root.updatePopupGeometry();
-            popupContent.forceActiveFocus();
-        })
+                                   root.updatePopupGeometry();
+                                   popupContent.forceActiveFocus();
+                               })
         onAboutToHide: revealProgress = 0
         onClosed: {
             if (root.expanded)
@@ -509,8 +511,8 @@ FocusScope {
             implicitHeight: optionsPopup.height
 
             Keys.onPressed: event => {
-                root.handleMenuKey(event);
-            }
+                                root.handleMenuKey(event);
+                            }
 
             Item {
                 id: maskedSurface

@@ -8,6 +8,8 @@ import qs.Widgets.common
 StyledFlickable {
     id: root
 
+    property string sectionFilter: ""
+
     property var parentModal: null
     property bool presentationActive: false
 
@@ -19,18 +21,23 @@ StyledFlickable {
 
     clip: true
     contentWidth: width
-    contentHeight: contentColumn.implicitHeight + Metrics.pageMargin * 2
+    contentHeight: contentColumn.implicitHeight + Metrics.settingsPageMargin * 2
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
+    }
 
     ColumnLayout {
         id: contentColumn
 
-        width: Math.min(640, Math.max(0, root.width - Metrics.pageMargin * 2))
-        x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
-        y: Metrics.pageMargin
-        spacing: Metrics.spacingXL
+        width: Math.min(680, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
+        spacing: Metrics.settingsGroupSpacing
 
         SettingsSection {
             id: searchSection0
+            visible: root.showsSection("language")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor0.title
@@ -55,14 +62,15 @@ StyledFlickable {
                     valueRole: "code"
                     closeOnAccept: true
                     onAccepted: value => {
-                        return UiPreferences.setLanguage(value);
-                    }
+                                    return UiPreferences.setLanguage(value);
+                                }
                 }
             }
         }
 
         SettingsSection {
             id: searchSection1
+            visible: root.showsSection("region-weather-location")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor1.title
@@ -85,6 +93,7 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection2
+            visible: root.showsSection("weather-map")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor2.title
@@ -114,8 +123,8 @@ StyledFlickable {
                     currentValue: UiPreferences.weatherMapBaseProvider
                     buttonMinWidth: 104
                     onValueSelected: value => {
-                        return UiPreferences.setWeatherMapBaseProvider(value);
-                    }
+                                         return UiPreferences.setWeatherMapBaseProvider(value);
+                                     }
                 }
             }
 
@@ -147,8 +156,8 @@ StyledFlickable {
                     currentValue: UiPreferences.weatherMapOverlayProvider
                     buttonMinWidth: 104
                     onValueSelected: value => {
-                        return UiPreferences.setWeatherMapOverlayProvider(value);
-                    }
+                                         return UiPreferences.setWeatherMapOverlayProvider(value);
+                                     }
                 }
             }
 
@@ -165,6 +174,7 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection3
+            visible: root.showsSection("units")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor3.title
@@ -191,8 +201,8 @@ StyledFlickable {
                     currentValue: UiPreferences.weatherTemperatureUnit
                     buttonMinWidth: 56
                     onValueSelected: value => {
-                        return UiPreferences.setWeatherTemperatureUnit(value);
-                    }
+                                         return UiPreferences.setWeatherTemperatureUnit(value);
+                                     }
                 }
             }
 
@@ -211,14 +221,15 @@ StyledFlickable {
                     currentValue: UiPreferences.systemTemperatureUnit
                     buttonMinWidth: 56
                     onValueSelected: value => {
-                        return UiPreferences.setSystemTemperatureUnit(value);
-                    }
+                                         return UiPreferences.setSystemTemperatureUnit(value);
+                                     }
                 }
             }
         }
 
         SettingsSection {
             id: searchSection4
+            visible: root.showsSection("time-date")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor4.title
@@ -245,8 +256,8 @@ StyledFlickable {
                     currentValue: UiPreferences.useTwelveHourClock ? "12" : "24"
                     buttonMinWidth: 78
                     onValueSelected: value => {
-                        return UiPreferences.setUseTwelveHourClock(value === "12");
-                    }
+                                         return UiPreferences.setUseTwelveHourClock(value === "12");
+                                     }
                 }
             }
         }

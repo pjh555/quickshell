@@ -21,7 +21,7 @@ Item {
     readonly property var matches: {
         const available = SpotlightCatalog.settings.filter(entry => SpotlightCatalog.available(entry));
         return query.trim() ? LocalSearch.matchCatalog(available, query) : available.filter(entry =>
-        !entry.anchor);
+                                                                                            !entry.anchor);
     }
     readonly property rect barGeometry: {
         const viewportWidth = root.width;
@@ -71,7 +71,7 @@ Item {
             easing.bezierCurve: Animations.curves.emphasized
             onRunningChanged: {
                 if (!running && !root.expanded)
-                    input.clear();
+                input.clear();
             }
         }
     }
@@ -103,7 +103,7 @@ Item {
         }
     }
 
-    Rectangle {
+    LiquidGlassSurface {
         id: surface
 
         x: root.barGeometry.x + ((root.width - root.expandedWidth) / 2 - root.barGeometry.x) * root.expansion
@@ -111,14 +111,20 @@ Item {
         width: root.barGeometry.width + (root.expandedWidth - root.barGeometry.width) * root.expansion
         height: root.barGeometry.height + (root.expandedHeight - root.barGeometry.height) * root.expansion
         radius: root.barGeometry.height / 2 + (Metrics.cornerL - root.barGeometry.height / 2) * root.expansion
-        color: Appearance.m3colors.m3surfaceContainerHigh
-        clip: true
+        baseColor: Appearance.colors.colLayer1Base
+        blurOpacity: 0.24 + 0.08 * root.expansion
+        fallbackOpacity: 0.88
+        topHighlight: 0.16
+        bottomReflection: 0.035
+        clearMaterial: true
+        elevated: root.expanded
+        clipContent: true
 
         MouseArea {
             anchors.fill: parent
             onClicked: {
                 if (!root.expanded)
-                    root.open();
+                root.open();
             }
             onWheel: wheel => wheel.accepted = true
         }
@@ -126,15 +132,14 @@ Item {
         Rectangle {
             anchors.fill: parent
             radius: surface.radius
-            color: Appearance.m3colors.m3surfaceContainerLow
-            opacity: root.expansion
+            color: Appearance.applyAlpha(Appearance.macos.surfaceElevated, 0.18 * root.expansion)
         }
 
         Rectangle {
             width: parent.width
             height: root.barGeometry.height
             radius: height / 2
-            color: Appearance.m3colors.m3surfaceContainerHigh
+            color: Appearance.applyAlpha(Appearance.macos.surfaceElevated, 0.20)
 
             RippleButton {
                 id: navigation
@@ -195,7 +200,7 @@ Item {
                 Accessible.name: qsTr("Search settings")
                 onActiveFocusChanged: {
                     if (activeFocus)
-                        root.expanded = true;
+                    root.expanded = true;
                 }
                 Keys.onEscapePressed: root.close()
                 Keys.onDownPressed: root.moveSelection(1)
@@ -277,7 +282,7 @@ Item {
                 ScrollBar.vertical: StyledScrollBar {}
                 onCurrentIndexChanged: {
                     if (currentIndex >= 0)
-                        positionViewAtIndex(currentIndex, ListView.Contain);
+                    positionViewAtIndex(currentIndex, ListView.Contain);
                 }
 
                 delegate: RippleButton {
@@ -289,7 +294,8 @@ Item {
                     leftPadding: Metrics.spacingM
                     rightPadding: Metrics.spacingM
                     buttonRadius: Metrics.cornerM
-                    containerColor: results.currentIndex === index ? Appearance.colors.colSecondaryContainer :
+                    containerColor: results.currentIndex === index ? Appearance.applyAlpha(
+                                                                         Appearance.colors.colPrimary, 0.24) :
                                                                      "transparent"
                     hoverStateLayerOpacity: Appearance.interaction.hoverStateLayerOpacity
                     pressedStateLayerOpacity: Appearance.interaction.pressedStateLayerOpacity
@@ -300,7 +306,7 @@ Item {
                     onClicked: root.activate(index)
                     onHoveredChanged: {
                         if (hovered)
-                            results.currentIndex = index;
+                        results.currentIndex = index;
                     }
 
                     contentItem: RowLayout {
@@ -308,7 +314,8 @@ Item {
                         MaterialSymbol {
                             text: result.modelData.icon
                             iconSize: Metrics.iconM
-                            color: Appearance.colors.colOnSurfaceVariant
+                            color: results.currentIndex === result.index ? Appearance.colors.colPrimary :
+                                                                           Appearance.colors.colOnSurfaceVariant
                         }
                         ColumnLayout {
                             Layout.fillWidth: true

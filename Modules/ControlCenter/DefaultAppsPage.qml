@@ -8,9 +8,15 @@ import qs.Widgets.common
 StyledFlickable {
     id: root
 
+    property string sectionFilter: ""
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
+    }
+
     clip: true
     contentWidth: width
-    contentHeight: contentColumn.y + contentColumn.implicitHeight + Metrics.pageMargin
+    contentHeight: contentColumn.y + contentColumn.implicitHeight + Metrics.settingsPageMargin
 
     readonly property real pageContentWidth: 640
 
@@ -119,13 +125,14 @@ StyledFlickable {
     ColumnLayout {
         id: contentColumn
 
-        width: Math.min(root.pageContentWidth, Math.max(0, root.width - Metrics.pageMargin * 2))
-        x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
-        y: Metrics.pageMargin
-        spacing: Metrics.spacingXL
+        width: Math.min(root.pageContentWidth, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
+        spacing: Metrics.settingsGroupSpacing
 
         DefaultAppsGroup {
             id: extraSearchSection0
+            visible: root.showsSection("internet")
             Layout.fillWidth: true
             groupTitle: extraSearchAnchor0.title
             SettingsSearchAnchor {
@@ -149,6 +156,7 @@ StyledFlickable {
 
         DefaultAppsGroup {
             id: extraSearchSection1
+            visible: root.showsSection("utilities")
             Layout.fillWidth: true
             groupTitle: extraSearchAnchor1.title
             SettingsSearchAnchor {
@@ -172,6 +180,7 @@ StyledFlickable {
 
         DefaultAppsGroup {
             id: extraSearchSection2
+            visible: root.showsSection("documents")
             Layout.fillWidth: true
             groupTitle: extraSearchAnchor2.title
             SettingsSearchAnchor {
@@ -195,6 +204,7 @@ StyledFlickable {
 
         DefaultAppsGroup {
             id: extraSearchSection3
+            visible: root.showsSection("multimedia")
             Layout.fillWidth: true
             groupTitle: extraSearchAnchor3.title
             SettingsSearchAnchor {

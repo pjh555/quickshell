@@ -18,8 +18,8 @@ TabButton {
     property bool expanded: false
     property bool showToggledHighlight: true
     property color iconContainerColor: IconPalette.backgroundFor(root.buttonIcon)
-    property real baseSize: 48
-    property real baseHighlightHeight: 48
+    property real baseSize: 46
+    property real baseHighlightHeight: 46
 
     Layout.fillWidth: true
     implicitWidth: baseSize
@@ -36,10 +36,11 @@ TabButton {
         Rectangle {
             anchors.fill: parent
             radius: Metrics.cornerS
-            color: root.toggled ? Appearance.colors.colPrimaryContainer : root.down ? Appearance.colors.colLayer1Active :
-                                                                                      root.hovered
-                                                                                      ? Appearance.colors.colLayer1Hover :
-                                                                                        "transparent"
+            color: root.toggled ? Appearance.applyAlpha(Appearance.colors.colPrimary, 0.24) : root.down
+                                  ? Appearance.colors.colLayer1Active : root.hovered
+                                    ? Appearance.colors.colLayer1Hover : "transparent"
+            border.width: root.toggled ? 1 : 0
+            border.color: Appearance.applyAlpha(Appearance.colors.colPrimary, 0.46)
 
             Behavior on color {
                 ColorAnimation {
@@ -92,13 +93,13 @@ TabButton {
             anchors.rightMargin: Metrics.spacingM
             anchors.verticalCenter: parent.verticalCenter
             text: root.buttonText
-            color: Appearance.colors.colOnLayer1
+            color: root.toggled ? Appearance.colors.colOnSurface : Appearance.colors.colOnLayer1
             font.family: Typography.bodyLarge.family
             font.pixelSize: Typography.bodyLarge.pixelSize
             font.weight: root.toggled ? Font.DemiBold : Font.Medium
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
-            opacity: root.expanded ? 1 : 0
+            opacity: root.expanded ? (root.toggled ? 1 : 0.78) : 0
 
             Behavior on opacity {
                 NumberAnimation {

@@ -9,6 +9,7 @@ import qs.Widgets.common
 Item {
     id: root
 
+    property string sectionFilter: ""
     property int searchRequestSerial: -1
     readonly property var searchLeaf: currentSection === "overview" ? overviewFlickable : pageLoader.item ? (
                                                                                                                 pageLoader.item.searchLeaf
@@ -40,6 +41,10 @@ Item {
     property string currentSection: "overview"
     property string editingDirectoryKey: ""
     property var editingDirectoryField: null
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
+    }
 
     function directoryValue(key) {
         return String(UiPreferences[key] || "");
@@ -95,13 +100,14 @@ Item {
         ColumnLayout {
             id: contentColumn
 
-            width: Math.min(600, Math.max(1, overviewFlickable.width - 48))
-            x: Math.max(24, (overviewFlickable.width - width) / 2)
-            y: 28
-            spacing: 30
+            width: Math.min(680, Math.max(1, overviewFlickable.width - Metrics.settingsPageMargin * 2))
+            x: Math.max(Metrics.settingsPageMargin, (overviewFlickable.width - width) / 2)
+            y: Metrics.settingsPageMargin
+            spacing: Metrics.settingsGroupSpacing
 
             KeystoneSection {
                 id: searchSection0
+                visible: root.showsSection("keystone-style")
                 title: searchAnchor0.title
                 SettingsSearchAnchor {
                     id: searchAnchor0
@@ -137,8 +143,8 @@ Item {
                     value: PersonalizationConfig.keystoneStyle
                     placeholder: qsTr("Choose Keystone style")
                     onAccepted: value => {
-                        return PersonalizationConfig.setKeystoneStyle(value);
-                    }
+                                    return PersonalizationConfig.setKeystoneStyle(value);
+                                }
                 }
 
                 SettingsRow {
@@ -158,14 +164,15 @@ Item {
                     trailing: EdgePositionSelector {
                         position: PersonalizationConfig.keystonePosition
                         onPositionSelected: position => {
-                            return PersonalizationConfig.setKeystonePosition(position);
-                        }
+                                                return PersonalizationConfig.setKeystonePosition(position);
+                                            }
                     }
                 }
             }
 
             KeystoneSection {
                 id: dimensionsSection
+                visible: root.showsSection("size-spacing")
                 Layout.fillWidth: true
                 title: dimensionsSearchAnchor.title
                 iconName: "space_bar"
@@ -253,6 +260,7 @@ Item {
 
             KeystoneSection {
                 id: searchSection1
+                visible: root.showsSection("mouse-actions")
                 title: searchAnchor1.title
                 SettingsSearchAnchor {
                     id: searchAnchor1
@@ -308,6 +316,7 @@ Item {
 
             KeystoneSection {
                 id: mediaSection
+                visible: root.showsSection("media-controls")
                 title: mediaSearchAnchor.title
                 iconName: "music_note"
 
@@ -341,7 +350,7 @@ Item {
             }
 
             KeystoneSection {
-                visible: PersonalizationConfig.keystoneFullDisplay
+                visible: root.showsSection("keystone-style") && PersonalizationConfig.keystoneFullDisplay
                 title: qsTr("Status items")
                 iconName: "view_week"
 
@@ -417,7 +426,7 @@ Item {
 
             KeystoneSection {
                 id: extraSearchSection0
-                visible: KeyboardLockService.available
+                visible: root.showsSection("keyboard-indicators") && KeyboardLockService.available
                 title: extraSearchAnchor0.title
                 SettingsSearchAnchor {
                     id: extraSearchAnchor0
@@ -450,6 +459,7 @@ Item {
 
             KeystoneSection {
                 id: extraSearchSection1
+                visible: root.showsSection("keyhole")
                 title: extraSearchAnchor1.title
                 SettingsSearchAnchor {
                     id: extraSearchAnchor1
@@ -470,6 +480,7 @@ Item {
 
             KeystoneSection {
                 id: searchSection2
+                visible: root.showsSection("horizontal-clock")
                 title: searchAnchor2.title
                 SettingsSearchAnchor {
                     id: searchAnchor2
@@ -518,6 +529,7 @@ Item {
 
             KeystoneSection {
                 id: searchSection3
+                visible: root.showsSection("recording")
                 title: searchAnchor3.title
                 SettingsSearchAnchor {
                     id: searchAnchor3
@@ -715,8 +727,8 @@ Item {
                 textRole: "label"
                 valueRole: "value"
                 onAccepted: value => {
-                    return selectRow.accepted(value);
-                }
+                                return selectRow.accepted(value);
+                            }
             }
         }
     }

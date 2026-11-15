@@ -29,11 +29,27 @@ Item {
     property bool presentationActive: false
     property string selectedBluetoothAddress: ""
     property string selectedBluetoothAdapterId: ""
+    readonly property var hierarchicalSectionSources: ({
+                                                           "displays": "DisplaysSettingsPage.qml",
+                                                           "bar": "BarSettingsPage.qml",
+                                                           "dock": "DockSettingsPage.qml",
+                                                           "sidebar": "SidebarSettingsPage.qml",
+                                                           "spotlight": "SpotlightSettingsPage.qml",
+                                                           "effects": "EffectsSettingsPage.qml",
+                                                           "shortcuts": "ShortcutsSettingsPage.qml",
+                                                           "language-region": "LanguageRegionSettingsPage.qml",
+                                                           "autostart": "AutostartSettingsPage.qml",
+                                                           "default-apps": "DefaultAppsSettingsPage.qml",
+                                                           "network": "NetworkSettingsPage.qml",
+                                                           "connected-devices":
+                                                           "ConnectedDevicesSettingsPage.qml"
+                                                       })
 
     onCurrentSectionChanged: {
         if (ControlCenterService.searchTarget && !ControlCenterService.applyingSearch && searchRequestSerial
-                === ControlCenterService.searchSerial)
+            === ControlCenterService.searchSerial) {
             ControlCenterService.cancelSearch();
+        }
         ControlCenterService.retrySearch();
     }
 
@@ -41,10 +57,10 @@ Item {
 
     function selectedBluetoothDevice() {
         return BluetoothService.devices.find(device => {
-            return device.address === root.selectedBluetoothAddress && (
-                        root.selectedBluetoothAdapterId.length === 0 || device.adapterId
-                        === root.selectedBluetoothAdapterId);
-        }) || null;
+                                                 return device.address === root.selectedBluetoothAddress && (
+                                                     root.selectedBluetoothAdapterId.length === 0
+                                                     || device.adapterId === root.selectedBluetoothAdapterId);
+                                             }) || null;
     }
 
     function openSection(section) {
@@ -89,10 +105,12 @@ Item {
 
             anchors.left: parent.left
             anchors.right: parent.right
+            implicitHeight: visible ? 52 : 0
+            visible: !pageLoader.item || !("detailOpen" in pageLoader.item) || !pageLoader.item.detailOpen
             title: {
                 const route = SpotlightCatalog.route("general." + section);
                 if (route)
-                    return SpotlightCatalog.title(route.id);
+                return SpotlightCatalog.title(route.id);
                 if (section === "bluetooth-device") {
                     const device = root.selectedBluetoothDevice();
                     return device ? device.name : qsTr("Bluetooth device");
@@ -102,7 +120,7 @@ Item {
             iconName: {
                 const route = SpotlightCatalog.route("general." + section);
                 if (route)
-                    return route.icon;
+                return route.icon;
                 return section === "bluetooth-device" ? BluetoothDeviceIcon.iconName(
                                                             root.selectedBluetoothDevice()) : "settings";
             }
@@ -122,30 +140,32 @@ Item {
         headerComponent: root.currentSection === "overview" ? null : subpageHeader
         source: {
             const route = SpotlightCatalog.route("general." + root.currentSection);
-            if (route)
-                return Qt.resolvedUrl(route.source);
+            if (route) {
+                const hierarchicalSource = root.hierarchicalSectionSources[root.currentSection];
+                return Qt.resolvedUrl(hierarchicalSource || route.source);
+            }
             return Qt.resolvedUrl(root.currentSection === "bluetooth-device" ? "BluetoothDevicePage.qml" :
                                                                                "GeneralOverviewPage.qml");
         }
         onLoaded: {
             ControlCenterService.retrySearch();
             if (!item)
-                return;
+            return;
 
             if ("parentModal" in item)
-                item.parentModal = root.parentModal;
+            item.parentModal = root.parentModal;
 
             const page = item;
             if ("presentationActive" in page)
-                page.presentationActive = Qt.binding(function () {
-                    return root.presentationActive && pageLoader.item === page;
-                });
+            page.presentationActive = Qt.binding(function () {
+                return root.presentationActive && pageLoader.item === page;
+            });
 
             if ("deviceAddress" in item)
-                item.deviceAddress = root.selectedBluetoothAddress;
+            item.deviceAddress = root.selectedBluetoothAddress;
 
             if ("deviceAdapterId" in item)
-                item.deviceAdapterId = root.selectedBluetoothAdapterId;
+            item.deviceAdapterId = root.selectedBluetoothAdapterId;
         }
     }
 

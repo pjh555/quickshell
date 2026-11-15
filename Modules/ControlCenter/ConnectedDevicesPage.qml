@@ -8,9 +8,17 @@ import qs.Widgets.common
 StyledFlickable {
     id: root
 
+    property string sectionFilter: ""
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
+    }
+
     readonly property var savedDevices: BluetoothService.devices.filter(device => {
-        return device.paired || device.bonded || device.trusted;
-    })
+                                                                            return device.paired
+                                                                            || device.bonded
+                                                                            || device.trusted;
+                                                                        })
     readonly property string statusMessage: {
         if (BluetoothService.lastError.length > 0)
             return BluetoothService.lastError;
@@ -40,14 +48,14 @@ StyledFlickable {
 
     clip: true
     contentWidth: width
-    contentHeight: contentColumn.implicitHeight + Metrics.pageMargin * 2
+    contentHeight: contentColumn.implicitHeight + Metrics.settingsPageMargin * 2
 
     ColumnLayout {
         id: contentColumn
 
-        width: Math.min(640, Math.max(0, root.width - Metrics.pageMargin * 2))
-        x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
-        y: Metrics.pageMargin
+        width: Math.min(680, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
         spacing: Metrics.spacingL
 
         InlineStatusBanner {
@@ -59,6 +67,7 @@ StyledFlickable {
 
         SettingsSection {
             Layout.fillWidth: true
+            visible: root.showsSection("saved-devices")
 
             SettingsRow {
                 Layout.fillWidth: true
@@ -75,6 +84,7 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection0
+            visible: root.showsSection("saved-devices")
             Layout.fillWidth: true
             title: searchAnchor0.title
             SettingsSearchAnchor {
@@ -131,7 +141,7 @@ StyledFlickable {
         SettingsSection {
             id: searchSection1
             Layout.fillWidth: true
-            visible: BluetoothService.adapters.length > 1
+            visible: root.showsSection("bluetooth-adapter") && BluetoothService.adapters.length > 1
             title: searchAnchor1.title
             SettingsSearchAnchor {
                 id: searchAnchor1
@@ -169,6 +179,7 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection2
+            visible: root.showsSection("advanced-settings")
             Layout.fillWidth: true
             title: searchAnchor2.title
             SettingsSearchAnchor {

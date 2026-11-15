@@ -10,11 +10,12 @@ RippleButton {
     property string iconName: ""
     property string trailingIconName: "chevron_right"
     property string description: ""
+    property string valueText: ""
     property bool showDivider: true
     property color iconContainerColor: IconPalette.backgroundFor(root.iconName)
     property color iconColor: IconPalette.foregroundFor(root.iconName)
 
-    implicitHeight: description === "" ? Metrics.controlHeightXL : 68
+    implicitHeight: description === "" ? 50 : 62
     leftPadding: Metrics.spacingS
     rightPadding: Metrics.spacingS
     topPadding: 0
@@ -37,15 +38,15 @@ RippleButton {
 
             Rectangle {
                 visible: root.iconName !== ""
-                Layout.preferredWidth: 32
-                Layout.preferredHeight: 32
-                radius: 8
+                Layout.preferredWidth: 30
+                Layout.preferredHeight: 30
+                radius: 7
                 color: root.iconContainerColor
 
                 MaterialSymbol {
                     anchors.centerIn: parent
                     text: root.iconName
-                    iconSize: 20
+                    iconSize: 19
                     fill: 1
                     color: root.iconColor
                 }
@@ -76,6 +77,18 @@ RippleButton {
                 }
             }
 
+            Text {
+                visible: root.valueText !== ""
+                Layout.maximumWidth: Math.max(72, root.width * 0.32)
+                text: root.valueText
+                color: Appearance.colors.colOnSurfaceVariant
+                font.family: Typography.bodyMedium.family
+                font.pixelSize: Typography.bodyMedium.pixelSize
+                elide: Text.ElideRight
+                horizontalAlignment: Text.AlignRight
+                verticalAlignment: Text.AlignVCenter
+            }
+
             Item {
                 Layout.preferredWidth: Metrics.iconM
                 Layout.fillHeight: true
@@ -92,13 +105,13 @@ RippleButton {
 
         Rectangle {
             anchors.left: parent.left
-            anchors.leftMargin: root.iconName !== "" ? 44 : Metrics.spacingXS
+            anchors.leftMargin: root.iconName !== "" ? 42 : Metrics.spacingXS
             anchors.right: parent.right
             anchors.rightMargin: Metrics.spacingXS
             anchors.bottom: parent.bottom
             height: Metrics.dividerWidth
             visible: root.showDivider
-            color: Appearance.applyAlpha(Appearance.colors.colOutlineVariant, 0.5)
+            color: Appearance.applyAlpha(Appearance.macos.textPrimary, 0.12)
         }
     }
 }

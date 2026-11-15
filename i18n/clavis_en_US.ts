@@ -16340,4 +16340,487 @@ Windows: </translation>
         <translation>Open Home Folder</translation>
     </message>
 </context>
+<context>
+    <name>SettingsBusinessHub</name>
+    <message>
+        <location filename="../Modules/ControlCenter/SettingsBusinessHub.qml" line="205"/>
+        <source>Back to settings categories</source>
+        <translation>Back to settings categories</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="15"/>
+        <source>Account</source>
+        <translation>Account</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="19"/>
+        <source>Profile and devices</source>
+        <translation>Profile and devices</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="24"/>
+        <location filename="../Modules/ControlCenter/LanguageRegionSettingsPage.qml" line="7"/>
+        <source>Language &amp; region</source>
+        <translation>Language &amp; region</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="32"/>
+        <location filename="../Modules/ControlCenter/NetworkSettingsPage.qml" line="8"/>
+        <source>Connections</source>
+        <translation>Connections</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="36"/>
+        <source>Bluetooth devices</source>
+        <translation>Bluetooth devices</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="41"/>
+        <location filename="../Modules/ControlCenter/AdvancedSettingsPage.qml" line="16"/>
+        <source>Cloud storage</source>
+        <translation>Cloud storage</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="48"/>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="52"/>
+        <source>Personalization</source>
+        <translation>Personalization</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AccountSettingsPage.qml" line="57"/>
+        <location filename="../Modules/ControlCenter/ShortcutsSettingsPage.qml" line="7"/>
+        <source>Keyboard shortcuts</source>
+        <translation>Keyboard shortcuts</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AdvancedSettingsPage.qml" line="7"/>
+        <source>Services</source>
+        <translation>Services</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AdvancedSettingsPage.qml" line="11"/>
+        <source>Map and weather services</source>
+        <translation>Map and weather services</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AdvancedSettingsPage.qml" line="23"/>
+        <source>Generation</source>
+        <translation>Generation</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AdvancedSettingsPage.qml" line="27"/>
+        <source>Matugen templates</source>
+        <translation>Matugen templates</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="7"/>
+        <source>Connection</source>
+        <translation>Connection</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="11"/>
+        <source>Agent backend</source>
+        <translation>Agent backend</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="16"/>
+        <source>Provider</source>
+        <translation>Provider</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="23"/>
+        <source>Capabilities</source>
+        <translation>Capabilities</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="27"/>
+        <source>Computer control</source>
+        <translation>Computer control</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="32"/>
+        <source>MCP servers</source>
+        <translation>MCP servers</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="37"/>
+        <source>Agent skills</source>
+        <translation>Agent skills</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="44"/>
+        <source>Presence</source>
+        <translation>Presence</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="48"/>
+        <source>Desktop pet</source>
+        <translation>Desktop pet</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AgentSettingsPage.qml" line="53"/>
+        <source>Conversation</source>
+        <translation>Conversation</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AutostartSettingsPage.qml" line="7"/>
+        <source>Autostart</source>
+        <translation>Autostart</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AutostartSettingsPage.qml" line="11"/>
+        <location filename="../Modules/ControlCenter/SpotlightSettingsPage.qml" line="11"/>
+        <source>Applications</source>
+        <translation>Applications</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/AutostartSettingsPage.qml" line="16"/>
+        <source>Add application</source>
+        <translation>Add application</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/BarSettingsPage.qml" line="7"/>
+        <source>Bar</source>
+        <translation>Bar</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/BarSettingsPage.qml" line="11"/>
+        <source>Position</source>
+        <translation>Position</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/BarSettingsPage.qml" line="16"/>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="26"/>
+        <source>Size and spacing</source>
+        <translation>Size and spacing</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/BarSettingsPage.qml" line="21"/>
+        <source>Components</source>
+        <translation>Components</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ConnectedDevicesSettingsPage.qml" line="8"/>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ConnectedDevicesSettingsPage.qml" line="12"/>
+        <source>Saved devices</source>
+        <translation>Saved devices</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ConnectedDevicesSettingsPage.qml" line="20"/>
+        <source>Bluetooth adapter</source>
+        <translation>Bluetooth adapter</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ConnectedDevicesSettingsPage.qml" line="25"/>
+        <source>Advanced settings</source>
+        <translation>Advanced settings</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DefaultAppsSettingsPage.qml" line="7"/>
+        <source>Default applications</source>
+        <translation>Default applications</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DefaultAppsSettingsPage.qml" line="11"/>
+        <source>Internet</source>
+        <translation>Internet</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DefaultAppsSettingsPage.qml" line="16"/>
+        <source>Utilities</source>
+        <translation>Utilities</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DefaultAppsSettingsPage.qml" line="21"/>
+        <source>Documents</source>
+        <translation>Documents</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DefaultAppsSettingsPage.qml" line="26"/>
+        <source>Multimedia</source>
+        <translation>Multimedia</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DisplaysSettingsPage.qml" line="7"/>
+        <source>Displays</source>
+        <translation>Displays</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DockSettingsPage.qml" line="7"/>
+        <source>Dock</source>
+        <translation>Dock</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DockSettingsPage.qml" line="11"/>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="16"/>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="8"/>
+        <source>Appearance</source>
+        <translation>Appearance</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DockSettingsPage.qml" line="16"/>
+        <source>Behavior</source>
+        <translation>Behavior</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/DockSettingsPage.qml" line="21"/>
+        <source>Window previews</source>
+        <translation>Window previews</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/EffectsSettingsPage.qml" line="7"/>
+        <source>Visual effects</source>
+        <translation>Visual effects</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/EffectsSettingsPage.qml" line="11"/>
+        <source>Background transparency and blur</source>
+        <translation>Background transparency and blur</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="20"/>
+        <source>Keystone style</source>
+        <translation>Keystone style</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="31"/>
+        <source>Horizontal clock</source>
+        <translation>Horizontal clock</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="41"/>
+        <source>Interaction</source>
+        <translation>Interaction</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="45"/>
+        <source>Mouse actions</source>
+        <translation>Mouse actions</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="50"/>
+        <source>Media controls</source>
+        <translation>Media controls</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="55"/>
+        <source>Keyhole</source>
+        <translation>Keyhole</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="62"/>
+        <source>System</source>
+        <translation>System</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="66"/>
+        <source>Keyboard indicators</source>
+        <translation>Keyboard indicators</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/KeystoneSettingsPage.qml" line="72"/>
+        <source>Recording</source>
+        <translation>Recording</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/LanguageRegionSettingsPage.qml" line="11"/>
+        <source>Language</source>
+        <translation>Language</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/LanguageRegionSettingsPage.qml" line="16"/>
+        <source>Region &amp; weather location</source>
+        <translation>Region &amp; weather location</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/LanguageRegionSettingsPage.qml" line="21"/>
+        <source>Units</source>
+        <translation>Units</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/LanguageRegionSettingsPage.qml" line="26"/>
+        <source>Time &amp; date</source>
+        <translation>Time &amp; date</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/LanguageRegionSettingsPage.qml" line="33"/>
+        <source>Weather</source>
+        <translation>Weather</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/LanguageRegionSettingsPage.qml" line="37"/>
+        <source>Weather map</source>
+        <translation>Weather map</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/NetworkSettingsPage.qml" line="12"/>
+        <source>Wi-Fi</source>
+        <translation>Wi-Fi</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/NetworkSettingsPage.qml" line="19"/>
+        <source>Wired connections</source>
+        <translation>Wired connections</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/NetworkSettingsPage.qml" line="26"/>
+        <source>Details</source>
+        <translation>Details</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/NetworkSettingsPage.qml" line="30"/>
+        <source>Connection information</source>
+        <translation>Connection information</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/NetworkSettingsPage.qml" line="35"/>
+        <source>Other settings</source>
+        <translation>Other settings</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ShortcutsSettingsPage.qml" line="11"/>
+        <source>All shortcuts</source>
+        <translation>All shortcuts</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ShortcutsSettingsPage.qml" line="18"/>
+        <source>Assigned shortcuts</source>
+        <translation>Assigned shortcuts</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ShortcutsSettingsPage.qml" line="25"/>
+        <source>Managed shortcuts</source>
+        <translation>Managed shortcuts</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ShortcutsSettingsPage.qml" line="32"/>
+        <source>Unassigned shortcuts</source>
+        <translation>Unassigned shortcuts</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SidebarSettingsPage.qml" line="7"/>
+        <location filename="../Modules/ControlCenter/SidebarSettingsPage.qml" line="11"/>
+        <source>Sidebars</source>
+        <translation>Sidebars</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SidebarSettingsPage.qml" line="16"/>
+        <source>Clock style</source>
+        <translation>Clock style</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SidebarSettingsPage.qml" line="23"/>
+        <source>Cards</source>
+        <translation>Cards</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SidebarSettingsPage.qml" line="27"/>
+        <source>Desktop card layout</source>
+        <translation>Desktop card layout</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SidebarSettingsPage.qml" line="32"/>
+        <source>System cards</source>
+        <translation>System cards</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SpotlightSettingsPage.qml" line="7"/>
+        <source>Spotlight</source>
+        <translation>Spotlight</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SpotlightSettingsPage.qml" line="16"/>
+        <source>Web search</source>
+        <translation>Web search</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/SpotlightSettingsPage.qml" line="21"/>
+        <source>Clipboard</source>
+        <translation>Clipboard</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="12"/>
+        <source>Color scheme</source>
+        <translation>Color scheme</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="14"/>
+        <source>Light</source>
+        <translation>Light</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="15"/>
+        <source>Dark</source>
+        <translation>Dark</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="20"/>
+        <source>Icons</source>
+        <translation>Icons</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="25"/>
+        <source>Fonts</source>
+        <translation>Fonts</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="30"/>
+        <source>Cursor</source>
+        <translation>Cursor</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="37"/>
+        <source>Interface</source>
+        <translation>Interface</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="41"/>
+        <source>Settings window</source>
+        <translation>Settings window</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="46"/>
+        <source>Super key</source>
+        <translation>Super key</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/ThemeSettingsPage.qml" line="51"/>
+        <source>Lock screen</source>
+        <translation>Lock screen</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/WallpaperSettingsPage.qml" line="7"/>
+        <source>Backgrounds</source>
+        <translation>Backgrounds</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/WallpaperSettingsPage.qml" line="11"/>
+        <source>Desktop wallpaper</source>
+        <translation>Desktop wallpaper</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/WallpaperSettingsPage.qml" line="16"/>
+        <source>Overview background</source>
+        <translation>Overview background</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/WallpaperSettingsPage.qml" line="23"/>
+        <source>Motion</source>
+        <translation>Motion</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/WallpaperSettingsPage.qml" line="27"/>
+        <source>Transition</source>
+        <translation>Transition</translation>
+    </message>
+    <message>
+        <location filename="../Modules/ControlCenter/WallpaperSettingsPage.qml" line="32"/>
+        <source>Parallax effects</source>
+        <translation>Parallax effects</translation>
+    </message>
+</context>
 </TS>

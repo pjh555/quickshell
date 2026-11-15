@@ -7,23 +7,29 @@ import qs.Widgets.common
 StyledFlickable {
     id: root
 
+    property string sectionFilter: ""
     readonly property bool horizontalBar: PersonalizationConfig.barPosition === "top"
                                           || PersonalizationConfig.barPosition === "bottom"
 
     clip: true
     contentWidth: width
-    contentHeight: contentColumn.implicitHeight + Metrics.pageMargin * 2
+    contentHeight: contentColumn.implicitHeight + Metrics.settingsPageMargin * 2
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
+    }
 
     ColumnLayout {
         id: contentColumn
 
-        width: Math.min(640, Math.max(0, root.width - Metrics.pageMargin * 2))
-        x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
-        y: Metrics.pageMargin
+        width: Math.min(680, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
         spacing: Metrics.spacingL
 
         SettingsSection {
             id: searchSection0
+            visible: root.showsSection("position")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor0.title
@@ -62,14 +68,15 @@ StyledFlickable {
                 trailing: EdgePositionSelector {
                     position: PersonalizationConfig.barPosition
                     onPositionSelected: position => {
-                        return PersonalizationConfig.setBarPosition(position);
-                    }
+                                            return PersonalizationConfig.setBarPosition(position);
+                                        }
                 }
             }
         }
 
         SettingsSection {
             id: dimensionsSection
+            visible: root.showsSection("size-spacing")
             Layout.fillWidth: true
             flat: true
             title: dimensionsSearchAnchor.title
@@ -149,6 +156,7 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection1
+            visible: root.showsSection("components")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor1.title
@@ -195,11 +203,11 @@ StyledFlickable {
                     zone: "leading"
                     dragCoordinator: dragCoordinator
                     onToggled: componentId => {
-                        return PersonalizationConfig.toggleBarComponent(componentId, zone);
-                    }
+                                   return PersonalizationConfig.toggleBarComponent(componentId, zone);
+                               }
                     onRemoved: componentId => {
-                        return PersonalizationConfig.removeBarComponent(componentId);
-                    }
+                                   return PersonalizationConfig.removeBarComponent(componentId);
+                               }
                 }
             }
 
@@ -218,11 +226,11 @@ StyledFlickable {
                     zone: "trailing"
                     dragCoordinator: dragCoordinator
                     onToggled: componentId => {
-                        return PersonalizationConfig.toggleBarComponent(componentId, zone);
-                    }
+                                   return PersonalizationConfig.toggleBarComponent(componentId, zone);
+                               }
                     onRemoved: componentId => {
-                        return PersonalizationConfig.removeBarComponent(componentId);
-                    }
+                                   return PersonalizationConfig.removeBarComponent(componentId);
+                               }
                 }
             }
 
@@ -251,11 +259,11 @@ StyledFlickable {
                     zone: "quickSettings"
                     dragCoordinator: quickSettingsDragCoordinator
                     onToggled: componentId => {
-                        return PersonalizationConfig.toggleQuickSettingsComponent(componentId);
-                    }
+                                   return PersonalizationConfig.toggleQuickSettingsComponent(componentId);
+                               }
                     onRemoved: componentId => {
-                        return PersonalizationConfig.removeQuickSettingsComponent(componentId);
-                    }
+                                   return PersonalizationConfig.removeQuickSettingsComponent(componentId);
+                               }
                 }
             }
         }
@@ -268,8 +276,8 @@ StyledFlickable {
         z: 1000
         fields: [leadingField, trailingField]
         onDropped: (componentId, targetZone, targetIndex) => {
-            return PersonalizationConfig.moveBarComponent(componentId, targetZone, targetIndex);
-        }
+                       return PersonalizationConfig.moveBarComponent(componentId, targetZone, targetIndex);
+                   }
     }
 
     BarLayoutDragCoordinator {
@@ -279,7 +287,7 @@ StyledFlickable {
         z: 1001
         fields: [quickSettingsField]
         onDropped: (componentId, targetZone, targetIndex) => {
-            return PersonalizationConfig.moveQuickSettingsComponent(componentId, targetIndex);
-        }
+                       return PersonalizationConfig.moveQuickSettingsComponent(componentId, targetIndex);
+                   }
     }
 }

@@ -42,12 +42,12 @@ StyledFlickable {
     clip: true
     interactive: !layoutCanvas.dragging
     contentWidth: width
-    contentHeight: content.implicitHeight + Metrics.pageMargin * 2
+    contentHeight: content.implicitHeight + Metrics.settingsPageMargin * 2
     ColumnLayout {
         id: content
-        width: Math.min(640, Math.max(0, root.width - Metrics.pageMargin * 2))
-        x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
-        y: Metrics.pageMargin
+        width: Math.min(680, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
         spacing: Metrics.spacingL
         NiriSetupPrompt {
             Layout.fillWidth: true
@@ -121,9 +121,12 @@ StyledFlickable {
                 title: qsTr("Display")
                 value: DisplayConfigService.selection
                 options: DisplayConfigService.draft.filter(r => !r.deleted).map(r => ({
-                    value: r.key,
-                    label: r.connected ? r.label : qsTr("%1 (disconnected)").arg(r.label)
-                }))
+                                                                                          value: r.key,
+                                                                                          label: r.connected
+                                                                                                 ? r.label :
+                                                                                                   qsTr("%1 (disconnected)").arg(
+                                                                                                       r.label)
+                                                                                      }))
                 onSelected: value => DisplayConfigService.selection = value
             }
 
@@ -138,7 +141,7 @@ StyledFlickable {
                         checked: root.settings.enabled !== false
                         enabled: !root.selected || !root.selected.connected || !checked
                                  || DisplayConfigService.draft.filter(r => r.connected && r.settings.enabled
-                                                                           !== false).length > 1
+                                                                      !== false).length > 1
                         Accessible.name: qsTr("Enabled")
                         onToggled: root.edit("enabled", checked)
                     }
@@ -150,10 +153,16 @@ StyledFlickable {
                     value: root.settings.mode || ""
                     placeholder: root.settings.mode || ""
                     options: root.selected && root.selected.live ? root.selected.live.modes.map(m => ({
-                        value: Config.modeString(m),
-                        label: qsTr("%1 × %2 · %3 Hz").arg(m.width).arg(m.height).arg((m.refreshMilliHz
-                                                                                       / 1000).toFixed(3))
-                    })) : []
+                                                                                                          value: Config.modeString(
+                                                                                                                     m),
+                                                                                                          label: qsTr(
+                                                                                                                     "%1 × %2 · %3 Hz").arg(
+                                                                                                                     m.width).arg(
+                                                                                                                     m.height).arg(
+                                                                                                                     (m.refreshMilliHz
+                                                                                                                      / 1000).toFixed(
+                                                                                                                         3))
+                                                                                                      })) : []
                     onSelected: value => root.edit("mode", value)
                 }
                 DisplayChoice {
@@ -163,9 +172,9 @@ StyledFlickable {
                     options: {
                         const values = [1, 1.25, 1.5, 1.75, 2, 2.5, 3];
                         const result = values.map(v => ({
-                            value: String(v),
-                            label: Math.round(v * 100) + "%"
-                        }));
+                                                            value: String(v),
+                                                            label: Math.round(v * 100) + "%"
+                                                        }));
                         const current = root.settings.scale || 1;
                         if (values.indexOf(current) < 0)
                             result.push({
@@ -180,14 +189,14 @@ StyledFlickable {
                         return result;
                     }
                     onSelected: value => {
-                        if (value === "custom") {
-                            scaleDialog.inputText = String(Math.round((root.settings.scale || 1) * 1000000)
-                                                           / 10000);
-                            scaleDialog.showWindow();
-                        } else {
-                            root.edit("scale", Number(value));
-                        }
-                    }
+                                    if (value === "custom") {
+                                        scaleDialog.inputText = String(Math.round((root.settings.scale || 1)
+                                                                                  * 1000000) / 10000);
+                                        scaleDialog.showWindow();
+                                    } else {
+                                        root.edit("scale", Number(value));
+                                    }
+                                }
                 }
                 GridLayout {
                     Layout.fillWidth: true
@@ -350,9 +359,9 @@ StyledFlickable {
         function showWindow() {
             visible = true;
             Qt.callLater(() => {
-                percentInput.fieldItem.forceActiveFocus();
-                percentInput.fieldItem.selectAll();
-            });
+                             percentInput.fieldItem.forceActiveFocus();
+                             percentInput.fieldItem.selectAll();
+                         });
         }
         function dismiss() {
             visible = false;

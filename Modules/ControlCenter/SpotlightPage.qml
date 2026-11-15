@@ -7,6 +7,12 @@ import qs.Widgets.common
 StyledFlickable {
     id: root
 
+    property string sectionFilter: ""
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
+    }
+
     function closeChildWindows() {
         appStylePicker.closeMenu();
         appOrderPicker.closeMenu();
@@ -18,17 +24,18 @@ StyledFlickable {
 
     clip: true
     contentWidth: width
-    contentHeight: contentColumn.implicitHeight + Metrics.pageMargin * 2
+    contentHeight: contentColumn.implicitHeight + Metrics.settingsPageMargin * 2
 
     ColumnLayout {
         id: contentColumn
 
-        width: Math.min(640, Math.max(0, root.width - Metrics.pageMargin * 2))
-        x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
-        y: Metrics.pageMargin
+        width: Math.min(680, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
 
         SettingsSection {
             id: searchSection0
+            visible: root.showsSection("applications")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor0.title
@@ -98,6 +105,7 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection1
+            visible: root.showsSection("web-search")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor1.title
@@ -125,8 +133,8 @@ StyledFlickable {
                     leadingWidth: Metrics.iconM
                     Accessible.name: qsTr("Search engine")
                     onAccepted: value => {
-                        return UiPreferences.setSpotlightSearchEngine(value);
-                    }
+                                    return UiPreferences.setSpotlightSearchEngine(value);
+                                }
 
                     leadingDelegate: Component {
                         Image {
@@ -146,6 +154,7 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection2
+            visible: root.showsSection("clipboard")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor2.title

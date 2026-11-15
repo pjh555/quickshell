@@ -15,6 +15,7 @@ StyledFlickable {
     id: root
 
     property var parentModal: null
+    property string sectionFilter: ""
     clip: true
     contentWidth: width
     contentHeight: contentColumn.y + contentColumn.implicitHeight + 20
@@ -60,12 +61,19 @@ StyledFlickable {
                                                                        PersonalizationConfig.parallaxPreferredScale
     readonly property bool preferredScaleControlEnabled: !desktopUsesAwww && !panoramaSelected
     readonly property var desktopFillModeOptions: PersonalizationConfig.desktopFillModes.map(option => ({
-        "value": option.value,
-        "label": option.label,
-        "enabled": root.desktopFillModeOptionEnabled(option.value, root.desktopUsesAwww)
-    }))
+                                                                                                            "value": option.value,
+                                                                                                            "label": option.label,
+                                                                                                            "enabled":
+                                                                                                            root.desktopFillModeOptionEnabled(
+                                                                                                                option.value,
+                                                                                                                root.desktopUsesAwww)
+                                                                                                        }))
     readonly property real pageContentWidth: 600
     property real fillModeGroupRestingWidth: 0
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
+    }
 
     Component.onCompleted: WallpaperService.refreshOverviewBackdropRule()
 
@@ -157,8 +165,7 @@ StyledFlickable {
     }
 
     component FlatSettingsSection: SettingsSection {
-        color: "transparent"
-        radius: 0
+        flat: true
     }
 
     component WallpaperPreview: Item {
@@ -255,24 +262,25 @@ StyledFlickable {
                                "enabled": group.flipEnabled
                            })]
         onValueSelected: value => {
-            if (value === "play")
-                group.playClicked();
-            else if (value === "replay")
-                group.replayClicked();
-            else if (value === "flip")
-                group.flipClicked();
-        }
+                             if (value === "play")
+                             group.playClicked();
+                             else if (value === "replay")
+                             group.replayClicked();
+                             else if (value === "flip")
+                             group.flipClicked();
+                         }
     }
 
     ColumnLayout {
         id: contentColumn
         width: root.pageContentWidth
-        x: Math.max(24, (root.width - width) / 2)
-        y: 24
-        spacing: 30
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
+        spacing: Metrics.settingsGroupSpacing
 
         NiriSetupPrompt {
             Layout.fillWidth: true
+            visible: root.showsSection("overview-background")
             title: qsTr("Overview integration")
             description: qsTr(
                              "Create or connect backdrop rules and make the global workspace background transparent.")
@@ -285,8 +293,8 @@ StyledFlickable {
 
         InlineStatusBanner {
             Layout.fillWidth: true
-            visible: NiriConfigService.snapshot.overviewSatisfied === true && !NiriConfigService.ready(
-                         "layer-rules")
+            visible: root.showsSection("overview-background") && NiriConfigService.snapshot.overviewSatisfied
+                     === true && !NiriConfigService.ready("layer-rules")
             message: qsTr("Overview is already configured outside Clavis")
         }
 
@@ -417,13 +425,13 @@ StyledFlickable {
                                                })]
                             currentValue: ""
                             onValueSelected: value => {
-                                if (value === "previous")
-                                    WallpaperService.cyclePrevious();
-                                else if (value === "random")
-                                    WallpaperService.cycleRandom();
-                                else
-                                    WallpaperService.cycleNext();
-                            }
+                                                 if (value === "previous")
+                                                 WallpaperService.cyclePrevious();
+                                                 else if (value === "random")
+                                                 WallpaperService.cycleRandom();
+                                                 else
+                                                 WallpaperService.cycleNext();
+                                             }
                         }
                     }
                 }
@@ -436,7 +444,7 @@ StyledFlickable {
                     currentValue: root.currentDesktopFillMode
                     Component.onCompleted: root.fillModeGroupRestingWidth = implicitWidth
                     onValueSelected: value => WallpaperService.setWallpaperFillModeForScreen(
-                                                  root.selectedDesktopOutput, value)
+                                         root.selectedDesktopOutput, value)
                 }
 
                 FlatSettingsSection {
@@ -468,16 +476,21 @@ StyledFlickable {
 
         Loader {
             Layout.fillWidth: true
+            active: root.showsSection("current-wallpaper")
+            visible: active
             sourceComponent: currentWallpaperSectionComponent
         }
 
         Loader {
             Layout.fillWidth: true
+            active: root.showsSection("current-wallpaper")
+            visible: active
             sourceComponent: desktopManagerSectionComponent
         }
 
         Section {
             id: searchSection2
+            visible: root.showsSection("transition")
             title: searchAnchor2.title
             SettingsSearchAnchor {
                 id: searchAnchor2
@@ -522,11 +535,11 @@ StyledFlickable {
                                             PersonalizationConfig.wallpaperTransitionType
                             horizontalPadding: 24
                             onValueSelected: value => {
-                                if (root.desktopUsesAwww)
-                                    PersonalizationConfig.setAwwwDesktopTransitionType(value);
-                                else
-                                    WallpaperService.setWallpaperTransitionType(value);
-                            }
+                                                 if (root.desktopUsesAwww)
+                                                 PersonalizationConfig.setAwwwDesktopTransitionType(value);
+                                                 else
+                                                 WallpaperService.setWallpaperTransitionType(value);
+                                             }
                         }
 
                         StyledButtonGroup {
@@ -539,11 +552,11 @@ StyledFlickable {
                                             PersonalizationConfig.wallpaperTransitionType
                             horizontalPadding: 24
                             onValueSelected: value => {
-                                if (root.desktopUsesAwww)
-                                    PersonalizationConfig.setAwwwDesktopTransitionType(value);
-                                else
-                                    WallpaperService.setWallpaperTransitionType(value);
-                            }
+                                                 if (root.desktopUsesAwww)
+                                                 PersonalizationConfig.setAwwwDesktopTransitionType(value);
+                                                 else
+                                                 WallpaperService.setWallpaperTransitionType(value);
+                                             }
                         }
 
                         StyledButtonGroup {
@@ -553,7 +566,7 @@ StyledFlickable {
                             currentValue: PersonalizationConfig.awwwDesktopTransitionType
                             horizontalPadding: 24
                             onValueSelected: value => PersonalizationConfig.setAwwwDesktopTransitionType(
-                                                          value)
+                                                 value)
                         }
                     }
                 }
@@ -817,6 +830,7 @@ StyledFlickable {
 
         Section {
             id: searchSection3
+            visible: root.showsSection("parallax-effects")
             title: searchAnchor3.title
             SettingsSearchAnchor {
                 id: searchAnchor3
@@ -977,6 +991,7 @@ StyledFlickable {
 
         Section {
             id: searchSection4
+            visible: root.showsSection("overview-background")
             title: searchAnchor4.title
             SettingsSearchAnchor {
                 id: searchAnchor4
@@ -1010,7 +1025,7 @@ StyledFlickable {
                                         root.selectedOverviewOutput) :
                                     PersonalizationConfig.overviewWallpaperFillMode
                     onValueSelected: value => WallpaperService.setOverviewFillModeForScreen(
-                                                  root.selectedOverviewOutput, value)
+                                         root.selectedOverviewOutput, value)
                 }
 
                 SettingsRow {
@@ -1197,11 +1212,11 @@ StyledFlickable {
         parentModal: root.parentModal
         startPath: PersonalizationConfig.wallpaperFolder
         onFolderSelected: path => {
-            WallpaperService.setWallpaperFolder(path);
-        }
+                              WallpaperService.setWallpaperFolder(path);
+                          }
         onFileSelected: path => {
-            WallpaperService.setWallpaperFromFile(path, root.selectedDesktopOutput);
-        }
+                            WallpaperService.setWallpaperFromFile(path, root.selectedDesktopOutput);
+                        }
     }
 
     WallpaperColorPicker {

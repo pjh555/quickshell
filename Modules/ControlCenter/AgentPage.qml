@@ -8,11 +8,16 @@ import qs.Widgets.common
 StyledFlickable {
     id: root
 
+    property string sectionFilter: ""
     readonly property var currentPetSettings: PetSettingsService.forPack(AgentService.petEntry)
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
+    }
 
     clip: true
     contentWidth: width
-    contentHeight: contentColumn.implicitHeight + Metrics.pageMargin * 2
+    contentHeight: contentColumn.implicitHeight + Metrics.settingsPageMargin * 2
 
     Component.onCompleted: {
         AgentService.checkHealth();
@@ -75,9 +80,11 @@ StyledFlickable {
 
     function petLanguageCodes() {
         const entry = AgentService.petEntry || {};
-        const bundles = entry.locales && typeof entry.locales === "object"
-                ? entry.locales
-                : (entry.i18n && typeof entry.i18n === "object" ? entry.i18n : {});
+        const bundles = entry.locales && typeof entry.locales === "object" ? entry.locales : (entry.i18n
+                                                                                              && typeof entry.i18n
+                                                                                              === "object"
+                                                                                              ? entry.i18n :
+                                                                                                {});
         const codes = [];
         if (entry.language && codes.indexOf(String(entry.language)) < 0)
             codes.push(String(entry.language));
@@ -92,8 +99,9 @@ StyledFlickable {
         const override = PetSettingsService.languageFor(AgentService.petEntry);
         if (override)
             return override;
-        return AgentService.petEntry && AgentService.petEntry.language
-                ? String(AgentService.petEntry.language) : "";
+        return AgentService.petEntry && AgentService.petEntry.language ? String(
+                                                                             AgentService.petEntry.language) :
+                                                                         "";
     }
 
     property string presetHint: ""
@@ -155,13 +163,14 @@ StyledFlickable {
     ColumnLayout {
         id: contentColumn
 
-        width: Math.min(680, Math.max(0, root.width - Metrics.pageMargin * 2))
-        x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
-        y: Metrics.pageMargin
+        width: Math.min(720, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
         spacing: Metrics.spacingM
 
         SettingsSection {
             id: connectionSection
+            visible: root.showsSection("connection")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor0.title
@@ -247,6 +256,7 @@ StyledFlickable {
         }
 
         SettingsSection {
+            visible: root.showsSection("provider")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor1.title
@@ -387,6 +397,7 @@ StyledFlickable {
 
         SettingsSection {
             id: computerSection
+            visible: root.showsSection("computer")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor3.title
@@ -623,6 +634,7 @@ StyledFlickable {
 
         SettingsSection {
             id: mcpSection
+            visible: root.showsSection("mcp")
             Layout.fillWidth: true
             flat: true
             title: searchAnchorMcp.title
@@ -764,6 +776,7 @@ StyledFlickable {
 
         SettingsSection {
             id: skillsSection
+            visible: root.showsSection("skills")
             Layout.fillWidth: true
             flat: true
             title: searchAnchorSkills.title
@@ -874,6 +887,7 @@ StyledFlickable {
         }
 
         SettingsSection {
+            visible: root.showsSection("pet")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor2.title
@@ -923,9 +937,9 @@ StyledFlickable {
                 trailing: SearchSelectMenuField {
                     Layout.preferredWidth: 220
                     options: root.petLanguageCodes().map(code => ({
-                                                                  "label": code,
-                                                                  "value": code
-                                                              }))
+                                                                      "label": code,
+                                                                      "value": code
+                                                                  }))
                     value: root.petLanguageValue()
                     closeOnAccept: true
                     onAccepted: value => PetSettingsService.setLanguage(AgentService.petEntry, value)
@@ -946,10 +960,8 @@ StyledFlickable {
                 iconName: "radar"
                 trailingIconName: ""
                 text: qsTr("打开 Agent 监控中心")
-                description: qsTr("%1 个 Agent · %2 工作中 · %3 等待")
-                             .arg(AgentFleetService.activeCount)
-                             .arg(AgentFleetService.workingCount)
-                             .arg(AgentFleetService.waitingCount)
+                description: qsTr("%1 个 Agent · %2 工作中 · %3 等待").arg(AgentFleetService.activeCount).arg(
+                                 AgentFleetService.workingCount).arg(AgentFleetService.waitingCount)
                 onClicked: AgentFleetService.openPanel()
             }
 
@@ -1063,13 +1075,14 @@ StyledFlickable {
                 iconName: "download"
                 trailingIconName: ""
                 text: qsTr("导入 DSH 桌宠设置")
-                description: PetSettingsService.importStatus
-                             || qsTr("读取 ~/.dsh/dsh-pet 的 main-config.jsonc / pet/*")
+                description: PetSettingsService.importStatus || qsTr(
+                                 "读取 ~/.dsh/dsh-pet 的 main-config.jsonc / pet/*")
                 onClicked: PetSettingsService.importDsh()
             }
         }
 
         SettingsSection {
+            visible: root.showsSection("conversation")
             Layout.fillWidth: true
             flat: true
             title: qsTr("Conversation")

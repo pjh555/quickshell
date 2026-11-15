@@ -118,7 +118,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         height: Metrics.dividerWidth
         visible: root.showDivider
-        color: Appearance.applyAlpha(Appearance.colors.colOutlineVariant, 0.5)
+        color: Appearance.applyAlpha(Appearance.macos.textPrimary, 0.12)
     }
 
     MouseArea {

@@ -7,7 +7,7 @@ import qs.Widgets.common
 SidebarFlickable {
     id: root
     motionEnabled: !searchAnchorsEnabled
-    property real contentPadding: Metrics.pageMargin
+    property real contentPadding: Metrics.settingsPageMargin
     property bool searchAnchorsEnabled: true
     readonly property var preferences: DisplayColor.preferences
     clip: true
@@ -27,7 +27,7 @@ SidebarFlickable {
         width: Math.min(640, Math.max(0, root.width - root.contentPadding * 2))
         x: Math.max(root.contentPadding, (root.width - width) / 2)
         y: root.contentPadding + root.contentTopInset
-        spacing: Metrics.spacingXL
+        spacing: Metrics.settingsGroupSpacing
         InlineStatusBanner {
             Layout.topMargin: root.gapFor(0, 1)
 
@@ -335,8 +335,7 @@ SidebarFlickable {
 
             Layout.fillWidth: true
             readonly property var failedOutputs: DisplayColor.outputs.filter(o => o.state === "failed"
-                                                                                  || o.state
-                                                                                  === "unavailable")
+                                                                             || o.state === "unavailable")
             visible: DisplayColor.available && failedOutputs.length > 0
             tone: "error"
             message: qsTr("Gamma control unavailable: %1").arg(failedOutputs.map(o => o.name).join(", "))

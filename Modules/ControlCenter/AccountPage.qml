@@ -17,6 +17,7 @@ Item {
 
     property var parentModal: null
     property bool presentationActive: false
+    property string sectionFilter: ""
     signal navigateRequested(string pageId)
 
     onPresentationActiveChanged: SystemIdentityService.setUptimeConsumer("account-page",
@@ -30,7 +31,7 @@ Item {
     }
 
     readonly property real maximumContentWidth: 1024
-    readonly property bool wideLayout: pageColumn.width >= 848
+    readonly property bool wideLayout: root.sectionFilter === "" && pageColumn.width >= 848
     readonly property real cardGap: Appearance.spacing.medium
     readonly property real columnWidth: wideLayout ? (cardLayout.width - cardGap) / 2 : cardLayout.width
     readonly property real wallpaperPreviewMaximumWidth: 152
@@ -45,13 +46,13 @@ Item {
         const result = [];
         const seen = {};
         const groups = [BluetoothService.connectedDevices.filter(device => device.paired || device.bonded
-                                                                           || device.trusted),
+                                                                 || device.trusted),
                         BluetoothService.pairedDevices];
         for (const group of groups) {
             for (const device of group) {
                 const key = String(device.address || device.id || device.name || "");
                 if (seen[key])
-                    continue;
+                continue;
                 seen[key] = true;
                 result.push(device);
             }
@@ -62,14 +63,18 @@ Item {
         const values = [];
         const current = WallpaperService.currentWallpaper;
         if (current)
-            values.push(current);
+        values.push(current);
         for (const path of WallpaperService.wallpapers) {
             if (values.indexOf(path) < 0)
-                values.push(path);
+            values.push(path);
             if (values.length >= 6)
-                break;
+            break;
         }
         return values;
+    }
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
     }
 
     function formatBytes(value) {
@@ -186,27 +191,29 @@ Item {
     Component.onCompleted: {
         SystemIdentityService.setUptimeConsumer("account-page", root.presentationActive);
         if (WallpaperService.wallpapers.length === 0 && !WallpaperService.scanning)
-            WallpaperService.scan();
+        WallpaperService.scan();
     }
 
     StyledFlickable {
         id: accountScroll
         anchors.fill: parent
         contentWidth: width
-        contentHeight: pageColumn.implicitHeight + Appearance.spacing.large * 2
+        contentHeight: pageColumn.implicitHeight + Metrics.settingsPageMargin * 2
 
         Column {
             id: pageColumn
 
             x: (parent.width - width) / 2
-            y: Appearance.spacing.large
-            width: Math.min(root.maximumContentWidth, Math.max(0, parent.width - Appearance.spacing.large
-                                                               * 2))
+            y: Metrics.settingsPageMargin
+            width: Math.min(root.sectionFilter === "" ? root.maximumContentWidth : 760, Math.max(0, parent.width
+                                                                                                 - Metrics.settingsPageMargin
+                                                                                                 * 2))
 
-            spacing: Appearance.spacing.large
+            spacing: Metrics.settingsGroupSpacing
 
             AccountProfileHeader {
                 width: parent.width
+                visible: root.showsSection("profile")
                 wallpaperPath: bannerEditor.source
                 previewWallpaperPath: bannerEditor.previewSource
                 colorWallpaper: WallpaperService.isColorSource(wallpaperPath)
@@ -231,20 +238,38 @@ Item {
                 id: cardLayout
 
                 width: parent.width
-                height: root.wideLayout ? Math.max(shortcutsCard.y + shortcutsCard.height,
-                                                   personalizationCard.y + personalizationCard.height) :
-                                          personalizationCard.y + personalizationCard.height
+                visible: root.sectionFilter !== "profile"
+                height: root.sectionFilter === "language" ? languageCard.height : root.sectionFilter
+                                                            === "bluetooth-devices" ? bluetoothCard.height :
+                                                                                      root.sectionFilter
+                                                                                      === "keyboard-shortcuts"
+                                                                                      ? shortcutsCard.height :
+                                                                                        root.sectionFilter
+                                                                                        === "cloud-storage"
+                                                                                        ? cloudCard.height :
+                                                                                          root.sectionFilter
+                                                                                          === "personalization"
+                                                                                          ? personalizationCard.height :
+                                                                                            root.wideLayout
+                                                                                            ? Math.max(
+                                                                                                  shortcutsCard.y
+                                                                                                  + shortcutsCard.height,
+                                                                                                  personalizationCard.y
+                                                                                                  + personalizationCard.height) :
+                                                                                              personalizationCard.y
+                                                                                              + personalizationCard.height
 
                 MaterialCard {
                     id: languageCard
 
+                    visible: root.showsSection("language")
                     width: root.columnWidth
                     title: extraSearchAnchor0.title
                     SettingsSearchAnchor {
                         id: extraSearchAnchor0
                         target: languageCard
                         declaration:
-                            '{"id":"account.section.language","route":"account","title":"Language","context":"AccountPage","icon":"settings","aliases":[]}'
+                        '{"id":"account.section.language","route":"account","title":"Language","context":"AccountPage","icon":"settings","aliases":[]}'
                     }
                     iconName: "translate"
                     containerColor: Appearance.m3colors.m3surfaceContainerHigh
@@ -278,15 +303,16 @@ Item {
                 MaterialCard {
                     id: bluetoothCard
 
+                    visible: root.showsSection("bluetooth-devices")
                     x: 0
-                    y: languageCard.y + languageCard.height + root.cardGap
+                    y: root.sectionFilter !== "" ? 0 : languageCard.y + languageCard.height + root.cardGap
                     width: root.columnWidth
                     title: extraSearchAnchor1.title
                     SettingsSearchAnchor {
                         id: extraSearchAnchor1
                         target: bluetoothCard
                         declaration:
-                            '{"id":"account.section.bluetooth-devices","route":"account","title":"Bluetooth devices","context":"AccountPage","icon":"settings","aliases":[]}'
+                        '{"id":"account.section.bluetooth-devices","route":"account","title":"Bluetooth devices","context":"AccountPage","icon":"settings","aliases":[]}'
                     }
                     iconName: BluetoothService.enabled ? "bluetooth" : "bluetooth_disabled"
                     containerColor: Appearance.m3colors.m3surfaceContainerHigh
@@ -442,14 +468,15 @@ Item {
 
                 MaterialCard {
                     id: shortcutsCard
-                    y: bluetoothCard.y + bluetoothCard.height + root.cardGap
+                    visible: root.showsSection("keyboard-shortcuts")
+                    y: root.sectionFilter !== "" ? 0 : bluetoothCard.y + bluetoothCard.height + root.cardGap
                     width: root.columnWidth
                     title: extraSearchAnchor2.title
                     SettingsSearchAnchor {
                         id: extraSearchAnchor2
                         target: shortcutsCard
                         declaration:
-                            '{"id":"account.section.keyboard-shortcuts","route":"account","title":"Keyboard shortcuts","context":"AccountPage","icon":"settings","aliases":[]}'
+                        '{"id":"account.section.keyboard-shortcuts","route":"account","title":"Keyboard shortcuts","context":"AccountPage","icon":"settings","aliases":[]}'
                     }
                     iconName: "keyboard"
                     containerColor: Appearance.m3colors.m3surfaceContainerHigh
@@ -471,15 +498,17 @@ Item {
                 MaterialCard {
                     id: cloudCard
 
-                    x: root.wideLayout ? root.columnWidth + root.cardGap : 0
-                    y: root.wideLayout ? 0 : shortcutsCard.y + shortcutsCard.height + root.cardGap
+                    visible: root.showsSection("cloud-storage")
+                    x: root.sectionFilter !== "" ? 0 : root.wideLayout ? root.columnWidth + root.cardGap : 0
+                    y: root.sectionFilter !== "" ? 0 : root.wideLayout ? 0 : shortcutsCard.y
+                                                                         + shortcutsCard.height + root.cardGap
                     width: root.columnWidth
                     title: extraSearchAnchor3.title
                     SettingsSearchAnchor {
                         id: extraSearchAnchor3
                         target: cloudCard
                         declaration:
-                            '{"id":"account.section.cloud-storage","route":"account","title":"Cloud storage","context":"AccountPage","icon":"settings","aliases":[]}'
+                        '{"id":"account.section.cloud-storage","route":"account","title":"Cloud storage","context":"AccountPage","icon":"settings","aliases":[]}'
                     }
                     iconName: "cloud"
                     containerColor: Appearance.m3colors.m3surfaceContainerHigh
@@ -627,15 +656,16 @@ Item {
                 MaterialCard {
                     id: personalizationCard
 
-                    x: cloudCard.x
-                    y: cloudCard.y + cloudCard.height + root.cardGap
+                    visible: root.showsSection("personalization")
+                    x: root.sectionFilter !== "" ? 0 : cloudCard.x
+                    y: root.sectionFilter !== "" ? 0 : cloudCard.y + cloudCard.height + root.cardGap
                     width: root.columnWidth
                     title: extraSearchAnchor4.title
                     SettingsSearchAnchor {
                         id: extraSearchAnchor4
                         target: personalizationCard
                         declaration:
-                            '{"id":"account.section.personalization","route":"account","title":"Personalization","context":"AccountPage","icon":"settings","aliases":[]}'
+                        '{"id":"account.section.personalization","route":"account","title":"Personalization","context":"AccountPage","icon":"settings","aliases":[]}'
                     }
                     iconName: "palette"
                     containerColor: Appearance.m3colors.m3surfaceContainerHigh
@@ -805,7 +835,7 @@ Item {
         dialogTitle: qsTr("Choose avatar")
         onAccepted: (path, isDirectory) => {
             if (!isDirectory)
-                AvatarService.setAvatar(path);
+            AvatarService.setAvatar(path);
         }
     }
 

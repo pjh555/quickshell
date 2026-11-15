@@ -124,44 +124,46 @@ Item {
         const result = [];
         const byAction = {};
         NiriConfigService.actionCatalog.forEach(entry => {
-            const identity = entry.expression + ";";
-            const group = {
-                id: entry.id,
-                identity: identity,
-                name: ActionNames.translated(entry.name),
-                expression: entry.expression,
-                supported: entry.supported,
-                error: entry.error || "",
-                parameters: entry.parameters,
-                builtin: true,
-                chips: []
-            };
-            result.push(group);
-            byAction[identity] = group;
-        });
+                                                    const identity = entry.expression + ";";
+                                                    const group = {
+                                                        id: entry.id,
+                                                        identity: identity,
+                                                        name: ActionNames.translated(entry.name),
+                                                        expression: entry.expression,
+                                                        supported: entry.supported,
+                                                        error: entry.error || "",
+                                                        parameters: entry.parameters,
+                                                        builtin: true,
+                                                        chips: []
+                                                    };
+                                                    result.push(group);
+                                                    byAction[identity] = group;
+                                                });
         NiriConfigService.bindings.forEach(binding => {
-            let group = byAction[binding.group];
-            if (!group) {
-                group = {
-                    id: binding.group,
-                    identity: binding.group,
-                    name: ActionNames.commandName(binding.action) || binding.action,
-                    expression: binding.action,
-                    supported: true,
-                    builtin: false,
-                    chips: []
-                };
-                byAction[binding.group] = group;
-                result.push(group);
-            }
-            group.chips.push(binding);
-        });
+                                               let group = byAction[binding.group];
+                                               if (!group) {
+                                                   group = {
+                                                       id: binding.group,
+                                                       identity: binding.group,
+                                                       name: ActionNames.commandName(binding.action)
+                                                             || binding.action,
+                                                       expression: binding.action,
+                                                       supported: true,
+                                                       builtin: false,
+                                                       chips: []
+                                                   };
+                                                   byAction[binding.group] = group;
+                                                   result.push(group);
+                                               }
+                                               group.chips.push(binding);
+                                           });
         result.forEach(group => {
-            const titled = group.chips.find(chip => typeof chip.props["hotkey-overlay-title"] === "string"
-                                                    && chip.props["hotkey-overlay-title"] !== "");
-            if (titled)
-                group.name = titled.props["hotkey-overlay-title"];
-        });
+                           const titled = group.chips.find(chip => typeof chip.props["hotkey-overlay-title"]
+                                                           === "string" && chip.props["hotkey-overlay-title"]
+                                                           !== "");
+                           if (titled)
+                           group.name = titled.props["hotkey-overlay-title"];
+                       });
         // Status notifications can carry an unchanged snapshot. Keep the delegates in that case.
         if (JSON.stringify(groups) !== JSON.stringify(result))
             groups = result;
@@ -262,32 +264,32 @@ Item {
         enabled: root.inlineRecording && root.recording && inhibitor.active
         keymap: NiriConfigService.snapshot.keymap || ({})
         onCaptured: key => {
-            root.recording = false;
-            root.draft = Object.assign({}, root.draft, {
-                                           key: key
-                                       });
-            if (root.draft.parameters || !root.draft.action) {
-                root.inlineRecording = false;
-                root.editorOpen = true;
-            } else {
-                NiriConfigService.save({
-                                           operation: "save",
-                                           id: "",
-                                           revision: root.draftRevision,
-                                           key: key,
-                                           action: root.draft.action,
-                                           patch: {},
-                                           unset: []
-                                       });
-            }
-        }
+                        root.recording = false;
+                        root.draft = Object.assign({}, root.draft, {
+                                                       key: key
+                                                   });
+                        if (root.draft.parameters || !root.draft.action) {
+                            root.inlineRecording = false;
+                            root.editorOpen = true;
+                        } else {
+                            NiriConfigService.save({
+                                                       operation: "save",
+                                                       id: "",
+                                                       revision: root.draftRevision,
+                                                       key: key,
+                                                       action: root.draft.action,
+                                                       patch: {},
+                                                       unset: []
+                                                   });
+                        }
+                    }
         onCancelled: root.stopRecording()
         onFailed: reason => {
-            root.recording = false;
-            root.inlineRecording = false;
-            root.editorOpen = true;
-            NiriConfigService.error = reason;
-        }
+                      root.recording = false;
+                      root.inlineRecording = false;
+                      root.editorOpen = true;
+                      NiriConfigService.error = reason;
+                  }
     }
     // Observe complete taps without taking the grab from buttons or the list.
     // A drag cancels the tap recognizer, so scrolling never discards a recording.
@@ -312,10 +314,10 @@ Item {
         acceptedModifiers: Qt.NoModifier
         gesturePolicy: TapHandler.DragThreshold
         onTapped: eventPoint => {
-            if (eventPoint.position.y < results.y && root.recording && !root.isInteractiveAt(root,
-                                                                                             eventPoint.position))
-                root.stopRecording();
-        }
+                      if (eventPoint.position.y < results.y && root.recording && !root.isInteractiveAt(root,
+                                                                                                       eventPoint.position))
+                      root.stopRecording();
+                  }
     }
 
     function change(name, value) {
@@ -382,9 +384,9 @@ Item {
 
     ColumnLayout {
         id: column
-        y: Metrics.pageMargin
-        width: Math.min(640, Math.max(0, root.width - Metrics.pageMargin * 2))
-        x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
+        width: Math.min(680, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
         spacing: Metrics.spacingM
 
         NiriSetupPrompt {
@@ -455,11 +457,11 @@ Item {
                 }
             ]
             onValueSelected: value => {
-                if (root.category === value)
-                    return;
-                root.clearDraft();
-                root.category = value;
-            }
+                                 if (root.category === value)
+                                 return;
+                                 root.clearDraft();
+                                 root.category = value;
+                             }
         }
     }
 
@@ -470,10 +472,10 @@ Item {
             acceptedModifiers: Qt.NoModifier
             gesturePolicy: TapHandler.DragThreshold
             onTapped: eventPoint => {
-                const position = results.mapToItem(root, eventPoint.position);
-                if (root.recording && !root.isInteractiveAt(root, position))
-                    root.stopRecording();
-            }
+                          const position = results.mapToItem(root, eventPoint.position);
+                          if (root.recording && !root.isInteractiveAt(root, position))
+                          root.stopRecording();
+                      }
         }
         anchors.left: parent.left
         anchors.right: parent.right
@@ -693,14 +695,14 @@ Item {
                     enabled: root.recording && !root.inlineRecording && inhibitor.active
                     keymap: NiriConfigService.snapshot.keymap || ({})
                     onCaptured: key => {
-                        keyField.text = key;
-                        root.recording = false;
-                    }
+                                    keyField.text = key;
+                                    root.recording = false;
+                                }
                     onCancelled: root.stopRecording()
                     onFailed: reason => {
-                        root.recording = false;
-                        NiriConfigService.error = reason;
-                    }
+                                  root.recording = false;
+                                  NiriConfigService.error = reason;
+                              }
                 }
                 ActionButton {
                     text: root.recording ? qsTr("Cancel recording") : qsTr("Record key")

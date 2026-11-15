@@ -8,6 +8,12 @@ import qs.Modules.SystemCards
 StyledFlickable {
     id: root
 
+    property string sectionFilter: ""
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
+    }
+
     property bool presentationActive: false
     readonly property bool cookieClockActive: UiPreferences.sidebarClockStyle === "cookie"
     readonly property var gpuOptions: buildGpuOptions()
@@ -107,18 +113,19 @@ StyledFlickable {
     Component.onDestruction: SystemMonitorService.clearConsumer("general-sidebar-settings")
     clip: true
     contentWidth: width
-    contentHeight: contentColumn.implicitHeight + Metrics.pageMargin * 2
+    contentHeight: contentColumn.implicitHeight + Metrics.settingsPageMargin * 2
 
     ColumnLayout {
         id: contentColumn
 
-        width: Math.min(640, Math.max(0, root.width - Metrics.pageMargin * 2))
-        x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
-        y: Metrics.pageMargin
-        spacing: Metrics.spacingXL
+        width: Math.min(680, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
+        spacing: Metrics.settingsGroupSpacing
 
         SettingsSection {
             id: searchSection0
+            visible: root.showsSection("sidebars")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor0.title
@@ -183,6 +190,7 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection1
+            visible: root.showsSection("desktop-card-layout")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor1.title
@@ -272,6 +280,7 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection2
+            visible: root.showsSection("clock-style")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor2.title
@@ -591,6 +600,7 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection3
+            visible: root.showsSection("system-cards")
             Layout.fillWidth: true
             flat: true
             title: searchAnchor3.title

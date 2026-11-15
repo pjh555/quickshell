@@ -12,22 +12,31 @@ StyledFlickable {
     id: root
 
     property var parentModal: null
+    property string sectionFilter: ""
     property bool refreshRequested: false
     property bool refreshConfirmed: false
     readonly property real pageContentWidth: 600
     readonly property var remoteOptions: RcloneService.remotes.map(remote => {
-        return ({
-                    "label": remote.name,
-                    "value": remote.name,
-                    "remoteName": remote.name,
-                    "remoteType": remote.type,
-                    "enabled": !RcloneService.isReadOnly(remote),
-                    "tooltip": RcloneService.isReadOnly(remote) ? qsTr(
-                                                                      "This cloud storage is read-only and cannot be set as default") :
-                                                                  ""
-                });
-    })
+                                                                       return ({
+                                                                                   "label": remote.name,
+                                                                                   "value": remote.name,
+                                                                                   "remoteName": remote.name,
+                                                                                   "remoteType": remote.type,
+                                                                                   "enabled":
+                                                                                       !RcloneService.isReadOnly(
+                                                                                           remote),
+                                                                                   "tooltip":
+                                                                                   RcloneService.isReadOnly(
+                                                                                       remote) ? qsTr(
+                                                                                                     "This cloud storage is read-only and cannot be set as default") :
+                                                                                                 ""
+                                                                               });
+                                                                   })
     property var pendingDeleteTemplate: null
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
+    }
 
     function requestTemplateDeletion(template) {
         root.pendingDeleteTemplate = template;
@@ -87,7 +96,7 @@ StyledFlickable {
     contentHeight: contentColumn.y + contentColumn.implicitHeight + 24
     Component.onCompleted: {
         if (RcloneService.providers.length === 0)
-            RcloneService.loadProviders();
+        RcloneService.loadProviders();
     }
 
     Connections {
@@ -115,20 +124,21 @@ StyledFlickable {
     ColumnLayout {
         id: contentColumn
 
-        width: Math.min(root.pageContentWidth, Math.max(0, root.width - 48))
-        x: Math.max(24, (root.width - width) / 2)
-        y: 28
+        width: Math.min(root.pageContentWidth, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
         spacing: Appearance.spacing.medium
 
         SettingsSection {
             id: searchSection0
+            visible: root.showsSection("map-and-weather-services")
             Layout.fillWidth: true
             title: searchAnchor0.title
             SettingsSearchAnchor {
                 id: searchAnchor0
                 target: searchSection0
                 declaration:
-                    '{"id":"advanced.section.map-and-weather-services","route":"advanced","title":"Map and weather services","context":"AdvancedPage","icon":"tune","aliases":[]}'
+                '{"id":"advanced.section.map-and-weather-services","route":"advanced","title":"Map and weather services","context":"AdvancedPage","icon":"tune","aliases":[]}'
             }
             iconName: "map"
 
@@ -143,13 +153,14 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection1
+            visible: root.showsSection("cloud-storage")
             Layout.fillWidth: true
             title: searchAnchor1.title
             SettingsSearchAnchor {
                 id: searchAnchor1
                 target: searchSection1
                 declaration:
-                    '{"id":"advanced.section.cloud-storage","route":"advanced","title":"Cloud storage","context":"AdvancedPage","icon":"tune","aliases":[]}'
+                '{"id":"advanced.section.cloud-storage","route":"advanced","title":"Cloud storage","context":"AdvancedPage","icon":"tune","aliases":[]}'
             }
             iconName: "cloud"
 
@@ -248,13 +259,14 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection2
+            visible: root.showsSection("matugen-template-generation")
             Layout.fillWidth: true
             title: searchAnchor2.title
             SettingsSearchAnchor {
                 id: searchAnchor2
                 target: searchSection2
                 declaration:
-                    '{"id":"advanced.section.matugen-template-generation","route":"advanced","title":"Matugen template generation","context":"AdvancedPage","icon":"tune","aliases":[]}'
+                '{"id":"advanced.section.matugen-template-generation","route":"advanced","title":"Matugen template generation","context":"AdvancedPage","icon":"tune","aliases":[]}'
             }
 
             Item {
@@ -441,7 +453,7 @@ StyledFlickable {
                              && PersonalizationConfig.ready
                     onClicked: {
                         if (root.pendingDeleteTemplate)
-                            MatugenTemplateService.remove(root.pendingDeleteTemplate.id);
+                        MatugenTemplateService.remove(root.pendingDeleteTemplate.id);
                         templateDialog.close();
                     }
                 }

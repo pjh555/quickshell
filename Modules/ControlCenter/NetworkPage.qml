@@ -8,13 +8,19 @@ import qs.Widgets.common
 StyledFlickable {
     id: root
 
+    property string sectionFilter: ""
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
+    }
+
     property var parentModal: null
     property var passwordTarget: null
     property bool initialLoadAttempted: false
     property bool initialLoading: false
     readonly property var nearbyNetworks: NetworkService.nearbyWifiNetworks.filter(network => {
-        return !network.active;
-    })
+                                                                                       return !network.active;
+                                                                                   })
     readonly property var activeNetwork: NetworkService.activeNetwork
     readonly property string activeConnectionKey: activeNetwork ? [activeNetwork.type,
                                                                    activeNetwork.deviceName,
@@ -80,14 +86,14 @@ StyledFlickable {
             profiles = target.type === "wired" ? NetworkService.wiredProfiles :
                                                  NetworkService.savedWifiProfiles;
             return profiles.find(profile => {
-                return profile.uuid === target.uuid;
-            }) || null;
+                                     return profile.uuid === target.uuid;
+                                 }) || null;
         }
         if (target.type === "wired") {
             const interfaceName = String(target.deviceName || target.name || "");
             profiles = NetworkService.wiredProfiles.filter(profile => {
-                return profile.deviceName === interfaceName;
-            });
+                                                               return profile.deviceName === interfaceName;
+                                                           });
         } else {
             profiles = target.profiles || [];
         }
@@ -97,8 +103,8 @@ StyledFlickable {
         const activeUuid = root.runtimeMatchesActive ? String(NetworkService.runtimeDetails.connectionUuid
                                                               || "") : "";
         const activeProfile = profiles.find(profile => {
-            return activeUuid.length > 0 && profile.uuid === activeUuid;
-        }) || null;
+                                                return activeUuid.length > 0 && profile.uuid === activeUuid;
+                                            }) || null;
         if (activeProfile)
             return activeProfile;
 
@@ -110,8 +116,8 @@ StyledFlickable {
             return null;
 
         return NetworkService.wiredDevices.find(device => {
-            return device.deviceName === profile.deviceName;
-        }) || null;
+                                                    return device.deviceName === profile.deviceName;
+                                                }) || null;
     }
 
     function refreshRuntimeDetails() {
@@ -133,7 +139,7 @@ StyledFlickable {
 
     clip: true
     contentWidth: width
-    contentHeight: contentColumn.implicitHeight + Metrics.pageMargin * 2
+    contentHeight: contentColumn.implicitHeight + Metrics.settingsPageMargin * 2
     onActiveConnectionKeyChanged: root.refreshRuntimeDetails()
     onNearbyNetworksChanged: {
         if (root.nearbyNetworks.length > 0)
@@ -187,9 +193,9 @@ StyledFlickable {
     ColumnLayout {
         id: contentColumn
 
-        width: Math.min(640, Math.max(0, root.width - Metrics.pageMargin * 2))
-        x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
-        y: Metrics.pageMargin
+        width: Math.min(680, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
         spacing: Metrics.spacingL
 
         InlineStatusBanner {
@@ -204,7 +210,7 @@ StyledFlickable {
         SettingsSection {
             id: searchSection0
             Layout.fillWidth: true
-            visible: NetworkService.wiredDevices.length > 0
+            visible: root.showsSection("wired-connections") && NetworkService.wiredDevices.length > 0
             title: searchAnchor0.title
             SettingsSearchAnchor {
                 id: searchAnchor0
@@ -265,10 +271,12 @@ StyledFlickable {
 
             Repeater {
                 model: NetworkService.wiredDevices.filter(device => {
-                    return !NetworkService.wiredProfiles.some(profile => {
-                        return profile.deviceName === device.deviceName;
-                    });
-                })
+                                                              return !NetworkService.wiredProfiles.some(
+                                                                  profile => {
+                                                                      return profile.deviceName
+                                                                      === device.deviceName;
+                                                                  });
+                                                          })
 
                 SettingsRow {
                     id: unconfiguredWiredRow
@@ -287,6 +295,7 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection1
+            visible: root.showsSection("wi-fi")
             Layout.fillWidth: true
             title: searchAnchor1.title
             SettingsSearchAnchor {
@@ -525,6 +534,7 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection2
+            visible: root.showsSection("other-settings")
             Layout.fillWidth: true
             title: searchAnchor2.title
             SettingsSearchAnchor {
@@ -554,6 +564,7 @@ StyledFlickable {
 
         SettingsSection {
             id: searchSection3
+            visible: root.showsSection("connection-information")
             Layout.fillWidth: true
             title: searchAnchor3.title
             SettingsSearchAnchor {

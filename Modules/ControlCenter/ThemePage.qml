@@ -11,11 +11,18 @@ import qs.Widgets.common
 StyledFlickable {
     id: root
 
+    property string sectionFilter: ""
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
+    }
+
     clip: true
     contentWidth: width
     contentHeight: contentColumn.y + contentColumn.implicitHeight + 24
 
-    readonly property real pageContentWidth: Math.min(600, Math.max(0, width - 48))
+    readonly property real pageContentWidth: Math.min(680, Math.max(0, width - Metrics.settingsPageMargin
+                                                                    * 2))
 
     component Section: SettingsSection {
         Layout.fillWidth: true
@@ -416,12 +423,13 @@ StyledFlickable {
     ColumnLayout {
         id: contentColumn
         width: root.pageContentWidth
-        x: Math.max(24, (root.width - width) / 2)
-        y: 28
-        spacing: 30
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
+        spacing: Metrics.settingsGroupSpacing
 
         NiriSetupPrompt {
             Layout.fillWidth: true
+            visible: root.showsSection("cursor-theme")
             title: qsTr("Cursor integration")
             description: qsTr("Create or connect the Clavis cursor configuration.")
             integrationState: NiriConfigService.state("cursor")
@@ -433,6 +441,7 @@ StyledFlickable {
 
         RowLayout {
             Layout.fillWidth: true
+            visible: root.showsSection("matugen-color-scheme")
             spacing: 16
 
             ThemePreviewCard {
@@ -452,6 +461,7 @@ StyledFlickable {
 
         Section {
             id: windowSection
+            visible: root.showsSection("settings-window")
             title: windowSearchAnchor.title
             iconName: "window"
 
@@ -484,6 +494,7 @@ StyledFlickable {
 
         Section {
             id: searchSection0
+            visible: root.showsSection("matugen-color-scheme")
             title: searchAnchor0.title
             SettingsSearchAnchor {
                 id: searchAnchor0
@@ -517,6 +528,7 @@ StyledFlickable {
 
         Section {
             id: searchSection1
+            visible: root.showsSection("super-key-appearance")
             title: searchAnchor1.title
             SettingsSearchAnchor {
                 id: searchAnchor1
@@ -564,6 +576,7 @@ StyledFlickable {
 
         Section {
             id: searchSection2
+            visible: root.showsSection("lock-screen")
             title: searchAnchor2.title
             SettingsSearchAnchor {
                 id: searchAnchor2
@@ -587,6 +600,7 @@ StyledFlickable {
 
         Section {
             id: searchSection3
+            visible: root.showsSection("cursor-theme")
             title: searchAnchor3.title
             SettingsSearchAnchor {
                 id: searchAnchor3
@@ -643,6 +657,7 @@ StyledFlickable {
 
         Section {
             id: searchSection4
+            visible: root.showsSection("icon-theme")
             title: searchAnchor4.title
             SettingsSearchAnchor {
                 id: searchAnchor4
@@ -663,6 +678,7 @@ StyledFlickable {
 
         Section {
             id: searchSection5
+            visible: root.showsSection("fonts")
             title: searchAnchor5.title
             SettingsSearchAnchor {
                 id: searchAnchor5

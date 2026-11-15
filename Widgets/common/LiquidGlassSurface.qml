@@ -13,13 +13,16 @@ Item {
 
     property color baseColor: Appearance.colors.colLayer1Base
     property real radius: Appearance.rounding.extraLarge
-    property real blurOpacity: 0.34
+    property real blurOpacity: 0.36
     property real fallbackOpacity: 0.94
-    property real topHighlight: 0.16
-    property real bottomReflection: 0.04
+    property real topHighlight: 0.26
+    property real bottomReflection: 0.065
+    property bool clearMaterial: false
     property bool elevated: true
     property bool clipContent: false
     readonly property real effectiveOpacity: BlurService.enabled ? root.blurOpacity : root.fallbackOpacity
+    readonly property real materialOpacity: root.clearMaterial && BlurService.enabled ? root.effectiveOpacity
+                                                                                        * 0.72 : root.effectiveOpacity
     default property alias content: contentLayer.data
 
     Rectangle {
@@ -27,8 +30,23 @@ Item {
 
         anchors.fill: parent
         radius: root.radius
-        color: Appearance.applyAlpha(Appearance.mix(root.baseColor, Appearance.macos.surfaceElevated, 0.82),
-                                     root.effectiveOpacity)
+        gradient: Gradient {
+            orientation: Gradient.Vertical
+
+            GradientStop {
+                position: 0.0
+                color: Appearance.applyAlpha(Appearance.mix(root.baseColor, Appearance.macos.surfaceElevated,
+                                                            root.clearMaterial ? 0.70 : 0.92),
+                                             root.materialOpacity)
+            }
+
+            GradientStop {
+                position: 1.0
+                color: Appearance.applyAlpha(Appearance.mix(root.baseColor, Appearance.macos.background,
+                                                            root.clearMaterial ? 0.38 : 0.62),
+                                             root.materialOpacity)
+            }
+        }
         antialiasing: true
         layer.enabled: root.elevated
 
@@ -49,12 +67,56 @@ Item {
         bottomStrength: root.bottomReflection
     }
 
+    // A clear material catches broad, moving-looking reflections while the
+    // compositor supplies the actual wallpaper blur behind it.
+    Rectangle {
+        anchors.fill: parent
+        radius: root.radius
+        visible: root.clearMaterial
+        gradient: Gradient {
+            orientation: Gradient.Horizontal
+
+            GradientStop {
+                position: 0.0
+                color: Appearance.applyAlpha(Appearance.macos.textPrimary, 0.055)
+            }
+
+            GradientStop {
+                position: 0.28
+                color: "transparent"
+            }
+
+            GradientStop {
+                position: 0.72
+                color: "transparent"
+            }
+
+            GradientStop {
+                position: 1.0
+                color: Appearance.applyAlpha(Appearance.macos.textPrimary, 0.035)
+            }
+        }
+        antialiasing: true
+    }
+
     Rectangle {
         anchors.fill: parent
         radius: root.radius
         color: "transparent"
         border.width: 1
-        border.color: Appearance.macos.glassBorder
+        border.color: root.clearMaterial ? Appearance.applyAlpha(Appearance.macos.textPrimary, 0.22) :
+                                           Appearance.macos.glassBorder
+        antialiasing: true
+    }
+
+    // Inner rim: glass thickness, not another outline.
+    Rectangle {
+        anchors.fill: parent
+        anchors.margins: 1
+        radius: Math.max(0, root.radius - 1)
+        color: "transparent"
+        border.width: 1
+        border.color: Appearance.applyAlpha(Appearance.macos.textPrimary, root.clearMaterial ? 0.12 : 0.09)
         antialiasing: true
     }
 

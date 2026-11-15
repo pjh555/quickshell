@@ -11,6 +11,12 @@ import qs.Widgets.common
 StyledFlickable {
     id: root
 
+    property string sectionFilter: ""
+
+    function showsSection(section) {
+        return root.sectionFilter === "" || root.sectionFilter === section;
+    }
+
     property var pendingRemoveEntry: null
     property var parentModal: null
     readonly property real pageContentWidth: 720
@@ -41,7 +47,7 @@ StyledFlickable {
 
     clip: true
     contentWidth: width
-    contentHeight: contentColumn.implicitHeight + Metrics.pageMargin
+    contentHeight: contentColumn.implicitHeight + Metrics.settingsPageMargin
     Component.onCompleted: {
         AutostartService.initialize();
     }
@@ -74,10 +80,10 @@ StyledFlickable {
     ColumnLayout {
         id: contentColumn
 
-        width: Math.min(root.pageContentWidth, Math.max(0, root.width - Metrics.pageMargin * 2))
-        x: Math.max(Metrics.pageMargin, (root.width - width) / 2)
-        y: Metrics.pageMargin
-        spacing: Metrics.spacingXL
+        width: Math.min(root.pageContentWidth, Math.max(0, root.width - Metrics.settingsPageMargin * 2))
+        x: Math.max(Metrics.settingsPageMargin, (root.width - width) / 2)
+        y: Metrics.settingsPageMargin
+        spacing: Metrics.settingsGroupSpacing
 
         InlineStatusBanner {
             Layout.fillWidth: true
@@ -127,11 +133,12 @@ StyledFlickable {
 
         ColumnLayout {
             Layout.fillWidth: true
-            spacing: Metrics.spacingXL
+            spacing: Metrics.settingsGroupSpacing
             visible: AutostartService.ready
 
             SettingsSection {
                 id: searchSection0
+                visible: root.showsSection("add-application-to-autostart")
                 Layout.fillWidth: true
                 flat: true
                 iconName: "rocket_launch"
@@ -158,6 +165,7 @@ StyledFlickable {
 
             SettingsSection {
                 id: searchSection1
+                visible: root.showsSection("user-autostart-applications")
                 Layout.fillWidth: true
                 flat: true
                 iconName: "list_alt"
