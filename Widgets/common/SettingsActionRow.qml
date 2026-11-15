@@ -21,7 +21,8 @@ RippleButton {
     topPadding: 0
     bottomPadding: 0
     buttonRadius: Metrics.cornerS
-    containerColor: "transparent"
+    containerColor: root.highlighted ? Appearance.applyAlpha(Appearance.colors.colPrimary, 0.14) :
+                                       "transparent"
     rippleColor: Appearance.colors.colOnSurface
     stateLayerColor: Appearance.colors.colOnSurface
     pressedStateLayerColor: Appearance.colors.colOnSurface

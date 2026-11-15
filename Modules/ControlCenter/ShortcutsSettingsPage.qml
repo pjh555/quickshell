@@ -1,7 +1,6 @@
 import QtQuick
 
 SettingsBusinessHub {
-    legacySource: Qt.resolvedUrl("ShortcutsPage.qml")
     groups: [
         {
             "title": qsTranslate("SettingsBusinessHub", "Keyboard shortcuts"),
@@ -10,6 +9,7 @@ SettingsBusinessHub {
                 {
                     "title": qsTranslate("SettingsBusinessHub", "All shortcuts"),
                     "icon": "keyboard",
+                    "source": "ShortcutsPage.qml",
                     "initialProperties": {
                         "category": "all"
                     }
@@ -17,6 +17,7 @@ SettingsBusinessHub {
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Assigned shortcuts"),
                     "icon": "check_circle",
+                    "source": "ShortcutsPage.qml",
                     "initialProperties": {
                         "category": "assigned"
                     }
@@ -24,6 +25,7 @@ SettingsBusinessHub {
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Managed shortcuts"),
                     "icon": "admin_panel_settings",
+                    "source": "ShortcutsPage.qml",
                     "initialProperties": {
                         "category": "managed"
                     }
@@ -31,6 +33,7 @@ SettingsBusinessHub {
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Unassigned shortcuts"),
                     "icon": "add_circle",
+                    "source": "ShortcutsPage.qml",
                     "initialProperties": {
                         "category": "unassigned"
                     }

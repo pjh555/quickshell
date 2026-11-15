@@ -8,7 +8,7 @@ import qs.Widgets.common
 StyledFlickable {
     id: root
 
-    property string sectionFilter: ""
+    property string sectionFilter: "__unselected__"
 
     property var parentModal: null
     property bool presentationActive: false
@@ -24,7 +24,7 @@ StyledFlickable {
     contentHeight: contentColumn.implicitHeight + Metrics.settingsPageMargin * 2
 
     function showsSection(section) {
-        return root.sectionFilter === "" || root.sectionFilter === section;
+        return root.sectionFilter === section;
     }
 
     ColumnLayout {

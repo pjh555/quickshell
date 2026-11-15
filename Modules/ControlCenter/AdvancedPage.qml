@@ -12,7 +12,7 @@ StyledFlickable {
     id: root
 
     property var parentModal: null
-    property string sectionFilter: ""
+    property string sectionFilter: "__unselected__"
     property bool refreshRequested: false
     property bool refreshConfirmed: false
     readonly property real pageContentWidth: 600
@@ -35,7 +35,7 @@ StyledFlickable {
     property var pendingDeleteTemplate: null
 
     function showsSection(section) {
-        return root.sectionFilter === "" || root.sectionFilter === section;
+        return root.sectionFilter === section;
     }
 
     function requestTemplateDeletion(template) {

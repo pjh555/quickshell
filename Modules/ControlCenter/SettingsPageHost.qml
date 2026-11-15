@@ -10,6 +10,7 @@ Item {
     property string route: ""
     property int navigationDepth: 0
     property bool presentationActive: false
+    property bool asynchronous: true
     property Component headerComponent: null
     readonly property var item: currentLayer ? currentLayer.page : null
     readonly property bool ready: currentLayer !== null && currentLayer.pageSource === source && pendingLayer
@@ -112,7 +113,7 @@ Item {
             }
             onVisibleChanged: {
                 if (retired && !visible)
-                    destroy();
+                destroy();
             }
 
             Loader {
@@ -128,7 +129,7 @@ Item {
 
                 anchors.fill: parent
                 anchors.topMargin: headerLoader.height
-                asynchronous: true
+                asynchronous: root.asynchronous
                 onLoaded: root.present(layer)
             }
         }

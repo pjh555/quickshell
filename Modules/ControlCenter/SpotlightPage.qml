@@ -7,10 +7,10 @@ import qs.Widgets.common
 StyledFlickable {
     id: root
 
-    property string sectionFilter: ""
+    property string sectionFilter: "__unselected__"
 
     function showsSection(section) {
-        return root.sectionFilter === "" || root.sectionFilter === section;
+        return root.sectionFilter === section;
     }
 
     function closeChildWindows() {

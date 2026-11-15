@@ -25,7 +25,7 @@ Item {
     }
 
     property var parentModal: null
-    property string currentSection: "overview"
+    property string currentSection: "displays"
     property bool presentationActive: false
     property string selectedBluetoothAddress: ""
     property string selectedBluetoothAdapterId: ""
@@ -72,7 +72,7 @@ Item {
     function showOverview() {
         root.closeChildWindows();
         BluetoothService.clearError();
-        root.currentSection = "overview";
+        root.currentSection = "displays";
     }
 
     function showConnectedDevices() {
@@ -133,11 +133,10 @@ Item {
 
         anchors.fill: parent
         route: root.currentSection
-        navigationDepth: root.currentSection === "overview" ? 0 : (root.currentSection === "bluetooth-device"
-                                                                   || root.currentSection
-                                                                   === "bluetooth-pairing" ? 2 : 1)
+        navigationDepth: root.currentSection === "bluetooth-device" || root.currentSection
+                         === "bluetooth-pairing" ? 2 : 1
         presentationActive: root.presentationActive
-        headerComponent: root.currentSection === "overview" ? null : subpageHeader
+        headerComponent: subpageHeader
         source: {
             const route = SpotlightCatalog.route("general." + root.currentSection);
             if (route) {

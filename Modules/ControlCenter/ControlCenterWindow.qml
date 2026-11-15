@@ -203,11 +203,11 @@ FloatingWindow {
             anchors.fill: parent
             radius: root.maximized ? 0 : Appearance.rounding.extraLarge
             baseColor: Appearance.colors.colLayer0Base
-            blurOpacity: 0.18
-            fallbackOpacity: 0.78
+            blurOpacity: 0.68
+            fallbackOpacity: 0.96
             topHighlight: 0.18
             bottomReflection: 0.045
-            clearMaterial: true
+            clearMaterial: false
         }
 
         Shortcut {
@@ -297,10 +297,10 @@ FloatingWindow {
                     implicitWidth: root.navExpanded ? 248 : 72
                     radius: Metrics.cornerL
                     baseColor: Appearance.colors.colLayer1Base
-                    blurOpacity: 0.24
-                    fallbackOpacity: 0.82
+                    blurOpacity: 0.72
+                    fallbackOpacity: 0.97
                     topHighlight: 0.18
-                    clearMaterial: true
+                    clearMaterial: false
                     clipContent: true
 
                     ColumnLayout {
@@ -416,20 +416,16 @@ FloatingWindow {
                     }
                 }
 
-                LiquidGlassSurface {
+                Rectangle {
                     id: bodyBackground
 
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     radius: Metrics.cornerL
-                    baseColor: Appearance.colors.colLayer0Base
-                    blurOpacity: 0.28
-                    fallbackOpacity: 0.84
-                    topHighlight: 0.14
-                    bottomReflection: 0.035
-                    clearMaterial: true
-                    elevated: false
-                    clipContent: true
+                    color: Appearance.macos.background
+                    border.width: 1
+                    border.color: Appearance.macos.separator
+                    clip: true
 
                     Item {
                         id: currentPageHeader
@@ -445,6 +441,17 @@ FloatingWindow {
                                                                                             "detailOpen" in pageLoader.item)
                                                                                         || !pageLoader.item.detailOpen)
                         z: 2
+
+                        LiquidGlassSurface {
+                            anchors.fill: parent
+                            radius: 0
+                            baseColor: Appearance.macos.surfaceElevated
+                            blurOpacity: 0.72
+                            fallbackOpacity: 0.97
+                            topHighlight: 0.13
+                            bottomReflection: 0.025
+                            elevated: false
+                        }
 
                         Rectangle {
                             anchors.left: parent.left
@@ -508,6 +515,7 @@ FloatingWindow {
                         anchors.topMargin: currentPageHeader.height
                         source: root.pageSource(root.currentPage)
                         presentationActive: root.visible
+                        asynchronous: false
                         onLoaded: {
                             if (item && "parentModal" in item)
                                 item.parentModal = parentModal;

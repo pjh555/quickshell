@@ -816,16 +816,20 @@ PanelWindow {
                 }
             }
 
-            Rectangle {
+            LiquidGlassSurface {
                 id: glass
                 x: root.horizontal ? 0 : root.edge === "left" ? 0 : parent.width - width
                 y: root.horizontal ? parent.height - height : 0
                 width: root.horizontal ? parent.width : root.restingThickness
                 height: root.horizontal ? root.restingThickness : parent.height
                 radius: 20
-                color: BlurService.backgroundColor(Appearance.colors.colSurfaceContainer)
-                border.color: Appearance.macos.glassBorder
-                border.width: 1
+                baseColor: Appearance.colors.colSurfaceContainer
+                blurOpacity: 0.64
+                fallbackOpacity: 0.96
+                topHighlight: 0.20
+                bottomReflection: 0.04
+                clearMaterial: false
+
                 MouseArea {
                     anchors.fill: parent
                     acceptedButtons: Qt.RightButton

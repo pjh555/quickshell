@@ -84,10 +84,17 @@ Item {
             width: root.width
             height: root.height
 
-            Rectangle {
+            LiquidGlassSurface {
                 z: -1
                 anchors.fill: parent
-                color: root.backgroundColor
+                radius: 0
+                baseColor: root.backgroundColor
+                blurOpacity: 0.74
+                fallbackOpacity: 0.97
+                topHighlight: 0.10
+                bottomReflection: 0.025
+                clearMaterial: false
+                elevated: false
             }
 
             Rectangle {

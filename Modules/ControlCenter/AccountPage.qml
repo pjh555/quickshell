@@ -17,11 +17,19 @@ Item {
 
     property var parentModal: null
     property bool presentationActive: false
-    property string sectionFilter: ""
+    property string sectionFilter: "__unselected__"
     signal navigateRequested(string pageId)
 
     onPresentationActiveChanged: SystemIdentityService.setUptimeConsumer("account-page",
-                                                                         root.presentationActive)
+                                                                         root.presentationActive
+                                                                         && root.showsSection("profile"))
+    onSectionFilterChanged: {
+        SystemIdentityService.setUptimeConsumer("account-page", root.presentationActive && root.showsSection(
+                                                    "profile"));
+        if (root.showsSection("personalization") && WallpaperService.wallpapers.length === 0 &&
+            !WallpaperService.scanning)
+        WallpaperService.scan();
+    }
     Component.onDestruction: SystemIdentityService.setUptimeConsumer("account-page", false)
 
     function closeChildWindows() {
@@ -74,7 +82,7 @@ Item {
     }
 
     function showsSection(section) {
-        return root.sectionFilter === "" || root.sectionFilter === section;
+        return root.sectionFilter === section;
     }
 
     function formatBytes(value) {
@@ -189,9 +197,8 @@ Item {
     }
 
     Component.onCompleted: {
-        SystemIdentityService.setUptimeConsumer("account-page", root.presentationActive);
-        if (WallpaperService.wallpapers.length === 0 && !WallpaperService.scanning)
-        WallpaperService.scan();
+        SystemIdentityService.setUptimeConsumer("account-page", root.presentationActive && root.showsSection(
+                                                    "profile"));
     }
 
     StyledFlickable {
@@ -680,7 +687,7 @@ Item {
                         rowSpacing: Appearance.spacing.small
 
                         Repeater {
-                            model: root.wallpaperChoices
+                            model: root.showsSection("personalization") ? root.wallpaperChoices : []
 
                             delegate: RippleButton {
                                 id: wallpaperChoice

@@ -93,21 +93,10 @@ Item {
             Layout.fillWidth: true
             implicitHeight: body.implicitHeight + (root.compact ? 6 : Metrics.spacingS) * 2
             radius: Metrics.cornerM
-            color: Appearance.applyAlpha(Appearance.macos.surfaceElevated, BlurService.enabled ? (
-                                                                                                     root.compact
-                                                                                                     ? 0.42 : root.flat
-                                                                                                       ? 0.46 : 0.56) :
-                                                                                                 1)
+            color: root.flat ? Appearance.macos.background : Appearance.macos.surface
             border.width: Metrics.dividerWidth
-            border.color: Appearance.applyAlpha(Appearance.macos.textPrimary, 0.15)
+            border.color: Appearance.macos.separator
             clip: true
-
-            GlassHighlight {
-                anchors.fill: parent
-                radius: parent.radius
-                topStrength: root.compact ? 0.10 : 0.075
-                bottomStrength: root.compact ? 0.025 : 0.018
-            }
 
             ColumnLayout {
                 id: body

@@ -13,16 +13,16 @@ Item {
 
     property color baseColor: Appearance.colors.colLayer1Base
     property real radius: Appearance.rounding.extraLarge
-    property real blurOpacity: 0.36
-    property real fallbackOpacity: 0.94
-    property real topHighlight: 0.26
-    property real bottomReflection: 0.065
+    property real blurOpacity: 0.68
+    property real fallbackOpacity: 0.96
+    property real topHighlight: 0.22
+    property real bottomReflection: 0.045
     property bool clearMaterial: false
     property bool elevated: true
     property bool clipContent: false
     readonly property real effectiveOpacity: BlurService.enabled ? root.blurOpacity : root.fallbackOpacity
     readonly property real materialOpacity: root.clearMaterial && BlurService.enabled ? root.effectiveOpacity
-                                                                                        * 0.72 : root.effectiveOpacity
+                                                                                        * 0.54 : root.effectiveOpacity
     default property alias content: contentLayer.data
 
     Rectangle {
@@ -36,14 +36,14 @@ Item {
             GradientStop {
                 position: 0.0
                 color: Appearance.applyAlpha(Appearance.mix(root.baseColor, Appearance.macos.surfaceElevated,
-                                                            root.clearMaterial ? 0.70 : 0.92),
+                                                            root.clearMaterial ? 0.64 : 0.86),
                                              root.materialOpacity)
             }
 
             GradientStop {
                 position: 1.0
                 color: Appearance.applyAlpha(Appearance.mix(root.baseColor, Appearance.macos.background,
-                                                            root.clearMaterial ? 0.38 : 0.62),
+                                                            root.clearMaterial ? 0.34 : 0.54),
                                              root.materialOpacity)
             }
         }
@@ -52,9 +52,9 @@ Item {
 
         layer.effect: MultiEffect {
             shadowEnabled: root.elevated
-            shadowColor: Appearance.applyAlpha(Appearance.colors.colShadow, 0.34)
-            shadowBlur: 0.78
-            shadowVerticalOffset: 10
+            shadowColor: Appearance.applyAlpha(Appearance.colors.colShadow, root.clearMaterial ? 0.30 : 0.22)
+            shadowBlur: 0.72
+            shadowVerticalOffset: 8
             shadowHorizontalOffset: 0
             autoPaddingEnabled: true
         }
@@ -78,7 +78,7 @@ Item {
 
             GradientStop {
                 position: 0.0
-                color: Appearance.applyAlpha(Appearance.macos.textPrimary, 0.055)
+                color: Appearance.applyAlpha(Appearance.macos.textPrimary, 0.07)
             }
 
             GradientStop {
@@ -93,7 +93,7 @@ Item {
 
             GradientStop {
                 position: 1.0
-                color: Appearance.applyAlpha(Appearance.macos.textPrimary, 0.035)
+                color: Appearance.applyAlpha(Appearance.macos.textPrimary, 0.045)
             }
         }
         antialiasing: true
@@ -104,8 +104,8 @@ Item {
         radius: root.radius
         color: "transparent"
         border.width: 1
-        border.color: root.clearMaterial ? Appearance.applyAlpha(Appearance.macos.textPrimary, 0.22) :
-                                           Appearance.macos.glassBorder
+        border.color: root.clearMaterial ? Appearance.applyAlpha(Appearance.macos.textPrimary, 0.20) :
+                                           Appearance.applyAlpha(Appearance.macos.textPrimary, 0.14)
         antialiasing: true
     }
 

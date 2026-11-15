@@ -15,7 +15,7 @@ StyledFlickable {
     id: root
 
     property var parentModal: null
-    property string sectionFilter: ""
+    property string sectionFilter: "__unselected__"
     clip: true
     contentWidth: width
     contentHeight: contentColumn.y + contentColumn.implicitHeight + 20
@@ -72,7 +72,7 @@ StyledFlickable {
     property real fillModeGroupRestingWidth: 0
 
     function showsSection(section) {
-        return root.sectionFilter === "" || root.sectionFilter === section;
+        return root.sectionFilter === section;
     }
 
     Component.onCompleted: WallpaperService.refreshOverviewBackdropRule()

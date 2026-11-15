@@ -7,7 +7,7 @@ import qs.Widgets.common
 StyledFlickable {
     id: root
 
-    property string sectionFilter: ""
+    property string sectionFilter: "__unselected__"
     readonly property bool horizontalBar: PersonalizationConfig.barPosition === "top"
                                           || PersonalizationConfig.barPosition === "bottom"
 
@@ -16,7 +16,7 @@ StyledFlickable {
     contentHeight: contentColumn.implicitHeight + Metrics.settingsPageMargin * 2
 
     function showsSection(section) {
-        return root.sectionFilter === "" || root.sectionFilter === section;
+        return root.sectionFilter === section;
     }
 
     ColumnLayout {

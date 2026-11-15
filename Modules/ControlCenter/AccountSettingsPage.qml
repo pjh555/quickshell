@@ -9,7 +9,6 @@ SettingsBusinessHub {
         return entry ? entry.label : "";
     }
 
-    legacySource: Qt.resolvedUrl("AccountPage.qml")
     groups: [
         {
             "title": qsTranslate("SettingsBusinessHub", "Account"),
@@ -18,12 +17,15 @@ SettingsBusinessHub {
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Profile and devices"),
                     "icon": "person",
-                    "sectionFilter": "profile"
+                    "source": "AccountPage.qml",
+                    "sectionId": "profile"
                 },
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Language & region"),
                     "icon": "language",
                     "value": root.languageLabel,
+                    "source": "AccountPage.qml",
+                    "sectionId": "language",
                     "targetId": "account.section.language"
                 }
             ]
@@ -35,11 +37,15 @@ SettingsBusinessHub {
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Bluetooth devices"),
                     "icon": "settings_bluetooth",
+                    "source": "AccountPage.qml",
+                    "sectionId": "bluetooth-devices",
                     "targetId": "account.section.bluetooth-devices"
                 },
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Cloud storage"),
                     "icon": "cloud",
+                    "source": "AccountPage.qml",
+                    "sectionId": "cloud-storage",
                     "targetId": "account.section.cloud-storage"
                 }
             ]
@@ -51,11 +57,15 @@ SettingsBusinessHub {
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Personalization"),
                     "icon": "palette",
+                    "source": "AccountPage.qml",
+                    "sectionId": "personalization",
                     "targetId": "account.section.personalization"
                 },
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Keyboard shortcuts"),
                     "icon": "keyboard",
+                    "source": "AccountPage.qml",
+                    "sectionId": "keyboard-shortcuts",
                     "targetId": "account.section.keyboard-shortcuts"
                 }
             ]

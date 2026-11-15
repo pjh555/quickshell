@@ -10,7 +10,6 @@ SettingsBusinessHub {
         return entry ? entry.label : "";
     }
 
-    legacySource: Qt.resolvedUrl("KeystonePage.qml")
     groups: [
         {
             "title": qsTranslate("SettingsBusinessHub", "Appearance"),
@@ -20,11 +19,15 @@ SettingsBusinessHub {
                     "title": qsTranslate("SettingsBusinessHub", "Keystone style"),
                     "icon": "web_asset",
                     "value": root.keystoneStyleLabel,
+                    "source": "KeystonePage.qml",
+                    "sectionId": "keystone-style",
                     "targetId": "keystone.section.keystone-style"
                 },
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Size and spacing"),
                     "icon": "space_bar",
+                    "source": "KeystonePage.qml",
+                    "sectionId": "size-spacing",
                     "targetId": "keystone.section.size-spacing"
                 },
                 {
@@ -44,16 +47,22 @@ SettingsBusinessHub {
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Mouse actions"),
                     "icon": "mouse",
+                    "source": "KeystonePage.qml",
+                    "sectionId": "mouse-actions",
                     "targetId": "keystone.section.mouse-actions"
                 },
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Media controls"),
                     "icon": "music_note",
+                    "source": "KeystonePage.qml",
+                    "sectionId": "media-controls",
                     "targetId": "keystone.section.media-controls"
                 },
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Keyhole"),
                     "icon": "dashboard",
+                    "source": "KeystonePage.qml",
+                    "sectionId": "keyhole",
                     "targetId": "keystone.section.keyhole"
                 }
             ]
@@ -66,11 +75,15 @@ SettingsBusinessHub {
                     "title": qsTranslate("SettingsBusinessHub", "Keyboard indicators"),
                     "icon": "keyboard",
                     "available": KeyboardLockService.available,
+                    "source": "KeystonePage.qml",
+                    "sectionId": "keyboard-indicators",
                     "targetId": "keystone.section.keyboard-indicators"
                 },
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Recording"),
                     "icon": "video_camera_front",
+                    "source": "KeystonePage.qml",
+                    "sectionId": "recording",
                     "targetId": "keystone.section.recording"
                 }
             ]

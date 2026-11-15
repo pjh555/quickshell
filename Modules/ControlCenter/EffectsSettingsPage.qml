@@ -1,7 +1,6 @@
 import QtQuick
 
 SettingsBusinessHub {
-    legacySource: Qt.resolvedUrl("GeneralEffectsPage.qml")
     groups: [
         {
             "title": qsTranslate("SettingsBusinessHub", "Visual effects"),
@@ -10,6 +9,8 @@ SettingsBusinessHub {
                 {
                     "title": qsTranslate("SettingsBusinessHub", "Background transparency and blur"),
                     "icon": "blur_on",
+                    "source": "GeneralEffectsPage.qml",
+                    "sectionId": "background",
                     "targetId": "general.effects.section.background"
                 }
             ]
