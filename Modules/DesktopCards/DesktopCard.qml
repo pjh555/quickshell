@@ -5,6 +5,7 @@ import qs.Widgets.common
 import qs.Common
 import qs.Services
 import qs.Modules.SystemCards
+import qs.Components
 import "./DesktopCardLayout.js" as DesktopCardLayout
 
 Item {
@@ -155,6 +156,50 @@ Item {
             iconName: "dock_to_right"
             text: qsTr("Return to sidebar")
             onTriggered: SystemCardService.setContainer(root.tileId, "sidebar", "")
+        }
+    }
+
+    LiquidGlassSurface {
+        id: returnButton
+
+        anchors {
+            top: parent.top
+            right: parent.right
+            margins: 10
+        }
+
+        z: 10
+        width: 30
+        height: 30
+        radius: 15
+        baseColor: Appearance.macos.surfaceElevated
+        clearMaterial: true
+        elevated: true
+        blurOpacity: 0.76
+        fallbackOpacity: 0.94
+        topHighlight: 0.20
+        bottomReflection: 0.04
+        visible: root.active && root.hostItem !== null && (contextPointer.containsMouse
+                                                           || returnPointer.containsMouse) && !root.dragging
+
+        Accessible.role: Accessible.Button
+        Accessible.name: qsTr("Return to sidebar")
+
+        MaterialSymbol {
+            anchors.centerIn: parent
+            text: "dock_to_right"
+            iconSize: 18
+            color: Appearance.macos.textPrimary
+        }
+
+        MouseArea {
+            id: returnPointer
+
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: SystemCardService.setContainer(root.tileId, "sidebar", "")
         }
     }
 

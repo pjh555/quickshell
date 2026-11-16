@@ -86,11 +86,18 @@ PanelWindow {
             radius: 14
             color: BlurService.backgroundColor(Appearance.colors.colLayer0)
             border.width: 1
-            border.color: Appearance.macos.glassBorder
+            border.color: BlurService.glassBorderColor(false)
             clip: true
             opacity: root.opened ? 1 : 0
             scale: root.opened ? 1 : 0.98
             transformOrigin: Item.TopLeft
+
+            GlassHighlight {
+                anchors.fill: parent
+                radius: parent.radius
+                topStrength: 0.18
+                bottomStrength: 0.04
+            }
 
             Behavior on opacity {
                 NumberAnimation {

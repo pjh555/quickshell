@@ -75,7 +75,14 @@ PanelWindow {
             radius: 24
             color: root.panelColor
             border.width: 1
-            border.color: Appearance.macos.glassBorder
+            border.color: BlurService.glassBorderColor(false)
+
+            GlassHighlight {
+                anchors.fill: parent
+                radius: parent.radius
+                topStrength: 0.18
+                bottomStrength: 0.04
+            }
 
             MouseArea {
                 anchors.fill: parent
@@ -111,8 +118,8 @@ PanelWindow {
                         spacing: 1
 
                         Text {
-                            text: root.fleetMode ? qsTr("Agent Mission Control")
-                                                 : (AgentService.config.name || qsTr("Clavis Agent"))
+                            text: root.fleetMode ? qsTr("Agent Mission Control") : (AgentService.config.name
+                                                                                    || qsTr("Clavis Agent"))
                             color: Appearance.colors.colOnSurface
                             font.family: Fonts.ui
                             font.pixelSize: 14
@@ -120,14 +127,14 @@ PanelWindow {
                         }
 
                         Text {
-                            text: root.fleetMode
-                                  ? AgentFleetService.summaryText + qsTr(" · 自动刷新")
-                                  : (AgentService.online ? (AgentService.config.model || qsTr("已连接"))
-                                                         : qsTr("后端未连接"))
+                            text: root.fleetMode ? AgentFleetService.summaryText + qsTr(" · 自动刷新") : (
+                                                       AgentService.online ? (AgentService.config.model
+                                                                              || qsTr("已连接")) : qsTr("后端未连接"))
 
-                            color: root.fleetMode ? Appearance.colors.colOnSurfaceVariant
-                                                  : (AgentService.online ? Appearance.colors.colOnSurfaceVariant
-                                                                         : Appearance.colors.colError)
+                            color: root.fleetMode ? Appearance.colors.colOnSurfaceVariant : (
+                                                        AgentService.online
+                                                        ? Appearance.colors.colOnSurfaceVariant :
+                                                          Appearance.colors.colError)
                             font.family: Fonts.ui
                             font.pixelSize: 10
                             elide: Text.ElideRight
@@ -139,8 +146,8 @@ PanelWindow {
                         iconSize: 17
                         iconName: root.fleetMode ? "arrow_back" : "radar"
                         tooltipText: root.fleetMode ? qsTr("返回对话") : qsTr("Agent 监控中心")
-                        onClicked: root.fleetMode ? AgentFleetService.closePanel()
-                                                  : AgentFleetService.openPanel()
+                        onClicked: root.fleetMode ? AgentFleetService.closePanel() :
+                                                    AgentFleetService.openPanel()
                     }
 
                     IconButton {

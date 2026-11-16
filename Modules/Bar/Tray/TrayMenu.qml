@@ -152,10 +152,17 @@ PopupWindow {
                 color: BlurService.backgroundColor(Appearance.colors.colLayer0)
                 radius: 18
                 border.width: 1
-                border.color: Appearance.macos.glassBorder
+                border.color: BlurService.glassBorderColor(false)
                 clip: true
                 opacity: 0
                 Component.onCompleted: opacity = 1
+
+                GlassHighlight {
+                    anchors.fill: parent
+                    radius: parent.radius
+                    topStrength: 0.18
+                    bottomStrength: 0.04
+                }
 
                 StackView {
                     id: stackView

@@ -82,7 +82,7 @@ Rectangle {
         shape: root.resolvedShape
         color: root.accentColor
         animationDuration: Appearance.animation.expressiveSlowSpatial.duration
-        animationEasing: Easing.OutBack
+        animationEasing.type: Easing.OutBack
         z: 4
         Accessible.name: root.label + qsTr(" icon")
 

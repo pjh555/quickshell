@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import qs.Common
 import qs.Services
+import qs.Widgets.common
 
 import "Layouts.js" as Layouts
 
@@ -18,8 +19,15 @@ Item {
         radius: root.style ? root.style.panelRadius : 24
         color: root.style ? BlurService.backgroundColor(root.style.panelBase) : "#F2F2F7"
         border.width: 1
-        border.color: root.style ? root.style.panelBorder : "#00000010"
+        border.color: root.style ? BlurService.glassBorderColor(false) : "#00000010"
         clip: true
+
+        GlassHighlight {
+            anchors.fill: parent
+            radius: parent.radius
+            topStrength: 0.16
+            bottomStrength: 0.035
+        }
 
         Column {
             anchors.fill: parent

@@ -11,6 +11,7 @@ Item {
     property real radius: Appearance.rounding.extraLarge
     property real topStrength: 0.11
     property real bottomStrength: 0.035
+    property real edgeStrength: 0.055
 
     Rectangle {
         anchors.fill: parent
@@ -52,6 +53,36 @@ Item {
             GradientStop {
                 position: 1
                 color: Qt.rgba(1, 1, 1, root.bottomStrength)
+            }
+        }
+    }
+
+    // Side refractions keep large panels from reading as flat acrylic. The
+    // center remains quiet so text and content retain their contrast.
+    Rectangle {
+        anchors.fill: parent
+        radius: root.radius
+        gradient: Gradient {
+            orientation: Gradient.Horizontal
+
+            GradientStop {
+                position: 0
+                color: Appearance.applyAlpha(Appearance.macos.textPrimary, root.edgeStrength)
+            }
+
+            GradientStop {
+                position: 0.12
+                color: "transparent"
+            }
+
+            GradientStop {
+                position: 0.88
+                color: "transparent"
+            }
+
+            GradientStop {
+                position: 1
+                color: Appearance.applyAlpha(Appearance.macos.textPrimary, root.edgeStrength * 0.72)
             }
         }
     }

@@ -313,9 +313,16 @@ TopBarPill {
                     color: BlurService.backgroundColor(Appearance.colors.colLayer0)
                     radius: 18
                     border.width: 1
-                    border.color: Appearance.macos.glassBorder
+                    border.color: BlurService.glassBorderColor(false)
                     clip: true
                     opacity: overflowPopup.visible ? 1 : 0
+
+                    GlassHighlight {
+                        anchors.fill: parent
+                        radius: parent.radius
+                        topStrength: 0.18
+                        bottomStrength: 0.04
+                    }
 
                     Behavior on opacity {
                         NumberAnimation {

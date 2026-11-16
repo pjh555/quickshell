@@ -116,7 +116,7 @@ Item {
         fallbackOpacity: 0.88
         topHighlight: 0.16
         bottomReflection: 0.035
-        clearMaterial: true
+        clearMaterial: false
         elevated: root.expanded
         clipContent: true
 

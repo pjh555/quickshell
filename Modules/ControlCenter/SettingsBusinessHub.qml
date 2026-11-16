@@ -1,15 +1,13 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Common
-import qs.Components
 import qs.Services
 import qs.Widgets.common
 
-// Three-level iPadOS settings navigation: the window sidebar is level one,
-// this persistent list is level two, and the loaded page is level three.
+// Two-pane settings layout: the window sidebar selects a business, then this
+// page presents its grouped settings and a focused detail page.
 Item {
     id: root
 
@@ -17,11 +15,11 @@ Item {
     property var parentModal: null
     property bool presentationActive: false
     property var currentEntry: null
+    property bool detailOpen: false
     property string pendingRevealId: ""
-    readonly property bool compactNavigation: width < 720
-    readonly property bool detailOpen: currentEntry !== null
-    readonly property var searchLeaf: detailPageLoader.item ? (detailPageLoader.item.searchLeaf
-                                                               || detailPageLoader.item) : categoryFlickable
+    readonly property var searchLeaf: detailOpen && detailPageLoader.item ? (detailPageLoader.item.searchLeaf
+                                                                             || detailPageLoader.item) :
+                                                                            overviewFlickable
 
     signal navigateRequested(string pageId)
     signal pairingRequested
@@ -31,10 +29,8 @@ Item {
     function allEntries() {
         const entries = [];
         for (const group of root.groups || []) {
-            for (const entry of group.entries || []) {
-                if (entry.available !== false)
-                    entries.push(entry);
-            }
+            for (const entry of group.entries || [])
+                entries.push(entry);
         }
         return entries;
     }
@@ -52,31 +48,6 @@ Item {
         return root.allEntries()[0] || null;
     }
 
-    function ensureSelection() {
-        if (!root.currentEntry)
-            root.currentEntry = root.allEntries()[0] || null;
-    }
-
-    function openEntry(entry, revealTarget) {
-        if (!entry || entry.available === false)
-            return;
-        if (entry.pageId) {
-            root.navigateRequested(entry.pageId);
-            return;
-        }
-        root.currentEntry = entry;
-        root.pendingRevealId = revealTarget ? String(entry.targetId || "") : "";
-        root.revealPendingTarget();
-    }
-
-    function revealPendingTarget() {
-        if (!root.pendingRevealId || detailPageLoader.status !== Loader.Ready)
-            return;
-        const targetId = root.pendingRevealId;
-        root.pendingRevealId = "";
-        Qt.callLater(() => ControlCenterService.openSearch(targetId));
-    }
-
     function applyCurrentEntry() {
         const page = detailPageLoader.item;
         if (!page || !root.currentEntry)
@@ -90,11 +61,32 @@ Item {
         }
     }
 
-    function closeDetail() {
-        if (!root.compactNavigation)
+    function openEntry(entry, revealTarget) {
+        if (!entry || entry.available === false)
             return;
+        if (entry.pageId) {
+            root.navigateRequested(entry.pageId);
+            return;
+        }
+        root.currentEntry = entry;
+        root.pendingRevealId = revealTarget ? String(entry.targetId || "") : "";
+        root.detailOpen = true;
+        root.applyCurrentEntry();
+        root.revealPendingTarget();
+    }
+
+    function revealPendingTarget() {
+        if (!root.pendingRevealId || detailPageLoader.status !== Loader.Ready)
+            return;
+        const targetId = root.pendingRevealId;
+        root.pendingRevealId = "";
+        Qt.callLater(() => ControlCenterService.openSearch(targetId));
+    }
+
+    function closeDetail() {
         ControlCenterService.cancelSearch();
         root.pendingRevealId = "";
+        root.detailOpen = false;
         root.currentEntry = null;
     }
 
@@ -106,9 +98,15 @@ Item {
 
     function openSearchPath(path, serial) {
         const target = ControlCenterService.searchTarget;
-        if (target)
-            root.currentEntry = root.entryForTarget(target.id);
-        if (detailPageLoader.status !== Loader.Ready || !detailPageLoader.item)
+        if (target) {
+            const entry = root.entryForTarget(target.id);
+            if (entry) {
+                root.currentEntry = entry;
+                root.pendingRevealId = "";
+                root.detailOpen = true;
+            }
+        }
+        if (!root.detailOpen || detailPageLoader.status !== Loader.Ready || !detailPageLoader.item)
             return "loading";
         const childPath = root.currentEntry && root.currentEntry.pathSegment && path.length && path[0]
               === root.currentEntry.pathSegment ? path.slice(1) : path;
@@ -116,8 +114,6 @@ Item {
                 ? detailPageLoader.item.openSearchPath(childPath, serial) : "ready";
     }
 
-    Component.onCompleted: ensureSelection()
-    onGroupsChanged: ensureSelection()
     onCurrentEntryChanged: Qt.callLater(applyCurrentEntry)
 
     Rectangle {
@@ -125,209 +121,176 @@ Item {
         color: Appearance.macos.background
     }
 
-    RowLayout {
+    Item {
+        id: overviewLayer
+
         anchors.fill: parent
-        spacing: 0
+        enabled: !root.detailOpen
+        opacity: root.detailOpen ? 0 : 1
+        x: root.detailOpen ? -Metrics.spacingL : 0
+
+        StyledFlickable {
+            id: overviewFlickable
+
+            anchors.fill: parent
+            clip: true
+            contentWidth: width
+            contentHeight: overviewColumn.implicitHeight + Metrics.settingsPageMargin * 2
+
+            ColumnLayout {
+                id: overviewColumn
+
+                width: Math.min(760, Math.max(0, overviewFlickable.width - Metrics.settingsPageMargin * 2))
+                x: Math.max(Metrics.settingsPageMargin, (overviewFlickable.width - width) / 2)
+                y: Metrics.settingsPageMargin
+                spacing: Metrics.settingsGroupSpacing
+
+                Repeater {
+                    model: root.groups
+
+                    delegate: SettingsSection {
+                        id: groupSection
+
+                        required property var modelData
+
+                        Layout.fillWidth: true
+                        title: modelData.title || ""
+                        iconName: modelData.icon || ""
+                        compact: true
+
+                        Repeater {
+                            model: groupSection.modelData.entries || []
+
+                            delegate: SettingsActionRow {
+                                required property var modelData
+                                required property int index
+
+                                Layout.fillWidth: true
+                                visible: modelData.available !== false
+                                iconName: modelData.icon || "settings"
+                                text: modelData.title || ""
+                                valueText: modelData.value || ""
+                                description: modelData.description || ""
+                                showDivider: index < (groupSection.modelData.entries || []).length - 1
+                                onClicked: root.openEntry(modelData, false)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: Appearance.animation.expressiveFastEffects.duration
+            }
+        }
+
+        Behavior on x {
+            NumberAnimation {
+                duration: Appearance.animation.elementResize.duration
+                easing.type: Appearance.animation.elementResize.type
+                easing.bezierCurve: Appearance.animation.elementResize.bezierCurve
+            }
+        }
+    }
+
+    Item {
+        id: detailLayer
+
+        anchors.fill: parent
+        enabled: root.detailOpen
+        visible: root.detailOpen || opacity > 0
+        opacity: root.detailOpen ? 1 : 0
+        x: root.detailOpen ? 0 : Metrics.spacingL
 
         LiquidGlassSurface {
-            id: categoryPane
+            id: detailHeaderSurface
 
-            Layout.fillHeight: true
-            Layout.preferredWidth: root.compactNavigation ? root.width : 276
-            visible: !root.compactNavigation || !root.detailOpen
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            height: 52
             radius: 0
             baseColor: Appearance.macos.surfaceElevated
             blurOpacity: 0.72
             fallbackOpacity: 0.97
-            topHighlight: 0.12
+            topHighlight: 0.13
             bottomReflection: 0.025
             elevated: false
-            clipContent: true
 
-            StyledFlickable {
-                id: categoryFlickable
-
+            GeneralSubpageHeader {
                 anchors.fill: parent
-                clip: true
-                contentWidth: width
-                contentHeight: categoryColumn.implicitHeight + Metrics.spacingL * 2
-
-                ColumnLayout {
-                    id: categoryColumn
-
-                    width: categoryFlickable.width
-                    y: Metrics.spacingM
-                    spacing: Metrics.spacingL
-
-                    Repeater {
-                        model: root.groups
-
-                        delegate: ColumnLayout {
-                            id: groupColumn
-
-                            required property var modelData
-
-                            Layout.fillWidth: true
-                            Layout.leftMargin: Metrics.spacingS
-                            Layout.rightMargin: Metrics.spacingS
-                            spacing: 3
-
-                            Text {
-                                Layout.fillWidth: true
-                                Layout.leftMargin: Metrics.spacingM
-                                Layout.rightMargin: Metrics.spacingM
-                                text: groupColumn.modelData.title || ""
-                                color: Appearance.colors.colOnSurfaceVariant
-                                font.family: Typography.labelMedium.family
-                                font.pixelSize: Typography.labelMedium.pixelSize
-                                font.weight: Font.DemiBold
-                                elide: Text.ElideRight
-                            }
-
-                            Repeater {
-                                model: groupColumn.modelData.entries || []
-
-                                delegate: SettingsActionRow {
-                                    required property var modelData
-
-                                    Layout.fillWidth: true
-                                    visible: modelData.available !== false
-                                    iconName: modelData.icon || "settings"
-                                    text: modelData.title || ""
-                                    valueText: modelData.value || ""
-                                    showDivider: false
-                                    highlighted: root.currentEntry === modelData
-                                    onClicked: root.openEntry(modelData, false)
-                                }
-                            }
-                        }
-                    }
-                }
+                title: root.currentEntry ? root.currentEntry.title || "" : ""
+                iconName: root.currentEntry ? root.currentEntry.icon || "settings" : "settings"
+                backAccessibleName: qsTr("Back to settings categories")
+                onBackRequested: root.closeDetail()
             }
         }
 
-        Rectangle {
-            Layout.preferredWidth: 1
-            Layout.fillHeight: true
-            visible: categoryPane.visible
-            color: Appearance.macos.separator
+        Loader {
+            id: detailPageLoader
+
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: detailHeaderSurface.bottom
+            anchors.bottom: parent.bottom
+            active: root.detailOpen && root.currentEntry && !!root.currentEntry.source
+            asynchronous: true
+            source: active ? Qt.resolvedUrl(root.currentEntry.source) : ""
+            onLoaded: {
+                if (!item)
+                return;
+                if ("parentModal" in item)
+                item.parentModal = root.parentModal;
+                const page = item;
+                root.applyCurrentEntry();
+                if ("presentationActive" in page)
+                page.presentationActive = Qt.binding(() => root.presentationActive && root.detailOpen
+                                                     && detailPageLoader.item === page);
+                root.revealPendingTarget();
+                ControlCenterService.retrySearch();
+            }
         }
 
-        Item {
-            id: detailPane
+        InlineBusyIndicator {
+            anchors.centerIn: parent
+            visible: detailPageLoader.status === Loader.Loading
+            busy: visible
+        }
 
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            visible: !root.compactNavigation || root.detailOpen
+        Connections {
+            target: detailPageLoader.item
+            ignoreUnknownSignals: true
 
-            LiquidGlassSurface {
-                id: detailHeaderSurface
-
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: parent.top
-                height: 54
-                radius: 0
-                baseColor: Appearance.macos.surfaceElevated
-                blurOpacity: 0.72
-                fallbackOpacity: 0.97
-                topHighlight: 0.13
-                bottomReflection: 0.025
-                elevated: false
-
-                GeneralSubpageHeader {
-                    anchors.fill: parent
-                    title: root.currentEntry ? root.currentEntry.title || "" : ""
-                    iconName: root.currentEntry ? root.currentEntry.icon || "settings" : "settings"
-                    backAccessibleName: qsTr("Back to settings categories")
-                    visible: root.compactNavigation
-                    onBackRequested: root.closeDetail()
-                }
-
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.leftMargin: Metrics.spacingL
-                    anchors.rightMargin: Metrics.spacingL
-                    visible: !root.compactNavigation
-                    spacing: Metrics.spacingS
-
-                    Rectangle {
-                        Layout.preferredWidth: 32
-                        Layout.preferredHeight: 32
-                        radius: 8
-                        color: Appearance.colors.colSecondaryContainer
-
-                        MaterialSymbol {
-                            anchors.centerIn: parent
-                            text: root.currentEntry ? root.currentEntry.icon || "settings" : "settings"
-                            iconSize: 20
-                            fill: 1
-                            color: Appearance.colors.colOnSecondaryContainer
-                        }
-                    }
-
-                    Text {
-                        Layout.fillWidth: true
-                        text: root.currentEntry ? root.currentEntry.title || "" : ""
-                        color: Appearance.colors.colOnSurface
-                        font.family: Typography.titleLarge.family
-                        font.pixelSize: Typography.titleLarge.pixelSize
-                        font.weight: Font.DemiBold
-                        elide: Text.ElideRight
-                    }
-                }
+            function onNavigateRequested(pageId) {
+                root.navigateRequested(pageId);
             }
 
-            Loader {
-                id: detailPageLoader
-
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: detailHeaderSurface.bottom
-                anchors.bottom: parent.bottom
-                active: root.currentEntry !== null && !!root.currentEntry.source
-                asynchronous: true
-                source: active ? Qt.resolvedUrl(root.currentEntry.source) : ""
-                onLoaded: {
-                    if (!item)
-                    return;
-                    if ("parentModal" in item)
-                    item.parentModal = root.parentModal;
-                    const page = item;
-                    root.applyCurrentEntry();
-                    if ("presentationActive" in page)
-                    page.presentationActive = Qt.binding(() => root.presentationActive
-                                                         && detailPageLoader.item === page);
-                    root.revealPendingTarget();
-                    ControlCenterService.retrySearch();
-                }
+            function onPairingRequested() {
+                root.pairingRequested();
             }
 
-            InlineBusyIndicator {
-                anchors.centerIn: parent
-                visible: detailPageLoader.status === Loader.Loading
-                busy: visible
+            function onDeviceRequested(address, adapterId) {
+                root.deviceRequested(address, adapterId);
             }
 
-            Connections {
-                target: detailPageLoader.item
-                ignoreUnknownSignals: true
+            function onReturnRequested() {
+                root.returnRequested();
+            }
+        }
 
-                function onNavigateRequested(pageId) {
-                    root.navigateRequested(pageId);
-                }
+        Behavior on opacity {
+            NumberAnimation {
+                duration: Appearance.animation.expressiveFastEffects.duration
+            }
+        }
 
-                function onPairingRequested() {
-                    root.pairingRequested();
-                }
-
-                function onDeviceRequested(address, adapterId) {
-                    root.deviceRequested(address, adapterId);
-                }
-
-                function onReturnRequested() {
-                    root.returnRequested();
-                }
+        Behavior on x {
+            NumberAnimation {
+                duration: Appearance.animation.elementResize.duration
+                easing.type: Appearance.animation.elementResize.type
+                easing.bezierCurve: Appearance.animation.elementResize.bezierCurve
             }
         }
     }

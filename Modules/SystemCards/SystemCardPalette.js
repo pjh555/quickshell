@@ -1,20 +1,21 @@
 .pragma library
 
-// Apple-inspired widget palettes.  Each system card owns a saturated two- or
-// three-stop gradient, a foreground tuned for that gradient, and an accent
-// used by the icon badge and chart strokes.  Values are QML color strings so
-// the palette also works from the plain-JS catalog path.
+// iPadOS-style full-color widget palettes. Most utility widgets use the
+// adaptive neutral card supplied by SystemCardContent and reserve this color
+// for data emphasis. Weather and media opt into full-color surfaces.
 var palettes = {
     "time": {
+        "style": "neutral",
         "start": "#1C1C1E",
         "mid": "#2C2C2E",
         "end": "#3A3A3C",
         "foreground": "#FFFFFF",
         "secondary": "#C7FFFFFF",
-        "accent": "#64D2FF",
-        "accentBackground": "#29FFFFFF"
+        "accent": "#0A84FF",
+        "accentBackground": "#220A84FF"
     },
     "battery": {
+        "style": "neutral",
         "start": "#34C759",
         "mid": "#238C40",
         "end": "#0F6B2A",
@@ -24,6 +25,7 @@ var palettes = {
         "accentBackground": "#29FFFFFF"
     },
     "cpu": {
+        "style": "neutral",
         "start": "#0A84FF",
         "mid": "#0066CC",
         "end": "#0040A0",
@@ -33,6 +35,7 @@ var palettes = {
         "accentBackground": "#29FFFFFF"
     },
     "gpu": {
+        "style": "neutral",
         "start": "#BF5AF2",
         "mid": "#8E3DC4",
         "end": "#6A1B9A",
@@ -42,6 +45,7 @@ var palettes = {
         "accentBackground": "#29FFFFFF"
     },
     "memoryUsed": {
+        "style": "neutral",
         "start": "#FF9F0A",
         "mid": "#D97A00",
         "end": "#B25000",
@@ -51,6 +55,7 @@ var palettes = {
         "accentBackground": "#29FFFFFF"
     },
     "wifi": {
+        "style": "neutral",
         "start": "#30D158",
         "mid": "#1EA443",
         "end": "#0A6B2A",
@@ -60,6 +65,7 @@ var palettes = {
         "accentBackground": "#29FFFFFF"
     },
     "network": {
+        "style": "neutral",
         "start": "#5E5CE6",
         "mid": "#4140B8",
         "end": "#26248F",
@@ -69,6 +75,7 @@ var palettes = {
         "accentBackground": "#29FFFFFF"
     },
     "storage": {
+        "style": "neutral",
         "start": "#FF9F0A",
         "mid": "#E07F00",
         "end": "#C25E00",
@@ -78,6 +85,7 @@ var palettes = {
         "accentBackground": "#29FFFFFF"
     },
     "storageCapacity": {
+        "style": "neutral",
         "start": "#FF453A",
         "mid": "#C7342A",
         "end": "#8F1A14",
@@ -87,6 +95,7 @@ var palettes = {
         "accentBackground": "#29FFFFFF"
     },
     "calendar": {
+        "style": "neutral",
         "start": "#FF375F",
         "mid": "#C92847",
         "end": "#8F0F2A",
@@ -96,15 +105,17 @@ var palettes = {
         "accentBackground": "#29FFFFFF"
     },
     "weather": {
-        "start": "#0A84FF",
-        "mid": "#0A6BC9",
-        "end": "#0055A5",
+        "style": "fullColor",
+        "start": "#2E7CC6",
+        "mid": "#4A8FCE",
+        "end": "#7EB8E8",
         "foreground": "#FFFFFF",
-        "secondary": "#C7FFFFFF",
-        "accent": "#A6D8FF",
+        "secondary": "#D9FFFFFF",
+        "accent": "#FFFFFF",
         "accentBackground": "#29FFFFFF"
     },
     "music": {
+        "style": "media",
         "start": "#BF5AF2",
         "mid": "#D147B0",
         "end": "#FF375F",
@@ -114,6 +125,7 @@ var palettes = {
         "accentBackground": "#29FFFFFF"
     },
     "notifications": {
+        "style": "neutral",
         "start": "#3A3A3C",
         "mid": "#2A2A2C",
         "end": "#1C1C1E",
@@ -123,24 +135,24 @@ var palettes = {
         "accentBackground": "#26FFFFFF"
     },
     "notes": {
-        // Apple Notes yellow with dark brown type; the warm gradient keeps
-        // the card colorful without washing out the white-on-dark family.
-        "start": "#FFD60A",
-        "mid": "#F5B800",
-        "end": "#C77800",
-        "foreground": "#2B1D00",
-        "secondary": "#B32B1D00",
-        "accent": "#8A4B00",
-        "accentBackground": "#4DFFFFFF"
+        "style": "paper",
+        "start": "#FFFFFF",
+        "mid": "#FFFFFF",
+        "end": "#FFFFFF",
+        "foreground": "#1C1C1E",
+        "secondary": "#8E8E93",
+        "accent": "#FFD60A",
+        "accentBackground": "#33FFD60A"
     },
     "photos": {
-        "start": "#0A84FF",
-        "mid": "#0F9E9A",
-        "end": "#30D158",
-        "foreground": "#FFFFFF",
-        "secondary": "#C7FFFFFF",
-        "accent": "#FFFFFF",
-        "accentBackground": "#29FFFFFF"
+        "style": "media",
+        "start": "#FFFFFF",
+        "mid": "#FFFFFF",
+        "end": "#FFFFFF",
+        "foreground": "#1C1C1E",
+        "secondary": "#8E8E93",
+        "accent": "#007AFF",
+        "accentBackground": "#22007AFF"
     }
 };
 

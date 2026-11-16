@@ -8,7 +8,6 @@ import QtQuick.Effects
 import QtQuick.Shapes
 import qs.Common
 import qs.Services
-import qs.Widgets.common
 
 Item {
     id: root
@@ -29,22 +28,37 @@ Item {
     readonly property bool shellManagedSurface: root.useShellManagedSurface
     readonly property int surfaceRadius: Appearance.rounding.veryLarge
     readonly property var palette: CardPalette.paletteFor(root.tileId)
-    // iPad-style widget surface: a saturated diagonal gradient replaces the
-    // flat dark rectangle.  Every card consumes these values so icon badges,
-    // chart strokes and typography stay legible on their own gradient.
-    readonly property real clearMaterialOpacity: BlurService.enabled ? 0.72 : 0.94
-    readonly property color glassGradientStart: Appearance.applyAlpha(root.palette.start,
-                                                                      root.clearMaterialOpacity)
-    readonly property color glassGradientMid: Appearance.applyAlpha(root.palette.mid,
-                                                                    root.clearMaterialOpacity * 0.84)
-    readonly property color glassGradientEnd: Appearance.applyAlpha(root.palette.end,
-                                                                    root.clearMaterialOpacity)
-    readonly property color glassForeground: root.palette.foreground
-    readonly property color glassSecondaryForeground: root.palette.secondary
+    // Widgets are content surfaces, not shell chrome. Match iPadOS full-color
+    // widgets with an adaptive opaque card, reserving saturated backgrounds
+    // for content that benefits from them (weather, media, and stocks).
+    readonly property string surfaceStyle: String(root.palette.style || "neutral")
+    readonly property bool usesFullColorSurface: root.surfaceStyle === "fullColor" || root.surfaceStyle
+                                                 === "media"
+    readonly property color adaptiveSurfaceStart: UiPreferences.darkMode ? "#353537" : "#FFFFFF"
+    readonly property color adaptiveSurfaceMid: UiPreferences.darkMode ? "#2C2C2E" : "#FAFAFC"
+    readonly property color adaptiveSurfaceEnd: UiPreferences.darkMode ? "#242426" : "#F2F2F7"
+    readonly property color glassGradientStart: root.usesFullColorSurface ? root.palette.start :
+                                                                            root.adaptiveSurfaceStart
+    readonly property color glassGradientMid: root.usesFullColorSurface ? root.palette.mid :
+                                                                          root.adaptiveSurfaceMid
+    readonly property color glassGradientEnd: root.usesFullColorSurface ? root.palette.end :
+                                                                          root.adaptiveSurfaceEnd
+    readonly property color glassForeground: root.usesFullColorSurface ? root.palette.foreground : (
+                                                                             UiPreferences.darkMode
+                                                                             ? "#F5F5F7" : "#1C1C1E")
+    readonly property color glassSecondaryForeground: root.usesFullColorSurface ? root.palette.secondary : (
+                                                                                      UiPreferences.darkMode
+                                                                                      ? "#AEAEB2" : "#636366")
     readonly property color glassAccent: root.palette.accent
     readonly property color glassAccentBackground: root.palette.accentBackground
-    readonly property color glassPanelColor: Qt.rgba(1, 1, 1, 0.12 + root.interactionProgress * 0.04)
-    readonly property color glassBorderColor: Qt.rgba(1, 1, 1, 0.24 + root.interactionProgress * 0.12)
+    readonly property color glassPanelColor: root.usesFullColorSurface ? Qt.rgba(1, 1, 1, 0.14) : Appearance.applyAlpha(
+                                                                             root.glassAccent,
+                                                                             UiPreferences.darkMode ? 0.20 :
+                                                                                                      0.12)
+    readonly property color glassBorderColor: root.usesFullColorSurface ? Qt.rgba(1, 1, 1, 0.18) : (UiPreferences.darkMode ? Qt.rgba(
+                                                                                                                                 1, 1, 1, 0.12) :
+                                                                                                                             Qt.rgba(0,
+                                                                                                                                     0, 0, 0.08))
     readonly property var contentItem: contentLoader.item
     // Music supplies album art and Photos supplies its crossfading image pair
     // through these optional properties; every other card leaves them empty
@@ -273,9 +287,10 @@ Item {
 
         layer.effect: MultiEffect {
             shadowEnabled: true
-            shadowColor: Appearance.applyAlpha(Appearance.colors.colShadow, 0.4)
-            shadowBlur: 0.8
-            shadowVerticalOffset: 4
+            shadowColor: Appearance.applyAlpha(Appearance.colors.colShadow, UiPreferences.darkMode ? 0.36 :
+                                                                                                     0.22)
+            shadowBlur: 0.72
+            shadowVerticalOffset: 5
             shadowHorizontalOffset: 0
             autoPaddingEnabled: true
         }
@@ -311,9 +326,8 @@ Item {
         color: "transparent"
         antialiasing: true
 
-        // A diagonal, multi-stop gradient is the card material itself.  The
-        // Shape keeps the rounded silhouette while the gradient runs corner
-        // to corner, which a Rectangle's vertical/horizontal Gradient cannot.
+        // A restrained diagonal variation gives the opaque widget depth. It
+        // is intentionally not a Liquid Glass highlight or blur layer.
         Shape {
             anchors.fill: parent
             preferredRendererType: Shape.CurveRenderer
@@ -436,31 +450,8 @@ Item {
         Rectangle {
             anchors.fill: parent
             radius: root.surfaceRadius
-            gradient: Gradient {
-                orientation: Gradient.Vertical
-
-                GradientStop {
-                    position: 0
-                    color: Qt.rgba(1, 1, 1, 0.18)
-                }
-
-                GradientStop {
-                    position: 0.35
-                    color: Qt.rgba(1, 1, 1, 0.04)
-                }
-
-                GradientStop {
-                    position: 0.62
-                    color: "transparent"
-                }
-            }
-        }
-
-        GlassHighlight {
-            anchors.fill: parent
-            radius: root.surfaceRadius
-            topStrength: 0.14 + root.interactionProgress * 0.08
-            bottomStrength: 0.035
+            visible: root.usesFullColorSurface && !root.contentBackgroundEnabled
+            color: Qt.rgba(1, 1, 1, 0.025 + root.interactionProgress * 0.025)
         }
     }
 

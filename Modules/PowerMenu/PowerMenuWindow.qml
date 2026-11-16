@@ -45,46 +45,48 @@ PanelWindow {
         anchors.fill: parent
         focus: root.visible
         Keys.onPressed: event => {
-            switch (event.key) {
-            case Qt.Key_Left:
-            case Qt.Key_Up:
-                root.selectedIndex = (root.selectedIndex + actionRepeater.count - 1) % actionRepeater.count;
-                break;
-            case Qt.Key_Right:
-            case Qt.Key_Down:
-                root.selectedIndex = (root.selectedIndex + 1) % actionRepeater.count;
-                break;
-            case Qt.Key_Return:
-            case Qt.Key_Enter:
-                if (!event.isAutoRepeat)
-                    PowerMenuService.trigger(actionRepeater.itemAt(root.selectedIndex).modelData.action);
-                break;
-            case Qt.Key_Escape:
-                PowerMenuService.close();
-                break;
-            case Qt.Key_L:
-                PowerMenuService.trigger("lock");
-                break;
-            case Qt.Key_E:
-                PowerMenuService.trigger("logout");
-                break;
-            case Qt.Key_U:
-                PowerMenuService.trigger("suspend");
-                break;
-            case Qt.Key_S:
-                PowerMenuService.trigger("poweroff");
-                break;
-            case Qt.Key_H:
-                PowerMenuService.trigger("hibernate");
-                break;
-            case Qt.Key_R:
-                PowerMenuService.trigger("reboot");
-                break;
-            default:
-                return;
-            }
-            event.accepted = true;
-        }
+                            switch (event.key) {
+                                case Qt.Key_Left:
+                                case Qt.Key_Up:
+                                root.selectedIndex = (root.selectedIndex + actionRepeater.count - 1)
+                                % actionRepeater.count;
+                                break;
+                                case Qt.Key_Right:
+                                case Qt.Key_Down:
+                                root.selectedIndex = (root.selectedIndex + 1) % actionRepeater.count;
+                                break;
+                                case Qt.Key_Return:
+                                case Qt.Key_Enter:
+                                if (!event.isAutoRepeat)
+                                PowerMenuService.trigger(actionRepeater.itemAt(
+                                                             root.selectedIndex).modelData.action);
+                                break;
+                                case Qt.Key_Escape:
+                                PowerMenuService.close();
+                                break;
+                                case Qt.Key_L:
+                                PowerMenuService.trigger("lock");
+                                break;
+                                case Qt.Key_E:
+                                PowerMenuService.trigger("logout");
+                                break;
+                                case Qt.Key_U:
+                                PowerMenuService.trigger("suspend");
+                                break;
+                                case Qt.Key_S:
+                                PowerMenuService.trigger("poweroff");
+                                break;
+                                case Qt.Key_H:
+                                PowerMenuService.trigger("hibernate");
+                                break;
+                                case Qt.Key_R:
+                                PowerMenuService.trigger("reboot");
+                                break;
+                                default:
+                                return;
+                            }
+                            event.accepted = true;
+                        }
 
         MouseArea {
             anchors.fill: parent
@@ -99,6 +101,13 @@ PanelWindow {
             height: actionRow.implicitHeight + 56
             radius: Appearance.rounding.extraLarge
             color: BlurService.backgroundColor(Appearance.colors.colLayer0)
+
+            GlassHighlight {
+                anchors.fill: parent
+                radius: parent.radius
+                topStrength: 0.20
+                bottomStrength: 0.045
+            }
 
             MouseArea {
                 anchors.fill: parent

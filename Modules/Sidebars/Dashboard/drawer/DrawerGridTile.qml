@@ -70,8 +70,8 @@ Item {
         }
     }
 
-    // The card content owns the iPad-style glass surface now; a second solid
-    // backing rectangle here would block the compositor blur behind it.
+    // The card content owns the adaptive iPadOS widget surface. Shell glass is
+    // reserved for navigation and edit controls outside the widget body.
     SystemCardContent {
         id: cardContent
 
@@ -89,7 +89,8 @@ Item {
     Rectangle {
         anchors.fill: parent
         radius: Appearance.rounding.veryLarge
-        color: root.dragging ? Qt.rgba(0, 0, 0, 0.08) : root.hovered ? Qt.rgba(1, 1, 1, 0.06) : "transparent"
+        color: root.dragging ? Appearance.applyAlpha(Appearance.colors.colPrimary, 0.10) : root.hovered
+                               ? Appearance.applyAlpha(Appearance.colors.colPrimary, 0.045) : "transparent"
 
         Behavior on color {
             ColorAnimation {

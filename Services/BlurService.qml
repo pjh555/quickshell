@@ -25,9 +25,28 @@ Singleton {
     signal integrationConfigured
     signal integrationFailed(string message)
 
+    // Regular Liquid Glass is the default shell material. Keep it legible
+    // even when the user asks for very low opacity; Clear is reserved for
+    // compact controls above wallpaper or other media-rich content.
+    readonly property real regularOpacity: root.enabled ? Math.max(0.66,
+                                                                   PersonalizationConfig.shellBackgroundOpacity) :
+                                                          0.96
+    readonly property real clearOpacity: root.enabled ? Math.max(0.34, Math.min(0.56,
+                                                                                PersonalizationConfig.shellBackgroundOpacity
+                                                                                * 0.68)) : 0.90
+
     function backgroundColor(baseColor) {
-        const material = Appearance.mix(baseColor, Appearance.macos.surfaceElevated, 0.18);
-        return Appearance.applyAlpha(material, PersonalizationConfig.shellBackgroundOpacity);
+        const material = Appearance.mix(baseColor, Appearance.macos.surfaceElevated, 0.58);
+        return Appearance.applyAlpha(material, root.regularOpacity);
+    }
+
+    function clearBackgroundColor(baseColor) {
+        const material = Appearance.mix(baseColor, Appearance.macos.surfaceElevated, 0.72);
+        return Appearance.applyAlpha(material, root.clearOpacity);
+    }
+
+    function glassBorderColor(clearMaterial) {
+        return Appearance.applyAlpha(Appearance.macos.textPrimary, clearMaterial ? 0.20 : 0.14);
     }
 
     // A shell-managed Material surface. It starts from an opaque base but

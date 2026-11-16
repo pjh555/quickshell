@@ -128,7 +128,14 @@ TopBarPill {
                 radius: 22
                 color: BlurService.backgroundColor(Appearance.colors.colLayer0)
                 border.width: 1
-                border.color: Appearance.macos.glassBorder
+                border.color: BlurService.glassBorderColor(false)
+
+                GlassHighlight {
+                    anchors.fill: parent
+                    radius: parent.radius
+                    topStrength: 0.18
+                    bottomStrength: 0.04
+                }
 
                 MouseArea {
                     anchors.fill: parent

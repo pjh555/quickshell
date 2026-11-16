@@ -124,11 +124,18 @@ FocusScope {
         height: Math.max(280, Math.min(parent.height - root.panelInset * 2, 620, Math.max(320, parent.height
                                                                                           * 0.68)))
         radius: 32
-        color: Qt.rgba(0.06, 0.07, 0.09, 0.995)
+        color: BlurService.backgroundColor(Appearance.colors.colLayer1)
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.16)
+        border.color: BlurService.glassBorderColor(false)
         opacity: 0
         scale: 0.92
+
+        GlassHighlight {
+            anchors.fill: parent
+            radius: parent.radius
+            topStrength: 0.20
+            bottomStrength: 0.045
+        }
 
         TapHandler {
             onTapped: {}

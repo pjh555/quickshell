@@ -83,16 +83,16 @@ FloatingWindow {
 
     onTargetScreenChanged: {
         if (targetScreen)
-            screen = targetScreen;
+        screen = targetScreen;
     }
     onCurrentPathChanged: Qt.callLater(refreshBreadcrumbs)
     onVisibleChanged: {
         if (visible)
-            Qt.callLater(fileGrid.refreshLayout);
+        Qt.callLater(fileGrid.refreshLayout);
     }
     onClosed: {
         if (_completionHandled)
-            return;
+        return;
         _completionHandled = true;
         visible = false;
         pathEditing = false;
@@ -187,9 +187,9 @@ FloatingWindow {
         pathDraft = currentPath;
         pathEditing = true;
         Qt.callLater(() => {
-            pathEditor.forceActiveFocus();
-            pathEditor.selectAll();
-        });
+                         pathEditor.forceActiveFocus();
+                         pathEditor.selectAll();
+                     });
     }
 
     function cancelPathEditing() {
@@ -224,9 +224,9 @@ FloatingWindow {
         _completionHandled = false;
         visible = true;
         Qt.callLater(() => {
-            dialogFocus.forceActiveFocus();
-            fileGrid.forceActiveFocus();
-        });
+                         dialogFocus.forceActiveFocus();
+                         fileGrid.forceActiveFocus();
+                     });
     }
 
     function dismiss() {
@@ -301,19 +301,19 @@ FloatingWindow {
         clearSelection();
         _folderModelAttached = false;
         Qt.callLater(() => {
-            showHiddenFiles = visible;
-            Qt.callLater(() => {
-                _folderModelAttached = true;
-                fileGrid.positionViewAtBeginning();
-                Qt.callLater(fileGrid.refreshLayout);
-            });
-        });
+                         showHiddenFiles = visible;
+                         Qt.callLater(() => {
+                                          _folderModelAttached = true;
+                                          fileGrid.positionViewAtBeginning();
+                                          Qt.callLater(fileGrid.refreshLayout);
+                                      });
+                     });
     }
 
     function isImageName(name) {
         const lower = String(name || "").toLowerCase();
         return [".jpg", ".jpeg", ".png", ".webp", ".bmp", ".gif"].some(extension => lower.endsWith(
-                                                                                        extension));
+                                                                           extension));
 
     }
 
@@ -355,9 +355,9 @@ FloatingWindow {
 
         Keys.onEscapePressed: event => {
             if (root.pathEditing)
-                root.cancelPathEditing();
+            root.cancelPathEditing();
             else
-                root.dismiss();
+            root.dismiss();
             event.accepted = true;
         }
         Keys.onReturnPressed: event => {
@@ -392,6 +392,13 @@ FloatingWindow {
             z: -2
             radius: Appearance.rounding.veryLarge
             color: BlurService.backgroundColor(Appearance.m3colors.m3surface)
+
+            GlassHighlight {
+                anchors.fill: parent
+                radius: parent.radius
+                topStrength: 0.16
+                bottomStrength: 0.035
+            }
         }
 
         CompositorBlurRegion {
@@ -408,7 +415,7 @@ FloatingWindow {
             z: -1
             onPressed: event => {
                 if (event.button === Qt.LeftButton && root.pathEditing)
-                    root.cancelPathEditing();
+                root.cancelPathEditing();
                 event.accepted = true;
             }
             onClicked: event => event.accepted = true
@@ -418,14 +425,14 @@ FloatingWindow {
             acceptedButtons: Qt.LeftButton
             onTapped: eventPoint => {
                 if (!root.pathEditing)
-                    return;
+                return;
 
                 const topLeft = pathEditor.mapToItem(dialogFocus, 0, 0);
                 const position = eventPoint.position;
                 const insideEditor = position.x >= topLeft.x && position.x <= topLeft.x + pathEditor.width
-                      && position.y >= topLeft.y && position.y <= topLeft.y + pathEditor.height;
+                && position.y >= topLeft.y && position.y <= topLeft.y + pathEditor.height;
                 if (!insideEditor)
-                    root.cancelPathEditing();
+                root.cancelPathEditing();
             }
         }
 
@@ -497,7 +504,7 @@ FloatingWindow {
                     acceptedButtons: Qt.LeftButton
                     onActiveChanged: {
                         if (active)
-                            root.startSystemMove();
+                        root.startSystemMove();
                     }
                 }
             }
@@ -739,7 +746,7 @@ FloatingWindow {
                                     onAccepted: root.commitPathEditing()
                                     onActiveFocusChanged: {
                                         if (!activeFocus && root.pathEditing)
-                                            root.cancelPathEditing();
+                                        root.cancelPathEditing();
                                     }
 
                                     Keys.onEscapePressed: event => {
@@ -855,7 +862,7 @@ FloatingWindow {
                                         duration: Appearance.animation.expressiveDefaultSpatial.duration
                                         easing.type: Appearance.animation.expressiveDefaultSpatial.type
                                         easing.bezierCurve:
-                                            Appearance.animation.expressiveDefaultSpatial.bezierCurve
+                                        Appearance.animation.expressiveDefaultSpatial.bezierCurve
                                     }
                                 }
                                 Behavior on rotation {
@@ -863,7 +870,7 @@ FloatingWindow {
                                         duration: Appearance.animation.expressiveDefaultSpatial.duration
                                         easing.type: Appearance.animation.expressiveDefaultSpatial.type
                                         easing.bezierCurve:
-                                            Appearance.animation.expressiveDefaultSpatial.bezierCurve
+                                        Appearance.animation.expressiveDefaultSpatial.bezierCurve
                                     }
                                 }
 
@@ -1064,9 +1071,9 @@ FloatingWindow {
         rippleColor: Appearance.colors.colOnSurface
         releaseAction: () => {
             if (breadcrumbButton.current)
-                root.beginPathEditing();
+            root.beginPathEditing();
             else
-                root.navigateTo(breadcrumbButton.path);
+            root.navigateTo(breadcrumbButton.path);
         }
 
         contentItem: Item {
